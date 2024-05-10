@@ -1,5 +1,4 @@
-import logging
-import subprocess
+import logging, subprocess
 
 from .config import DatabaseTypeAndVersion, DatabaseType
 from .provide_database_server import DatabaseProvider
@@ -16,7 +15,7 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
         processes = []
         for i in range(nr_instances):
             match db.database_type:
-                case DatabaseType.MYSQL:
+                case DatabaseType.MYSQL | DatabaseType.MARIADB:
                     # open a terminal window with a mysql session
                     command = context.Context.get_context().open_terminal_command +\
                             f" -- {connection.db_binaries_folder}/mysql -h {connection.host}" +\

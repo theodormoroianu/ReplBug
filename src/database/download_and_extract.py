@@ -1,3 +1,6 @@
+"""
+This module handles the download and extraction of the database binaries.
+"""
 import pathlib, logging, tarfile, requests
 
 import database.config as db_config
@@ -39,9 +42,14 @@ def _possible_download_urls(db_and_version: db_config.DatabaseTypeAndVersion):
             f"https://dev.mysql.com/get/Downloads/MySQL-{db_and_version.version}/mysql-{db_and_version.version}-linux-glibc2.12-x86_64.tar.xz",
             f"https://dev.mysql.com/get/Downloads/MySQL-{db_and_version.version}/mysql-{db_and_version.version}-linux-glibc2.12-x86_64.tar.gz"
         ]
+    elif db_and_version.database_type == db_config.DatabaseType.MARIADB:
+        version = db_and_version.version
+        return [
+            f"https://mirror.mva-n.net/mariadb/mariadb-{version}/bintar-linux-systemd-x86_64/mariadb-{version}-linux-systemd-x86_64.tar.gz",
+            f"https://archive.mariadb.org/mariadb-{version}/bintar-linux-systemd-x86_64/mariadb-{version}-linux-systemd-x86_64.tar.gz",
+        ]
     else:
-        raise ValueError(f"Unsupported database type: {db_and_version.database_type}")
-    
+        raise ValueError(f"Unsupported database type: {db_and_version.database_type}")   
 
 
 def download_and_extract_db_binaries(db: db_config.DatabaseTypeAndVersion) -> pathlib.Path:
