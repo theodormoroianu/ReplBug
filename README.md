@@ -1,1 +1,42 @@
-# MasterThesis
+# Master Thesis
+
+This repository contains the source code of a Python application, able to deploy arbitrary versions of the _MySQL_, _MariaDB_ and _TiDB_ DBMSs.
+
+## Installation
+
+To install the _Python_ dependencies, run the following command: `pip3 install -r requirements.txt`.
+
+We do not offer an exact list of the required system packages, as it depends on the operating system. You do **not** need to install the DBMSs manually, as the application will take care of that. Moreover, no other instance of the DBMSs should be running on the system.
+
+## Usage
+
+ * Configure the `.env` file with the desired settings.
+ * Start the application by running the following command: `./src/main.py`. Use the `help` command in the CLI to get a list of all available commands.
+
+## DBMSs
+
+All downloaded assets are placed in the `{CACHE_FOLDER_PATH}` directory (from `.env`). The application downloads the DBMSs from the official websites, and the URLs are hardcoded in the source code. The application downloads the following DBMSs:
+
+### MySQL
+
+The application downloads the _MySQL_ DBMS from the official website's archives. The URLs where the binaries are downloaded from are:
+
+ * `https://dev.mysql.com/get/Downloads/MySQL-{version}/mysql-{version}-linux-glibc2.12-x86_64.tar.xz`, or
+ * `https://dev.mysql.com/get/Downloads/MySQL-{version}/mysql-{version}-linux-glibc2.12-x86_64.tar.gz`.
+
+### MariaDB
+
+ * `https://mirror.mva-n.net/mariadb/mariadb-{version}/bintar-linux-systemd-x86_64/mariadb-{version}-linux-systemd-x86_64.tar.gz`, or
+ * `https://archive.mariadb.org/mariadb-{version}/bintar-linux-systemd-x86_64/mariadb-{version}-linux-systemd-x86_64.tar.gz`.
+
+### TiDB
+
+ * Currently not implemented (TODO).
+
+## Logging
+
+The application logs most of the actions in the `{CACHE_FOLDER_PATH}/logs/` directory (by default `.cache/logs/`). A new log file is created for each run of the application.
+
+
+
+
