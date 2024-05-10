@@ -15,11 +15,23 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
         processes = []
         for i in range(nr_instances):
             match db.database_type:
-                case DatabaseType.MYSQL | DatabaseType.MARIADB:
+                case DatabaseType.MYSQL:
                     # open a terminal window with a mysql session
                     command = context.Context.get_context().open_terminal_command +\
                             f" -- {connection.db_binaries_folder}/mysql -h {connection.host}" +\
                             f" -P {connection.port} -u {connection.user}  --password='{connection.password}'"
+                    logging.info(f"Running command: {command}")
+                    proc = subprocess.Popen(
+                        [command],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        shell=True
+                    )
+                    processes.append(proc)
+                case DatabaseType.MARIADB:
+                    # open a terminal window with a mysql session
+                    command = context.Context.get_context().open_terminal_command +\
+                            f" -- {connection.db_binaries_folder}/mysql"
                     logging.info(f"Running command: {command}")
                     proc = subprocess.Popen(
                         [command],

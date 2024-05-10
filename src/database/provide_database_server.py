@@ -112,7 +112,7 @@ class DatabaseProvider:
 
         # wait for the database to start
         match self.database_type_and_version.database_type:
-            case DatabaseType.MYSQL | DatabaseType.MARIADB:
+            case DatabaseType.MYSQL:
                 logging.info("Waiting for the database to start...")
                 print(f"Waiting for the database to start..", end='')
                 while True:
@@ -124,7 +124,23 @@ class DatabaseProvider:
                         )
                         break
                     except Exception as e:
-                        # print(e)
+                        logging.debug("Received error: " + e)
+                        print(f".", end='', flush=True)
+                        logging.info("Retrying in 1 second...")
+                        time.sleep(0.5)
+                print(" DONE")
+                logging.info("Database started.")
+            case DatabaseType.MARIADB:
+                logging.info("Waiting for the database to start...")
+                print(f"Waiting for the database to start..", end='')
+                while True:
+                    try:
+                        conn = mysql.connector.connect(
+                            host=self.database_connection.host,
+                        )
+                        break
+                    except Exception as e:
+                        logging.debug("Received error: " + e)
                         print(f".", end='', flush=True)
                         logging.info("Retrying in 1 second...")
                         time.sleep(0.5)
