@@ -124,7 +124,7 @@ class DatabaseProvider:
                         )
                         break
                     except Exception as e:
-                        logging.debug("Received error: " + e)
+                        logging.debug("Received error: " + repr(e))
                         print(f".", end='', flush=True)
                         logging.info("Retrying in 1 second...")
                         time.sleep(0.5)
@@ -140,7 +140,7 @@ class DatabaseProvider:
                         )
                         break
                     except Exception as e:
-                        logging.debug("Received error: " + e)
+                        logging.debug("Received error: " + repr(e))
                         print(f".", end='', flush=True)
                         logging.info("Retrying in 1 second...")
                         time.sleep(0.5)

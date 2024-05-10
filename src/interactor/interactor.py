@@ -50,3 +50,14 @@ class MainInteractor(cmd.Cmd):
             self.do_database(" ".join(args[1:]))
             return
         return super().default(line)
+
+    def process_external_arg(self, args: str):
+        """
+        Processes the external arguments.
+        If the arguments are empty, it starts the command loop.
+        """
+        if args != "":
+            self.onecmd(args)
+        else:
+            self.cmdloop()
+            

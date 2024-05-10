@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, os, logging, datetime
+import argparse, os, logging, datetime, sys
 
 import context
 import interactor.interactor as interactor
@@ -25,7 +25,9 @@ def main():
     # run the interactor
     logging.info("Starting the BugHunter tool.")
     try:
-        interactor.MainInteractor.get_instance().cmdloop()
+        interactor.MainInteractor.get_instance().process_external_arg(
+            " ".join(sys.argv[1:])
+        )
     except KeyboardInterrupt as e:
         print("")
     logging.info("Exiting the BugHunter tool.")
