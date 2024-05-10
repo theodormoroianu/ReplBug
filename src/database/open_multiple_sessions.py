@@ -33,8 +33,10 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
                     raise ValueError(f"Unsupported database type: {db.database_type}")
         
         logging.info("Waiting for the database sessions to be closed...")
+        print("Waiting for the database sessions to be closed...", end='', flush=True)
         # wait for the processes to finish
         for proc in processes:
             proc.wait()
             proc.kill()
         logging.info("All database sessions have been closed.")
+        print(" DONE")

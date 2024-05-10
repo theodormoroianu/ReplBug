@@ -72,8 +72,8 @@ class DatabaseProvider:
         """
         Starts the database and populates the `database_connection` attribute.
         """
-        print("Configuring the database server...", end='', flush=True)
         self.db_path = download_and_extract_db_binaries(self.database_type_and_version)
+        print("Configuring the database server...", end='', flush=True)
         self._run_database()
         print(" DONE")
 

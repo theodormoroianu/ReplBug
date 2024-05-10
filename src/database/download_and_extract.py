@@ -12,7 +12,7 @@ def _download_large_file(url: str, destination: pathlib.Path):
     response.raise_for_status()
     nr_chunks = 0
     logging.info(f"Downloading {url} to {destination}...")
-    print(f"Downloading {url}...")
+    print(f"Downloading {url}.", end='', flush=True)
     with open(destination, "wb") as f:
         for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
             f.write(chunk)
@@ -20,7 +20,7 @@ def _download_large_file(url: str, destination: pathlib.Path):
             if nr_chunks % 10000 == 0:
                 logging.debug(f"Downloaded {nr_chunks * CHUNK_SIZE // 2**20} MB...")
                 print(".", end='', flush=True)
-    print("")
+    print(" DONE")
     # sanity check
     if nr_chunks <= 100:
         logging.error(f"Downloaded file is too small: {nr_chunks * CHUNK_SIZE // 2**20} MB.")
@@ -74,10 +74,11 @@ def download_and_extract_db_binaries(db: db_config.DatabaseTypeAndVersion) -> pa
         raise ValueError(f"Could not download the database binaries for {db}.")
 
     # extract the binaries
-    print("Extracting the binaries...")
+    print("Extracting the binaries...", end="", flush=True)
     with tarfile.open(cache_location / f"binaries.tar.{compression}", f"r:{compression}") as tar:
         # Extract all contents to the destination folder
         tar.extractall(cache_location)
+    print(" DONE")
     
     # change the extracted folder name to "binaries"
     extracted_folder = [i for i in cache_location.iterdir() if i.is_dir()][0]

@@ -104,7 +104,7 @@ class DatabaseInteractor(cmd.Cmd):
         Spawns multiple shells connected to a database server.
         """
         try:
-            nr_shells, db, version = arg.split()
+            nr_shells, db, version = arg.replace("-", " ").split()
             db = db_config.DatabaseType.from_str(db)
         except Exception as e:
             self.help_spawn()
