@@ -1,9 +1,12 @@
+import logging
+import cmd
+
 import database.config as db_config
 import database.provide_database_server as db_provider
 import database.download_and_extract as db_download
-import cmd
+import database.open_multiple_sessions as db_open_sessions
 import context
-import logging
+import interactor.helpers as helpers
 
 def _download_database(command: list[str]):
     """
@@ -47,7 +50,6 @@ def _download_database(command: list[str]):
 #         cursor.execute("INSERT INTO test_table (id, name) VALUES (1, 'test')")
 #         cursor.execute("SELECT * FROM test_table")
 #         print(cursor.fetchall())
-
 
 
 class DatabaseInteractor(cmd.Cmd):
@@ -97,11 +99,58 @@ class DatabaseInteractor(cmd.Cmd):
         print("Usage: download <DB TYPE> <VERSION>")
         print("Example: download mysql 8.0.34")
     
+    def do_spawn(self, arg: str):
+        """
+        Spawns multiple shells connected to a database server.
+        """
+        try:
+            nr_shells, db, version = arg.split()
+            db = db_config.DatabaseType.from_str(db)
+        except Exception as e:
+            self.help_spawn()
+            return
+        db_open_sessions.open_multiple_sessions(
+            db_config.DatabaseTypeAndVersion(db, version),
+            int(nr_shells)
+        )
+
+    def do_start_server(self, arg: str):
+        """
+        Starts a database server and waits for the user to connect to it.
+        """
+        try:
+            db_and_version = helpers.parse_db_type_and_version(arg)
+        except Exception as e:
+            self.help_start_server()
+            return
+
+        with db_provider.DatabaseProvider(db_and_version) as provider:
+            connection = provider.database_connection
+            print(f"Host:     {connection.host}")
+            print(f"Port:     {connection.port}")
+            print(f"User:     {connection.user}")
+            print(f"Password: '{connection.password}'")
+
+            print("Database server started. Press Enter to stop.")
+            input()
+    
+    def help_start_server(self):
+        print("Starts a database server and waits for the user to connect to it.")
+        print("Usage: start_server <DB TYPE>-<VERSION>")
+        print("Example: start_server mysql-8.0.34")
+
+    def help_spawn(self):
+        print("Spawns multiple shells connected to a database server.")
+        print("Usage: spawn <NR SHELLS> <DB TYPE> <VERSION>")
+        print("Example: spawn 4 mysql 8.0.34")
+
     def do_help(self, arg):
         """Shows help menu."""
         print("Available commands:")
-        print("  list      : Lists the downloaded available databases.")
-        print("  download  : Downloads a database.")
+        print("  list         : Lists the downloaded available databases.")
+        print("  download     : Downloads a database.")
+        print("  spawn        : Spawns multiple shells connected to a database server.")
+        print("  start_db     : Starts a database server and waits for the user to connect to it.")
 
     def help_help(self):
         print("Shows help menu.")

@@ -32,6 +32,7 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
                 user="root",
                 password="",
                 database="",
+                db_binaries_folder=root_folder/"bin"
             ),
             server_process
         ]
@@ -71,12 +72,15 @@ class DatabaseProvider:
         """
         Starts the database and populates the `database_connection` attribute.
         """
+        print("Configuring the database server...", end='', flush=True)
         self.db_path = download_and_extract_db_binaries(self.database_type_and_version)
         self._run_database()
+        print(" DONE")
 
         # wait for the database to start
         if self.database_type_and_version.database_type == DatabaseType.MYSQL:
             logging.info("Waiting for the database to start...")
+            print(f"Waiting for the database to start..", end='')
             while True:
                 try:
                     conn = mysql.connector.connect(
@@ -86,9 +90,10 @@ class DatabaseProvider:
                     )
                     break
                 except Exception as e:
-                    print(f"Waiting for the database to start: {e}")
+                    print(f".", end='', flush=True)
                     logging.info("Retrying in 1 second...")
-                    time.sleep(1)
+                    time.sleep(0.5)
+            print(" DONE")
             logging.info("Database started.")
         else:
             raise ValueError(f"Unsupported database type: {self.database_type_and_version.database_type}")
@@ -110,11 +115,13 @@ class DatabaseProvider:
         """
         Stops the database.
         """
+        print("Stopping the database server...", end="", flush=True)
         _stop_database_server(
             self.db_path,
             self.database_type_and_version,
             self.server_process
         )
+        print(" DONE")
         self.database_connection = None
         self.server_process = None
 

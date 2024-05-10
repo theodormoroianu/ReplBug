@@ -1,4 +1,5 @@
 from enum import Enum
+import pathlib
 
 class DatabaseType(Enum):
     """
@@ -43,10 +44,13 @@ class DatabaseConnection:
             port: int,
             user: str,
             password: str,
-            database: str):
+            database: str,
+            db_binaries_folder: pathlib.Path):
         self.database_type_and_version = database_type_and_version
         self.host = host
         self.port = port
         self.user = user
         self.password = password
         self.database = database
+        self.db_binaries_folder = db_binaries_folder
+        

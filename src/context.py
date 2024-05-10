@@ -16,12 +16,16 @@ class Context:
     context = None
 
     def __init__(self):
+        # Read cache folder location.
         self.cache_folder: pathlib.Path = pathlib.Path(os.getenv("CACHE_FOLDER_PATH"))
         assert self.cache_folder is not None, "The `CACHE_FOLDER_PATH` environment variable is not set."
         if not self.cache_folder.exists():
             self.cache_folder.mkdir(parents=True)
+
+        # Read the database server stop flag.
         self.stop_database_server_at_startup = (os.getenv("STOP_DATABASE_SERVER_AT_STARTUP").lower() == "true")
 
+        # Read the logging level.
         match os.getenv("LOGGING_LEVEL"):
             case "DEBUG":
                 self.logging_level = "DEBUG"
@@ -31,6 +35,9 @@ class Context:
                 self.logging_level = "WARNING"
             case _:
                 self.logging_level = "INFO"
+
+        # Read the path to the terminal console.
+        self.open_terminal_command = os.getenv("TERMINAL_WINDOW_COMMAND")
 
     @staticmethod
     def get_context():

@@ -1,8 +1,5 @@
-from dotenv import load_dotenv
-import argparse
-import os
-import logging
-import datetime
+#! /usr/bin/env python3
+import argparse, os, logging, datetime
 
 import context
 import interactor.interactor as interactor
