@@ -26,8 +26,11 @@ def main():
 
     # run the interactor
     logging.info("Starting the BugHunter tool.")
-    interactor.interactor()
-
+    try:
+        interactor.MainInteractor.get_instance().cmdloop()
+    except KeyboardInterrupt as e:
+        print("")
+    logging.info("Exiting the BugHunter tool.")
 
 if __name__ == '__main__':
     main()

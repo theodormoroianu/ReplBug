@@ -19,7 +19,8 @@ def _download_large_file(url: str, destination: pathlib.Path):
             nr_chunks += 1
             if nr_chunks % 10000 == 0:
                 logging.debug(f"Downloaded {nr_chunks * CHUNK_SIZE // 2**20} MB...")
-    
+                print(".", end='', flush=True)
+    print("")
     # sanity check
     if nr_chunks <= 100:
         logging.error(f"Downloaded file is too small: {nr_chunks * CHUNK_SIZE // 2**20} MB.")
@@ -48,7 +49,7 @@ def download_and_extract_db_binaries(db: db_config.DatabaseTypeAndVersion) -> pa
     Downloads and extracts the necessary binaries for the database.
     """
     # get the cache location
-    cache_location = context.Context.get_context().cache_folder / f"{db}"
+    cache_location = context.Context.get_context().cache_folder / f"databases/{db}"
     
     # # if we already have the binaries, we don't need to download them again
     if cache_location.exists() and (cache_location / "binaries").exists():
@@ -56,7 +57,7 @@ def download_and_extract_db_binaries(db: db_config.DatabaseTypeAndVersion) -> pa
         return cache_location / "binaries"
     
     # download the binaries
-    cache_location.mkdir(exist_ok=True)
+    cache_location.mkdir(exist_ok=True, parents=True)
     urls = _possible_download_urls(db)
     downloaded = False
     for url in urls:

@@ -1,59 +1,52 @@
 import interactor.database_interactor as database_interactor
-from database.config import DatabaseTypeAndVersion, DatabaseType
-import database.provide_database_server as provide_database_server
-import mysql.connector
-import time
+import cmd
 
-def my_fn(_):
-    db = DatabaseTypeAndVersion(DatabaseType.MYSQL, version="8.0.34")
+class MainInteractor(cmd.Cmd):
+    prompt = '> '
+    instance = None
 
-    with provide_database_server.DatabaseProvider(db) as provider:
-        connection = provider.database_connection
+    @staticmethod
+    def get_instance():
+        if MainInteractor.instance is None:
+            MainInteractor.instance = MainInteractor()
+        return MainInteractor.instance
 
-        # connect to the database
-        conn = mysql.connector.connect(
-            host=connection.host,
-            user=connection.user,
-            password=connection.password
-        )
+    def __init__(self):
+        super().__init__()
 
-        # create a cursor
-        cursor = conn.cursor()
+    def do_database(self, arg):
+        """Allows the user to download and interact with a database."""
+        try:
+            database_interactor.DatabaseInteractor\
+                .get_instance()\
+                .process_external_arg(arg)
+        except KeyboardInterrupt as e:
+            print("")
+            pass
 
-        cursor.execute("CREATE DATABASE test_db")
-        cursor.execute("USE test_db")
+    def do_help(self, arg):
+        """Shows help menu."""
+        print("Available commands:")
+        print("  database  : Allows the user to download and interact with a database.")
+        print("  help      : Shows this help menu")
+        print("  quit      : Quits the program")
 
-        cursor.execute("CREATE TABLE test_table (id INT PRIMARY KEY, name VARCHAR(255))")
-        cursor.execute("INSERT INTO test_table (id, name) VALUES (1, 'test')")
-        cursor.execute("SELECT * FROM test_table")
-        print(cursor.fetchall())
+    def help_help(self):
+        print("Shows help menu.")
+    
+    def precmd(self, line: str) -> str:
+        if line == "EOF":
+            print("")
+            return "quit"
+        return super().precmd(line)
 
-_commands = {
-    "database": ("interact with the database", database_interactor.database_interactor),
-    "my_fn": ("my_fn", my_fn)
-}
+    def default(self, line: str) -> None:
+        args = line.split()
 
-def interactor():
-    """
-    Provides a command line interface for the BugHunter tool.
-    """
-    while True:
-        command = input("> ")
-        command = command.lower().split()
-        if command == []:
-            continue
-
-        if command[0] == "exit":
-            break
-        elif command[0] == "help":
-            print("Available commands:")
-            for command, (description, _) in _commands.items():
-                print(f"  {command}: {description}")
-        elif command[0] in _commands:
-            try:
-                _commands[command[0]][1](command[1:])
-            except Exception as e:
-                print(f"An error occurred: {e}")
-        else:
-            print(f"Unknown command: {command[0]}")
-            print("Type 'help' to see the available commands.")
+        if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
+            return True
+        
+        if len(args) > 0 and args[0] == "db":
+            self.do_database(" ".join(args[1:]))
+            return
+        return super().default(line)
