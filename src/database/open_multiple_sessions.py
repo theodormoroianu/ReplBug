@@ -40,6 +40,18 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
                         shell=True
                     )
                     processes.append(proc)
+                case DatabaseType.TIDB:
+                    # open a terminal window with a tidb session
+                    command = context.Context.get_context().open_terminal_command +\
+                            f" -- mysql --comments --host 127.0.0.1 --port 4000 -u root"
+                    logging.info(f"Running command: {command}")
+                    proc = subprocess.Popen(
+                        [command],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        shell=True
+                    )
+                    processes.append(proc)
                 case _:
                     raise ValueError(f"Unsupported database type: {db.database_type}")
         

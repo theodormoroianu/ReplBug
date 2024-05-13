@@ -31,7 +31,9 @@ The application downloads the _MySQL_ DBMS from the official website's archives.
 
 ### TiDB
 
- * Currently not implemented (TODO).
+We use the `tiup` tool to download and install the _TiDB_ DBMS.
+
+The tools are downloaded from [here](https://docs.pingcap.com/tidb/stable/quick-start-with-tidb#simulate-production-deployment-on-a-single-machine).
 
 ## Logging
 

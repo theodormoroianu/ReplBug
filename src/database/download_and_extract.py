@@ -56,6 +56,9 @@ def download_and_extract_db_binaries(db: db_config.DatabaseTypeAndVersion) -> pa
     """
     Downloads and extracts the necessary binaries for the database.
     """
+    if db.database_type == db_config.DatabaseType.TIDB:
+        logging.info("Skipping download and extraction of TiDB binaries.")
+        return None
     # get the cache location
     cache_location = context.Context.get_context().cache_folder / f"databases/{db}"
     

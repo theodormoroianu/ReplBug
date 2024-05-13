@@ -8,6 +8,7 @@ import subprocess
 import mysql.connector
 import time
 import logging
+import signal
 
 from .config import DatabaseTypeAndVersion, DatabaseType, DatabaseConnection
 import context
@@ -17,6 +18,28 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
     """
     Runs the database server.
     """
+    if db.database_type == DatabaseType.TIDB:
+        server_process = subprocess.Popen(
+            [f"tiup"] + f"playground v{db.version} --db 2 --pd 3 --kv 3".split(),
+            # shell=True,
+            stdin=subprocess.DEVNULL,
+            # stdout=subprocess.DEVNULL,
+        )
+        return [
+            DatabaseConnection(
+                database_type_and_version=db,
+                host="localhost",
+                port=4000,
+                user="root",
+                password="",
+                database="",
+                db_binaries_folder=None,
+            ),
+            server_process
+        ]
+
+    print("Configuring the database server...", end='', flush=True)
+
     # delete existing data if any
     data_folder = root_folder / "data"
     if data_folder.exists():
@@ -29,6 +52,8 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
         
         # start the mysql server in a separate process, ignore the output
         server_process = subprocess.Popen([f"{root_folder}/bin/mysqld", "--user=root"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print(" DONE")
+
         return [
             DatabaseConnection(
                 database_type_and_version=db,
@@ -48,6 +73,8 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
 
         # start the mariadb server in a separate process, ignore the output
         server_process = subprocess.Popen([f"{root_folder}/bin/mysqld", f"--datadir={data_folder}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print(" DONE")
+
         return [
             DatabaseConnection(
                 database_type_and_version=db,
@@ -67,6 +94,10 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
     """
     Stops the database server.
     """
+    if db.database_type == DatabaseType.TIDB:
+        logging.info(f"Stopping the TiDB server at {root_folder}")
+        server_process.send_signal(signal.SIGINT)
+        return server_process.wait()
     if db.database_type == DatabaseType.MYSQL:
         logging.info(f"Stopping the MySQL server at {root_folder}")
         # stop the mysql server
@@ -106,9 +137,7 @@ class DatabaseProvider:
         Starts the database and populates the `database_connection` attribute.
         """
         self.db_path = download_and_extract_db_binaries(self.database_type_and_version)
-        print("Configuring the database server...", end='', flush=True)
         self._run_database()
-        print(" DONE")
 
         # wait for the database to start
         match self.database_type_and_version.database_type:
@@ -145,6 +174,22 @@ class DatabaseProvider:
                         logging.info("Retrying in 1 second...")
                         time.sleep(0.5)
                 print(" DONE")
+                logging.info("Database started.")
+            case DatabaseType.TIDB:
+                logging.info("Waiting for the database to start...")
+                while True:
+                    try:
+                        conn = mysql.connector.connect(
+                            host=self.database_connection.host,
+                            user=self.database_connection.user,
+                            port=self.database_connection.port
+                        )
+                        break
+                    except Exception as e:
+                        logging.debug("Received error: " + repr(e))
+                        logging.info("Retrying in 1 second...")
+                        time.sleep(0.5)
+                print("Database connected.")
                 logging.info("Database started.")
             case _:
                 raise ValueError(f"Unsupported database type: {self.database_type_and_version.database_type}")
