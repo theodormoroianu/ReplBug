@@ -18,8 +18,7 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
                 case DatabaseType.MYSQL:
                     # open a terminal window with a mysql session
                     command = context.Context.get_context().open_terminal_command +\
-                            f" -- {connection.db_binaries_folder}/mysql -h {connection.host}" +\
-                            f" -P {connection.port} -u {connection.user}  --password='{connection.password}'"
+                            f" -- mysql -S /tmp/mysql.sock -u root"
                     logging.info(f"Running command: {command}")
                     proc = subprocess.Popen(
                         [command],
@@ -31,7 +30,7 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
                 case DatabaseType.MARIADB:
                     # open a terminal window with a mysql session
                     command = context.Context.get_context().open_terminal_command +\
-                            f" -- {connection.db_binaries_folder}/mysql"
+                            f" -- mysql -S /tmp/mysql.sock"
                     logging.info(f"Running command: {command}")
                     proc = subprocess.Popen(
                         [command],
