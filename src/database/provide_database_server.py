@@ -14,16 +14,19 @@ from .config import DatabaseTypeAndVersion, DatabaseType, DatabaseConnection
 import context
 from .download_and_extract import download_and_extract_db_binaries
 
-def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) -> Tuple[DatabaseConnection, subprocess.Popen]:
+def _run_database_server(
+        root_folder: Optional[pathlib.Path],
+        db: DatabaseTypeAndVersion) -> Tuple[DatabaseConnection, subprocess.Popen]:
     """
     Runs the database server.
     """
+
     if db.database_type == DatabaseType.TIDB:
+        # start the tidb server
+        # tiup handles the download and installation of the binaries
         server_process = subprocess.Popen(
             [f"tiup"] + f"playground v{db.version} --db 2 --pd 3 --kv 3".split(),
-            # shell=True,
             stdin=subprocess.DEVNULL,
-            # stdout=subprocess.DEVNULL,
         )
         return [
             DatabaseConnection(
@@ -31,13 +34,11 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
                 host="localhost",
                 port=4000,
                 user="root",
-                password="",
-                database="",
-                db_binaries_folder=None,
             ),
             server_process
         ]
 
+    # ensure that the resources exist
     print("Configuring the database server...", end='', flush=True)
 
     # delete existing data if any
@@ -58,11 +59,7 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
             DatabaseConnection(
                 database_type_and_version=db,
                 host="localhost",
-                port=3306,
-                user="root",
-                password="",
-                database="",
-                db_binaries_folder=root_folder/"bin"
+                user="root"
             ),
             server_process
         ]
@@ -79,16 +76,13 @@ def _run_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion) 
             DatabaseConnection(
                 database_type_and_version=db,
                 host="localhost",
-                port=3306,
-                user=os.getlogin(),
-                password="",
-                database="",
-                db_binaries_folder=root_folder/"bin"
+                user=os.getlogin()
             ),
             server_process
         ]
     else:
         raise ValueError(f"Unsupported database type: {db.database_type}")
+
 
 def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion, server_process: subprocess.Popen) -> int:
     """
@@ -98,15 +92,16 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
         logging.info(f"Stopping the TiDB server at {root_folder}")
         server_process.send_signal(signal.SIGINT)
         return server_process.wait()
+    
     if db.database_type == DatabaseType.MYSQL:
         logging.info(f"Stopping the MySQL server at {root_folder}")
         # stop the mysql server
         os.system(f"{root_folder}/bin/mysqladmin -u root shutdown")
         retcode = server_process.wait()
-
         # delete the data folder
         os.system(f"rm -rf {root_folder}/data")
         return retcode
+    
     elif db.database_type == DatabaseType.MARIADB:
         logging.info(f"Stopping the MariaDB server at {root_folder}")
         # stop the mariadb server
@@ -116,6 +111,7 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
         # delete the data folder
         os.system(f"rm -rf {root_folder}/data")
         return retcode
+    
     else:
         raise ValueError(f"Unsupported database type: {db.database_type}")
     
@@ -140,60 +136,15 @@ class DatabaseProvider:
         self._run_database()
 
         # wait for the database to start
-        match self.database_type_and_version.database_type:
-            case DatabaseType.MYSQL:
-                logging.info("Waiting for the database to start...")
-                print(f"Waiting for the database to start..", end='')
-                while True:
-                    try:
-                        conn = mysql.connector.connect(
-                            host=self.database_connection.host,
-                            user=self.database_connection.user,
-                            password=self.database_connection.password
-                        )
-                        break
-                    except Exception as e:
-                        logging.debug("Received error: " + repr(e))
-                        print(f".", end='', flush=True)
-                        logging.info("Retrying in 1 second...")
-                        time.sleep(0.5)
-                print(" DONE")
-                logging.info("Database started.")
-            case DatabaseType.MARIADB:
-                logging.info("Waiting for the database to start...")
-                print(f"Waiting for the database to start..", end='')
-                while True:
-                    try:
-                        conn = mysql.connector.connect(
-                            host=self.database_connection.host,
-                        )
-                        break
-                    except Exception as e:
-                        logging.debug("Received error: " + repr(e))
-                        print(f".", end='', flush=True)
-                        logging.info("Retrying in 1 second...")
-                        time.sleep(0.5)
-                print(" DONE")
-                logging.info("Database started.")
-            case DatabaseType.TIDB:
-                logging.info("Waiting for the database to start...")
-                while True:
-                    try:
-                        conn = mysql.connector.connect(
-                            host=self.database_connection.host,
-                            user=self.database_connection.user,
-                            port=self.database_connection.port
-                        )
-                        break
-                    except Exception as e:
-                        logging.debug("Received error: " + repr(e))
-                        logging.info("Retrying in 1 second...")
-                        time.sleep(0.5)
-                print("Database connected.")
-                logging.info("Database started.")
-            case _:
-                raise ValueError(f"Unsupported database type: {self.database_type_and_version.database_type}")
-        
+        print("Waiting for the database to start...", end="", flush=True)
+        while True:
+            try:
+                conn = self.database_connection.to_connection()
+                break
+            except Exception as e:
+                print(".", end="", flush=True)
+                time.sleep(1)
+        print(" DONE", flush=True)
         return self
 
     def _run_database(self):

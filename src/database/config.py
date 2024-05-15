@@ -1,5 +1,7 @@
 from enum import Enum
+from typing import Optional
 import pathlib
+import mysql.connector
 
 class DatabaseType(Enum):
     """
@@ -41,16 +43,28 @@ class DatabaseConnection:
             self,
             database_type_and_version: DatabaseTypeAndVersion,
             host: str,
-            port: int,
-            user: str,
-            password: str,
-            database: str,
-            db_binaries_folder: pathlib.Path):
+            port: Optional[int] = None,
+            user: Optional[str] = None,
+            password: Optional[str] = None):
         self.database_type_and_version = database_type_and_version
         self.host = host
         self.port = port
         self.user = user
         self.password = password
-        self.database = database
-        self.db_binaries_folder = db_binaries_folder
-        
+    
+    def to_connection(self) -> mysql.connector.MySQLConnection:
+        """
+        Returns a MySQL connection object.
+        """
+        args = {
+            'host': self.host
+        }
+        if self.user:
+            args['user'] = self.user
+        if self.password:
+            args['password'] = self.password
+        if self.port:
+            args['port'] = self.port
+
+        conn = mysql.connector.connect(**args)
+        return conn

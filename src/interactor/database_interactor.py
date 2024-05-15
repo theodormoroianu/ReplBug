@@ -8,50 +8,6 @@ import database.open_multiple_sessions as db_open_sessions
 import context
 import interactor.helpers as helpers
 
-def _download_database(command: list[str]):
-    """
-    Downloads a database.
-    """
-    if len(command) != 2:
-        print("Usage: download <DB TYPE> <VERSION>")
-        return
-
-    database_type = command[0]
-    database_type = db_config.DatabaseType.from_str(database_type.lower())
-
-    version = command[1]
-
-    db_and_version = db_config.DatabaseTypeAndVersion(database_type, version)
-
-    provider = db_provider.DatabaseProvider(db_and_version)
-    provider._download_and_extract_binaries()
-
-
-# def my_fn(_):
-#     db = DatabaseTypeAndVersion(DatabaseType.MYSQL, version="8.0.34")
-
-#     with provide_database_server.DatabaseProvider(db) as provider:
-#         connection = provider.database_connection
-
-#         # connect to the database
-#         conn = mysql.connector.connect(
-#             host=connection.host,
-#             user=connection.user,
-#             password=connection.password
-#         )
-
-#         # create a cursor
-#         cursor = conn.cursor()
-
-#         cursor.execute("CREATE DATABASE test_db")
-#         cursor.execute("USE test_db")
-
-#         cursor.execute("CREATE TABLE test_table (id INT PRIMARY KEY, name VARCHAR(255))")
-#         cursor.execute("INSERT INTO test_table (id, name) VALUES (1, 'test')")
-#         cursor.execute("SELECT * FROM test_table")
-#         print(cursor.fetchall())
-
-
 class DatabaseInteractor(cmd.Cmd):
     prompt = 'db> '
     instance = None
@@ -126,12 +82,13 @@ class DatabaseInteractor(cmd.Cmd):
 
         with db_provider.DatabaseProvider(db_and_version) as provider:
             connection = provider.database_connection
-            print(f"Host:     {connection.host}")
-            print(f"Port:     {connection.port}")
-            print(f"User:     {connection.user}")
-            print(f"Password: '{connection.password}'")
+            print(f"Host:          {connection.host}")
+            print(f"Port:          {connection.port}")
+            print(f"User:          {connection.user}")
+            print(f"Password:      {connection.password}")
+            print(f"Connect with:  {db_open_sessions.mysql_cli_command(db_and_version)}")
 
-            print("Database server started. Press Enter to stop.")
+            print("\nDatabase server started. Press Enter to stop.")
             input()
     
     def help_start_server(self):
