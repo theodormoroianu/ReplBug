@@ -25,13 +25,13 @@ def _run_database_server(
         # start the tidb server
         # tiup handles the download and installation of the binaries
         server_process = subprocess.Popen(
-            [f"tiup"] + f"playground v{db.version} --db 2 --pd 3 --kv 3".split(),
+            [f"tiup"] + f"playground v{db.version} --db 1 --pd 3 --kv 3".split(),
             stdin=subprocess.DEVNULL,
         )
         return [
             DatabaseConnection(
                 database_type_and_version=db,
-                host="localhost",
+                host="127.0.0.1",
                 port=4000,
                 user="root",
             ),
@@ -90,7 +90,7 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
     """
     if db.database_type == DatabaseType.TIDB:
         logging.info(f"Stopping the TiDB server at {root_folder}")
-        server_process.send_signal(signal.SIGINT)
+        server_process.terminate()
         return server_process.wait()
     
     if db.database_type == DatabaseType.MYSQL:
@@ -132,19 +132,23 @@ class DatabaseProvider:
         """
         Starts the database and populates the `database_connection` attribute.
         """
+        logging.info(f"Starting the database server for {self.database_type_and_version}.")
         self.db_path = download_and_extract_db_binaries(self.database_type_and_version)
         self._run_database()
 
         # wait for the database to start
         print("Waiting for the database to start...", end="", flush=True)
+        logging.info("Waiting for the database to start...")
         while True:
             try:
                 conn = self.database_connection.to_connection()
+                conn.ping()
                 break
             except Exception as e:
                 print(".", end="", flush=True)
                 time.sleep(1)
         print(" DONE", flush=True)
+        logging.info("Database started.")
         return self
 
     def _run_database(self):
@@ -163,6 +167,7 @@ class DatabaseProvider:
         Stops the database.
         """
         print("Stopping the database server...", end="", flush=True)
+        logging.info(f"Stopping the database server for {self.database_type_and_version}.")
         _stop_database_server(
             self.db_path,
             self.database_type_and_version,

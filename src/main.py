@@ -9,8 +9,9 @@ def main():
 
     # stop the database server
     if context.Context.get_context().stop_database_server_at_startup:
-        os.system("pgrep mysqld | xargs kill 2> /dev/null")
-        os.system("pgrep mariadbd | xargs kill 2> /dev/null")
+        os.system("pgrep mysqld | xargs kill -9 2> /dev/null")
+        os.system("pgrep mariadbd | xargs kill -9 2> /dev/null")
+        os.system("pgrep tiup | xargs kill 2> /dev/null")
 
     # start logging
     logging_folder = context.Context.get_context().cache_folder / "logs"

@@ -13,7 +13,7 @@ def mysql_cli_command(db: DatabaseTypeAndVersion):
     elif db.database_type == DatabaseType.MYSQL:
         return "mysql -S /tmp/mysql.sock -u root"
     elif db.database_type == DatabaseType.TIDB:
-        return "mysql --comments --host localhost --port 4000 -u root"
+        return "mysql --comments --host 127.0.0.1 --port 4000 -u root"
     else:
         raise ValueError(f"Unsupported database type: {db.database_type}")
 

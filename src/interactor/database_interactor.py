@@ -1,5 +1,6 @@
 import logging
 import cmd
+import time
 
 import database.config as db_config
 import database.provide_database_server as db_provider
@@ -82,15 +83,21 @@ class DatabaseInteractor(cmd.Cmd):
 
         with db_provider.DatabaseProvider(db_and_version) as provider:
             connection = provider.database_connection
-            print(f"Host:          {connection.host}")
-            print(f"Port:          {connection.port}")
-            print(f"User:          {connection.user}")
-            print(f"Password:      {connection.password}")
-            print(f"Connect with:  {db_open_sessions.mysql_cli_command(db_and_version)}")
+            if db_and_version.database_type != db_config.DatabaseType.TIDB:
+                print(f"Host:          {connection.host}")
+                print(f"Port:          {connection.port}")
+                print(f"User:          {connection.user}")
+                print(f"Password:      {connection.password}")
+                print(f"Connect with:  {db_open_sessions.mysql_cli_command(db_and_version)}")
+            else:
+                time.sleep(2)
 
-            print("\nDatabase server started. Press Enter to stop.")
-            input()
-    
+            print("\nDatabase server started. Press Enter to stop.", flush=True)
+            try:
+                input()
+            except KeyboardInterrupt:
+                pass
+            
     def help_start_server(self):
         print("Starts a database server and waits for the user to connect to it.")
         print("Usage: start_server <DB TYPE>-<VERSION>")

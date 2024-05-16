@@ -1,5 +1,10 @@
-import interactor.database_interactor as database_interactor
 import cmd
+
+import interactor.database_interactor as database_interactor
+import context
+import testcase.run_testcases as run_testcases
+
+HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history" 
 
 class MainInteractor(cmd.Cmd):
     prompt = '> '
@@ -14,6 +19,23 @@ class MainInteractor(cmd.Cmd):
     def __init__(self):
         super().__init__()
 
+    def preloop(self):
+        # Load commmand history
+        try:
+            import readline
+            readline.read_history_file(HISTORY_FILE)
+        except:
+            pass
+
+    def postloop(self):
+        # Dump commmand history
+        try:
+            import readline
+            readline.set_history_length(100)
+            readline.write_history_file(HISTORY_FILE)
+        except:
+            pass
+
     def do_database(self, arg):
         """Allows the user to download and interact with a database."""
         try:
@@ -23,6 +45,10 @@ class MainInteractor(cmd.Cmd):
         except KeyboardInterrupt as e:
             print("")
             pass
+
+    def do_testcases(self, arg):
+        """Runs the testcases."""
+        run_testcases.run()
 
     def do_help(self, arg):
         """Shows help menu."""
