@@ -1,6 +1,7 @@
 import cmd
 
 import interactor.database_interactor as database_interactor
+import interactor.testcase_interactor as testcase_interactor
 import context
 import testcase.run_testcases as run_testcases
 
@@ -46,14 +47,24 @@ class MainInteractor(cmd.Cmd):
             print("")
             pass
 
-    def do_testcases(self, arg):
+    def do_testcase(self, arg):
         """Runs the testcases."""
-        run_testcases.run()
+        try:
+            testcase_interactor.TestcaseInteractor\
+                .get_instance()\
+                .process_external_arg(arg)
+        except KeyboardInterrupt as e:
+            print("")
+            pass
+    
+    def do_test(self, arg):
+        return self.do_testcase(arg)
 
     def do_help(self, arg):
         """Shows help menu."""
         print("Available commands:")
         print("  database  : Allows the user to download and interact with a database.")
+        print("  testcase  : Allows the user run one or more testcases.")
         print("  help      : Shows this help menu")
         print("  quit      : Quits the program")
 
@@ -74,6 +85,9 @@ class MainInteractor(cmd.Cmd):
         
         if len(args) > 0 and args[0] == "db":
             self.do_database(" ".join(args[1:]))
+            return
+        if len(args) > 0 and (args[0] == "tc" or args[0] == "test"):
+            self.do_testcase(" ".join(args[1:]))
             return
         return super().default(line)
 

@@ -1,4 +1,4 @@
-from typing import Callable, List, Dict
+from typing import Callable, List, Dict, Union
 import logging
 import mysql.connector
 import mysql.connector.cursor
@@ -10,12 +10,10 @@ class Instruction:
     """
     Represents a single instruction to be run in a testcase
     """
-    def __init__(self, transaction_id: int, instruction: str, expects_output: bool, validator: Callable[[str], bool] = None):
+    def __init__(self, transaction_id: Union[int, None], instruction: str, validator: Callable[[str], bool] = None):
         self.transaction_id = transaction_id
         self.instruction = instruction
         self.validator = validator
-        self.expects_output = expects_output
-
 
 class Testcase:
     """
@@ -24,13 +22,14 @@ class Testcase:
     def __init__(
             self,
             name: str,
-            nr_transactions: int,
             instructions: List[Instruction],
-            db_and_type: db_config.DatabaseTypeAndVersion):
+            db_and_type: db_config.DatabaseTypeAndVersion,
+            pre_run_instructions: List[Instruction] = None,
+        ):
         self.name = name
-        self.nr_transactions = nr_transactions
         self.instructions = instructions
         self.db_and_type = db_and_type
+        self.pre_run_instructions = pre_run_instructions
 
     def run(self):
         """
@@ -39,16 +38,51 @@ class Testcase:
         logging.info(f"Running testcase {self.name} on {self.db_and_type}")
         with db_provider.DatabaseProvider(self.db_and_type) as provider:
             conn = provider.database_connection.to_connection()
-            
-            transaction_to_cursor: Dict[int, mysql.connector.cursor.CursorBase] = {}
+            conn.cursor().execute("create database testdb;")
+            conn.cursor().execute("use testdb;")
 
+            if self.pre_run_instructions:
+                logging.info("Running pre-run instructions...")
+                try:
+                    for instruction in self.pre_run_instructions:
+                        assert instruction.transaction_id == None
+                        cursor = conn.cursor()
+                        it = cursor.execute(instruction.instruction, multi=True)
+                        for cur in it:
+                            if cur.with_rows:
+                                output = cur.fetchall()
+                                print(f"Output for pre-run instruction: {output}")
+                except Exception as e:
+                    logging.error(f"Error running pre-run instructions: {e}")
+                    print(f"Error running pre-run instructions: {e}")
+                    input("Press enter to continue...")
+                    raise e
+            conn.commit()
+            conn.close()
+
+            # Mapping from transaction id to cursor / connection object
+            transaction_to_connection: Dict[int, mysql.connector.MySQLConnection] = {}
+
+            logging.info("Running instructions...")
             for instruction in self.instructions:
-                if instruction.transaction_id not in transaction_to_cursor:
-                    transaction_to_cursor[instruction.transaction_id] = conn.cursor()
+                assert instruction.transaction_id is not None
+                logging.info(f"Running instruction: {instruction.instruction}")
+                if instruction.transaction_id not in transaction_to_connection:
+                    # create a new concurent connection for the transaction
+                    new_conn = provider.database_connection.to_connection()
+                    new_conn.cursor().execute("use testdb;")
+                    transaction_to_connection[instruction.transaction_id] = new_conn
 
-                cursor = transaction_to_cursor[instruction.transaction_id]
-                cursor.execute(instruction.instruction)
-                if instruction.expects_output:
-                    output = cursor.fetchall()
-                    print(f"Output for transaction {instruction.transaction_id}: {output}")
-                
+                try:
+                    cursor = transaction_to_connection[instruction.transaction_id].cursor()
+                    cursor.execute(instruction.instruction)
+                    if cursor.with_rows:
+                        output = cursor.fetchall()
+                        print(f"Output for transaction {instruction.transaction_id}: {output}")
+                except Exception as e:
+                    logging.error(f"Error running instruction: {e}")
+                    print(f"Error running instruction: {e}")
+                    print(f"Instruction: {instruction.instruction}")
+                    input("Press enter to continue...")
+                    raise e
+    
