@@ -139,11 +139,11 @@ class Bug:
                 db_and_type=self.db_and_type,
                 pre_run_instructions=pre_run_instruction
             )
-            try:
-                runner.run()
-            except Exception as e:
-                print(f"Error running scenario {nr}: {e}")
-                logging.error(f"Error running scenario {nr}: {e}")
+            # try:
+            runner.run()
+            # except Exception as e:
+            #     print(f"Error running scenario {nr}: {e}")
+            #     logging.error(f"Error running scenario {nr}: {e}")
             self.testcase_runners.append(runner)
 
         self._save_result_from_user()

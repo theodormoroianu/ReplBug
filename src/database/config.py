@@ -34,6 +34,11 @@ class DatabaseTypeAndVersion:
     def __str__(self):
         return f"{self.database_type.value}-{self.version}"
     
+    def __eq__(self, other):
+        if other is None:
+            return False
+        return self.database_type == other.database_type and self.version == other.version
+    
     
 class DatabaseConnection:
     """

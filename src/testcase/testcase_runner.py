@@ -49,21 +49,21 @@ class TestcaseRunner:
 
             if self.pre_run_instructions:
                 logging.info("Running pre-run instructions...")
-                try:
-                    for instruction in self.pre_run_instructions:
-                        assert instruction.transaction_id == None
-                        cursor = conn.cursor()
-                        it = cursor.execute(instruction.instruction, multi=True)
-                        for cur in it:
-                            if cur.with_rows:
-                                output = cur.fetchall()
-                                instruction.output = output
-                                print(f"Output for pre-run instruction: {output}")
-                except Exception as e:
-                    logging.error(f"Error running pre-run instructions: {e}")
-                    print(f"Error running pre-run instructions: {e}")
-                    input("Press enter to continue...")
-                    raise e
+                # try:
+                for instruction in self.pre_run_instructions:
+                    assert instruction.transaction_id == None
+                    cursor = conn.cursor()
+                    it = cursor.execute(instruction.instruction, multi=True)
+                    for cur in it:
+                        if cur.with_rows:
+                            output = cur.fetchall()
+                            instruction.output = output
+                            print(f"Output for pre-run instruction: {output}")
+                # except SQLException as e:
+                #     logging.error(f"Error running pre-run instructions: {e}")
+                #     print(f"Error running pre-run instructions: {e}")
+                #     input("Press enter to continue...")
+                #     raise e
             conn.commit()
             conn.close()
 
