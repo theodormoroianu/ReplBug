@@ -5,7 +5,7 @@ import database.config as db_config
 #################################################################################################
 # Bug reported here: https://bugs.mysql.com/bug.php?id=107898                                   #
 # Taken from here:   https://github.com/JZuming/TxCheck/blob/main/docs/mysql_bugs.md            #
-# Setup:             mysql_bk_1.sql                                                             #
+# Setup:             mysql_bk_2.sql                                                             #
 #################################################################################################
 
 def bug2():

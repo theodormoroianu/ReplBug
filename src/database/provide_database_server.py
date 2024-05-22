@@ -16,7 +16,8 @@ from .download_and_extract import download_and_extract_db_binaries
 
 def _run_database_server(
         root_folder: Optional[pathlib.Path],
-        db: DatabaseTypeAndVersion) -> Tuple[DatabaseConnection, subprocess.Popen]:
+        db: DatabaseTypeAndVersion,
+        reconfigure_db: bool) -> Tuple[DatabaseConnection, subprocess.Popen]:
     """
     Runs the database server.
     """
@@ -38,22 +39,25 @@ def _run_database_server(
             server_process
         ]
 
-    # ensure that the resources exist
-    print("Configuring the database server...", end='', flush=True)
 
     # delete existing data if any
     data_folder = root_folder / "data"
-    if data_folder.exists():
+    if reconfigure_db and data_folder.exists():
         os.system(f"rm -rf {data_folder}")
+    if not data_folder.exists():
+        reconfigure_db = True
     
     if db.database_type == DatabaseType.MYSQL:
         # start the mysql server
         logging.info(f"Starting the MySQL server at {root_folder}")
-        os.system(f"cd {root_folder} && ./bin/mysqld --initialize-insecure --user=root 2> /dev/null > /dev/null")
         
+        if reconfigure_db:
+            print("Configuring the database server...", end='', flush=True)
+            os.system(f"cd {root_folder} && ./bin/mysqld --initialize-insecure --user=root 2> /dev/null > /dev/null")
+            print(" DONE")
+            
         # start the mysql server in a separate process, ignore the output
         server_process = subprocess.Popen([f"{root_folder}/bin/mysqld", "--user=root"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print(" DONE")
 
         return [
             DatabaseConnection(
@@ -66,11 +70,14 @@ def _run_database_server(
     elif db.database_type == DatabaseType.MARIADB:
         # start the mariadb server
         logging.info(f"Starting the MariaDB server at {root_folder}")  
-        os.system(f"cd {root_folder} && ./scripts/mysql_install_db --datadir={data_folder} 2> /dev/null > /dev/null")
+        
+        if reconfigure_db:
+            print("Configuring the database server...", end='', flush=True)
+            os.system(f"cd {root_folder} && ./scripts/mysql_install_db --datadir={data_folder} 2> /dev/null > /dev/null")
+            print(" DONE")
 
         # start the mariadb server in a separate process, ignore the output
         server_process = subprocess.Popen([f"{root_folder}/bin/mysqld", f"--datadir={data_folder}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print(" DONE")
 
         return [
             DatabaseConnection(
@@ -99,7 +106,7 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
         os.system(f"{root_folder}/bin/mysqladmin -u root shutdown")
         retcode = server_process.wait()
         # delete the data folder
-        os.system(f"rm -rf {root_folder}/data")
+        # os.system(f"rm -rf {root_folder}/data")
         return retcode
     
     elif db.database_type == DatabaseType.MARIADB:
@@ -109,7 +116,7 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
         retcode = server_process.wait()
 
         # delete the data folder
-        os.system(f"rm -rf {root_folder}/data")
+        # os.system(f"rm -rf {root_folder}/data")
         return retcode
     
     else:
@@ -121,11 +128,12 @@ class DatabaseProvider:
     """
     Provides and cleans the necessary binaries for a specific database.
     """
-    def __init__(self, database_type_and_version: DatabaseTypeAndVersion):
+    def __init__(self, database_type_and_version: DatabaseTypeAndVersion, reconfigure_db=False):
         self.database_type_and_version = database_type_and_version
         self.database_connection: Optional[DatabaseConnection] = None
         self.server_process: Optional[subprocess.Popen] = None
         self.db_path: Optional[pathlib.Path] = None
+        self.reconfigure_db = reconfigure_db
 
 
     def __enter__(self):
@@ -157,7 +165,8 @@ class DatabaseProvider:
         """
         db_connection, server_process = _run_database_server(
             self.db_path,
-            self.database_type_and_version
+            self.database_type_and_version,
+            reconfigure_db=self.reconfigure_db
         )
         self.database_connection = db_connection
         self.server_process = server_process

@@ -14,6 +14,7 @@ class Instruction:
         self.transaction_id = transaction_id
         self.instruction = instruction
         self.validator = validator
+        self.output = None
 
     def __repr__(self):
         return f"Instruction(transaction_id={self.transaction_id}, instruction={self.instruction})"
@@ -42,6 +43,7 @@ class TestcaseRunner:
         logging.info(f"Running testcase {self.name} on {self.db_and_type}")
         with db_provider.DatabaseProvider(self.db_and_type) as provider:
             conn = provider.database_connection.to_connection()
+            conn.cursor().execute("drop database if exists testdb;")
             conn.cursor().execute("create database testdb;")
             conn.cursor().execute("use testdb;")
 
@@ -55,6 +57,7 @@ class TestcaseRunner:
                         for cur in it:
                             if cur.with_rows:
                                 output = cur.fetchall()
+                                instruction.output = output
                                 print(f"Output for pre-run instruction: {output}")
                 except Exception as e:
                     logging.error(f"Error running pre-run instructions: {e}")
@@ -86,6 +89,7 @@ class TestcaseRunner:
                     cursor.execute(instruction.instruction)
                     if cursor.with_rows:
                         output = cursor.fetchall()
+                        instruction.output = output
                         print(f"Output for transaction {instruction.transaction_id}: {output}")
                 except Exception as e:
                     logging.error(f"Error running instruction: {e}")

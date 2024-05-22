@@ -21,13 +21,23 @@ class TestcaseInteractor(cmd.Cmd):
 
     def do_test(self, arg):
         """Runs the "test" function."""
-        import testcase.test as test
-        test.test()
+        import testcase.run_bugs as run_bugs
+        run_bugs.test()
+
+    def do_run(self, arg):
+        """Runs the bugs."""
+        import testcase.run_bugs as run_bugs
+        run_bugs.run_bugs(arg.split())
+
+    def do_bug(self, arg):
+        """Runs the bugs."""
+        self.do_run(arg)
 
     def do_help(self, arg):
         """Shows help menu."""
         print("Available commands:")
         print("test - Runs the test function.")
+        print("run - Runs the bugs.")
 
     def help_help(self):
         print("Shows help menu.")

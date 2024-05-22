@@ -58,8 +58,9 @@ class Bug:
         self.db_and_type = db_and_type
         self.scenarios = scenarios
         self.setup_sql_script = setup_sql_script
+        self.testcase_runners: list[testcase_runner.TestcaseRunner] = []
 
-    def save_result_from_user(self):
+    def _save_result_from_user(self):
         """
         Saves the result of the bug from the user
         """
@@ -77,7 +78,7 @@ class Bug:
             if answer.lower() != "y":
                 return
         
-        print("Please enter the result of the bug (CRL+C to stop):")
+        # print("Please enter the result of the bug (CRL+C to stop):")
         result = [
             f"# Bug ID {self.bug_id}",
             "",
@@ -91,17 +92,30 @@ class Bug:
             "",
             "## Results",
         ]
-        print("\n".join(["# " + i for i in result]))
-        while True:
-            try:
-                line = input("# ")
-                result.append(line)
-            except KeyboardInterrupt:
-                break
+        for nr, runner in enumerate(self.testcase_runners):
+            result.append(f"### Scenario {nr}")
+            for nr_instr, instr in enumerate(runner.instructions):
+                result.append(f" * Instruction #{nr_instr}:")
+                sql = instr.instruction.replace("\n", " ").replace("  ", " ")
+                if len(sql) > 40:
+                    sql = sql[:40] + "..."
+                result.append(f"     - SQL: {sql}")
+                result.append(f"     - Output: {instr.output}")
+            result.append("")
+        
+
+        # result.append("## User Observations")
+        # print("\n".join(["# " + i for i in result]))
+        # while True:
+        #     try:
+        #         line = input("# ")
+        #         result.append(line)
+        #     except KeyboardInterrupt:
+        #         break
         
         with open(file, "w") as f:
             f.write("\n".join(result))
-        print(f"Result saved in {file}.")
+        print(f"\nResult saved in {file}.")
         logging.info(f"Result for {self.bug_id} saved in {file}.")
 
     def run(self):
@@ -130,5 +144,6 @@ class Bug:
             except Exception as e:
                 print(f"Error running scenario {nr}: {e}")
                 logging.error(f"Error running scenario {nr}: {e}")
-        
-        self.save_result_from_user()
+            self.testcase_runners.append(runner)
+
+        self._save_result_from_user()

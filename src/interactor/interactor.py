@@ -3,7 +3,6 @@ import cmd
 import interactor.database_interactor as database_interactor
 import interactor.testcase_interactor as testcase_interactor
 import context
-import testcase.run_testcases as run_testcases
 
 HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history" 
 
