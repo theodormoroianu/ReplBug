@@ -39,6 +39,9 @@ class Context:
         # Read the path to the terminal console.
         self.open_terminal_command = os.getenv("TERMINAL_WINDOW_COMMAND")
 
+        # Read the data path
+        self.data_folder_path = pathlib.Path(os.getenv("DATA_FOLDER_PATH"))
+
     @staticmethod
     def get_context():
         """

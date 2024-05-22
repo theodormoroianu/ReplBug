@@ -15,7 +15,11 @@ class Instruction:
         self.instruction = instruction
         self.validator = validator
 
-class Testcase:
+    def __repr__(self):
+        return f"Instruction(transaction_id={self.transaction_id}, instruction={self.instruction})"
+    
+
+class TestcaseRunner:
     """
     Represents a single testcase
     """
@@ -74,7 +78,11 @@ class Testcase:
                     transaction_to_connection[instruction.transaction_id] = new_conn
 
                 try:
-                    cursor = transaction_to_connection[instruction.transaction_id].cursor()
+                    conn = transaction_to_connection[instruction.transaction_id]
+                    # Check if conn is still connected
+                    conn.ping()
+
+                    cursor = conn.cursor()
                     cursor.execute(instruction.instruction)
                     if cursor.with_rows:
                         output = cursor.fetchall()
@@ -83,6 +91,8 @@ class Testcase:
                     logging.error(f"Error running instruction: {e}")
                     print(f"Error running instruction: {e}")
                     print(f"Instruction: {instruction.instruction}")
-                    input("Press enter to continue...")
+                    # print stack trace of exception
+                    import traceback
+                    traceback.print_exc()
                     raise e
     
