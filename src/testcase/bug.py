@@ -97,8 +97,8 @@ class Bug:
             for nr_instr, instr in enumerate(runner.instructions):
                 result.append(f" * Instruction #{nr_instr}:")
                 sql = instr.instruction.replace("\n", " ").replace("  ", " ")
-                if len(sql) > 40:
-                    sql = sql[:40] + "..."
+                if len(sql) > 80:
+                    sql = sql[:80] + "..."
                 result.append(f"     - SQL: {sql}")
                 result.append(f"     - Output: {instr.output}")
             result.append("")
