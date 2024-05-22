@@ -47,23 +47,27 @@ class DatabaseConnection:
     def __init__(
             self,
             database_type_and_version: DatabaseTypeAndVersion,
-            host: str,
+            host: Optional[str] = None,
             port: Optional[int] = None,
             user: Optional[str] = None,
-            password: Optional[str] = None):
+            password: Optional[str] = None,
+            socket: Optional[str] = None):
         self.database_type_and_version = database_type_and_version
         self.host = host
         self.port = port
         self.user = user
         self.password = password
+        self.socket = socket
     
     def to_connection(self) -> mysql.connector.MySQLConnection:
         """
         Returns a MySQL connection object.
         """
-        args = {
-            'host': self.host
-        }
+        args = dict()
+        if self.socket:
+            args['unix_socket'] = self.socket
+        if self.host:
+            args['host'] = self.host
         if self.user:
             args['user'] = self.user
         if self.password:

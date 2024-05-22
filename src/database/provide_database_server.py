@@ -51,7 +51,7 @@ def _run_database_server(
         if reconfigure_db:
             logging.info("Configuring the database server...")
             if db.database_type == DatabaseType.MYSQL:
-                os.system(f"cd {root_folder} && ./bin/mysqld --initialize-insecure --user=root 2> /dev/null > /dev/null")
+                os.system(f"cd {root_folder} && ./bin/mysqld --initialize-insecure 2> /dev/null > /dev/null")
             else:
                 os.system(f"cd {root_folder} && ./scripts/mysql_install_db --datadir={data_folder} 2> /dev/null > /dev/null")
             logging.info("Database server configured.")
@@ -61,15 +61,14 @@ def _run_database_server(
             server_process = subprocess.Popen([f"{root_folder}/bin/mysqld", "--user=root"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             db_connection = DatabaseConnection(
                 database_type_and_version=db,
-                host="localhost",
+                socket="/tmp/mysql.sock",
                 user="root"
             )
         else:
             server_process = subprocess.Popen([f"{root_folder}/bin/mysqld", f"--datadir={data_folder}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             db_connection = DatabaseConnection(
                 database_type_and_version=db,
-                host="localhost",
-                user=os.getlogin()
+                socket="/tmp/mysql.sock",
             )
     
     # Wait for database to be reachable.
@@ -86,6 +85,7 @@ def _run_database_server(
                 print(f"Database and type: {db}")
                 print(f"PID of the server process: {server_process.pid}")
                 input("Press enter to continue...")
+                _stop_database_server(root_folder, db, server_process)
                 raise e
             time.sleep(0.8)
             logging.info("Waiting for the database to start...")
@@ -115,7 +115,6 @@ def _stop_database_server(root_folder: pathlib.Path, db: DatabaseTypeAndVersion,
         # stop the mariadb server
         os.system(f"{root_folder}/bin/mariadb-admin shutdown")
         retcode = server_process.wait()
-
         # delete the data folder
         # os.system(f"rm -rf {root_folder}/data")
         return retcode
@@ -195,6 +194,6 @@ class DatabaseProvider:
         print("Killing the running database server...", end='', flush=True)
         DatabaseProvider._stop_running_server()
         print("done.")
-        
+
 # register the cleanup function
 atexit.register(DatabaseProvider._kill_running_server_script_exiting)
