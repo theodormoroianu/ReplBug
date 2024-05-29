@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import Optional, Tuple
 import pathlib
 import mysql.connector
 
@@ -21,7 +21,7 @@ class DatabaseType(Enum):
             return DatabaseType.TIDB
         else:
             raise ValueError(f"Unsupported database type: {value}")
-
+        
 
 class DatabaseTypeAndVersion:
     """
@@ -34,11 +34,28 @@ class DatabaseTypeAndVersion:
     def __str__(self):
         return f"{self.database_type.value}-{self.version}"
     
-    def __eq__(self, other):
+    def __eq__(self, other: 'DatabaseTypeAndVersion'):
         if other is None:
             return False
         return self.database_type == other.database_type and self.version == other.version
     
+    def __hash__(self) -> int:
+        return hash((self.database_type, self.version))
+    
+    def to_docker_image_and_tag(self) -> Tuple[str, str]:
+        """
+        returns the docker image and tag for the database.
+        e.g. (docker.io/library/mariadb, 10.5.8)
+        """
+        if self.database_type == DatabaseType.MARIADB:
+            return ("docker.io/library/mariadb", self.version)
+        elif self.database_type == DatabaseType.MYSQL:
+            return ("docker.io/library/mysql", self.version)
+        elif self.database_type == DatabaseType.TIDB:
+            # https://hub.docker.com/r/pingcap/tidb/tags
+            return ("docker.io/pingcap/tidb", f"v{self.version}")
+        else:
+            raise ValueError(f"Unsupported database type: {self.database_type}")
     
 class DatabaseConnection:
     """

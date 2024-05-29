@@ -1,17 +1,27 @@
 import context
 import testcase.bug as bug
 import database.config as db_config
+from .helpers import *
 
 #################################################################################################
 # Bug reported here: https://bugs.mysql.com/bug.php?id=107887                                   #
 # Taken from here:   https://github.com/JZuming/TxCheck/blob/main/docs/mysql_bugs.md            #
-# Setup:             mysql_bk_1.sql                                                             #
+# Setup:             mysql_bk_4.sql                                                             #
 #################################################################################################
 
-def bug4():
-    scenario_0 = """
-    conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
-    conn_1> SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+ORIGINAL_ISOLATION_LEVEL = IsolationLevel.READ_COMMITTED
+
+description = """
+Link:                     https://bugs.mysql.com/bug.php?id=107887
+Original isolation level: READ COMMITTED
+Tested isolation level:   %s
+"""
+
+def get_bug_runner(isolation_level: IsolationLevel):
+    scenario_0 = f"""
+    conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+    conn_1> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
 
     conn_0> START TRANSACTION;
     conn_1> START TRANSACTION;
@@ -73,10 +83,19 @@ def bug4():
 
     setup_sql_script = context.Context.get_context().data_folder_path / "sql" / "mysql_bk_4.sql"
     bug_runner = bug.Bug(
-        bug_id="107887",
-        description="https://bugs.mysql.com/bug.php?id=107887",
+        bug_id=f"107887 - {isolation_level.value}",
+        description=description % isolation_level.value,
         db_and_type=db_config.DatabaseTypeAndVersion(db_config.DatabaseType.MYSQL, "8.0.23"),
         scenarios=[scenario_0, scenario_1],
         setup_sql_script=setup_sql_script
     )
-    bug_runner.run()
+    return bug_runner
+
+
+def get_bug_scenarios():
+    scenarios = {
+        f"bug4_{i.name}": get_bug_runner(i) for i in IsolationLevel
+        if i != ORIGINAL_ISOLATION_LEVEL
+    }
+    scenarios["bug4"] = get_bug_runner(ORIGINAL_ISOLATION_LEVEL)
+    return scenarios

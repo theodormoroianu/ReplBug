@@ -68,15 +68,15 @@ class Bug:
         file.parent.mkdir(parents=True, exist_ok=True)
 
         print("Saving results...")
-        if file.exists():
-            print("Result file already exists:")
-            content = open(file).readlines()
-            content = [" > " + i for i in content]
-            print("".join(content))
-            print("Do you want to overwrite it? (y/n)")
-            answer = input("> ")
-            if answer.lower() != "y":
-                return
+        # if file.exists():
+        #     print("Result file already exists:")
+        #     content = open(file).readlines()
+        #     content = [" > " + i for i in content]
+        #     print("".join(content))
+        #     print("Do you want to overwrite it? (y/n)")
+        #     answer = input("> ")
+        #     if answer.lower() != "y":
+        #         return
         
         # print("Please enter the result of the bug (CRL+C to stop):")
         result = [
@@ -100,6 +100,7 @@ class Bug:
                 if len(sql) > 80:
                     sql = sql[:80] + "..."
                 result.append(f"     - SQL: {sql}")
+                result.append(f"     - TID: {instr.transaction_id}")
                 result.append(f"     - Output: {instr.output}")
             result.append("")
         
@@ -115,7 +116,7 @@ class Bug:
         
         with open(file, "w") as f:
             f.write("\n".join(result))
-        print(f"\nResult saved in {file}.")
+        print(f"Result saved in {file}.")
         logging.info(f"Result for {self.bug_id} saved in {file}.")
 
     def run(self):

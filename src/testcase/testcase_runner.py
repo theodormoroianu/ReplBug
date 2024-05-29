@@ -4,7 +4,7 @@ import mysql.connector
 import mysql.connector.cursor
 
 import database.config as db_config
-import database.provide_database_server as db_provider
+import database.provide_db_container as db_provider
 
 class Instruction:
     """
@@ -71,13 +71,15 @@ class TestcaseRunner:
             transaction_to_connection: Dict[int, mysql.connector.MySQLConnection] = {}
 
             logging.info("Running instructions...")
-            for instruction in self.instructions:
+            for instruction_idx, instruction in enumerate(self.instructions):
                 assert instruction.transaction_id is not None
                 logging.info(f"Running instruction: {instruction.instruction}")
                 if instruction.transaction_id not in transaction_to_connection:
                     # create a new concurent connection for the transaction
                     new_conn = provider.database_connection.to_connection()
                     new_conn.cursor().execute("use testdb;")
+                    # set timeout of 3 seconds for lock wait
+                    new_conn.cursor().execute("SET SESSION innodb_lock_wait_timeout = 3")
                     transaction_to_connection[instruction.transaction_id] = new_conn
 
                 try:
@@ -90,7 +92,16 @@ class TestcaseRunner:
                     if cursor.with_rows:
                         output = cursor.fetchall()
                         instruction.output = output
-                        print(f"Output for transaction {instruction.transaction_id}: {output}")
+                        logging.debug(f"Output for transaction {instruction.transaction_id}: {output}")
+                except mysql.connector.errors.DatabaseError as e:
+                    logging.error(f"Error running instruction: {e}")
+                    print(f"Error running instruction: {e}")
+                    # save error as the output of the instruction
+                    instruction.output = f"Error: {e}"
+                    # stop the loop, as we are no longer interested in running the rest of the instructions
+                    for instr in self.instructions[instruction_idx+1:]:
+                        instr.output = "Skipped due to previous error."
+                    break
                 except Exception as e:
                     logging.error(f"Error running instruction: {e}")
                     print(f"Error running instruction: {e}")
