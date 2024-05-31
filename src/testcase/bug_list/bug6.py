@@ -63,7 +63,7 @@ def get_bug_runner(isolation_level: IsolationLevel):
     bug_runner = bug.Bug(
         bug_id=f"{bug_id} - {isolation_level.value}",
         description=description % isolation_level.value,
-        db_and_type=db_config.DatabaseTypeAndVersion(db_config.DatabaseType.MYSQL, "8.0.35"),
+        db_and_type=db_config.DatabaseTypeAndVersion(db_config.DatabaseType.MARIADB_DEBUG, "10.8.3"),
         scenarios=[scenario_0],
         setup_sql_script=setup_sql_script
     )

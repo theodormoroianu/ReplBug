@@ -33,7 +33,7 @@ Tested isolation level:   READ UNCOMMITTED
  * Instruction #4:
      - SQL:  select * from t_8fhx8c as ref_1 where ref_1.c_0byzvd not in ( select nullif(19,...
      - TID: 0
-     - Output: [(12, 70000, 18, 87.87, 'wkf9h', None, 76.7), (12, 71000, 37, 5.2, 'npgb8', None, 95.63), (12, 72000, 48, 83.8, 'xhx3rb', None, 51.53), (12, 73000, 30, 5.4, 'yfdncd', None, 33.34), (12, 74000, 82, 10.2, 'jmvq9d', None, 63.46), (12, 75000, 94, 57.76, 'l1ei4c', None, 58.27)]
+     - Output: []
  * Instruction #5:
      - SQL:  commit;
      - TID: 0

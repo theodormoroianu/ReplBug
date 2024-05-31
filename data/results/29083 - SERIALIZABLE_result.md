@@ -55,8 +55,8 @@ Tested isolation level:   SERIALIZABLE
  * Instruction #0:
      - SQL:  insert into t_7sdcgd values (91, 167000, case when exists ( select * from (t_eu...
      - TID: 0
-     - Output: None
+     - Output: Error: 1242 (21000): Subquery returns more than 1 row
  * Instruction #1:
      - SQL:  select * from t_7sdcgd where wkey = 91;
      - TID: 0
-     - Output: [(91, 167000, 2.0, 96, 71.64, '1c08ld')]
+     - Output: Skipped due to previous error.

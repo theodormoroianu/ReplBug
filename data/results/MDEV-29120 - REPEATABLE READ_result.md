@@ -8,7 +8,7 @@ Tested isolation level:   REPEATABLE READ
 
 
 ## Details
- * Database: mysql-8.0.35
+ * Database: mariadb-debug-10.8.3
  * Number of scenarios: 1
  * Initial setup script: /home/theodor/Projects/MasterThesis/data/sql/mysql_bk_6.sql
 

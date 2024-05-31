@@ -42,6 +42,9 @@ class Context:
         # Read the data path
         self.data_folder_path = pathlib.Path(os.getenv("DATA_FOLDER_PATH"))
 
+        # Read the path to dockerfiles
+        self.dockerfiles_path = pathlib.Path(os.getenv("DOCKERFILES_FOLDER_PATH"))
+
     @staticmethod
     def get_context():
         """

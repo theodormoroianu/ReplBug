@@ -10,6 +10,7 @@ class DatabaseType(Enum):
     MARIADB = 'mariadb'
     MYSQL = 'mysql'
     TIDB = 'tidb'
+    MARIADB_DEBUG = 'mariadb-debug'
 
     @staticmethod
     def from_str(value: str) -> 'DatabaseType':
@@ -19,6 +20,8 @@ class DatabaseType(Enum):
             return DatabaseType.MYSQL
         elif value == 'tidb':
             return DatabaseType.TIDB
+        elif value == 'mariadb-debug':
+            return DatabaseType.MARIADB_DEBUG
         else:
             raise ValueError(f"Unsupported database type: {value}")
         
@@ -54,9 +57,17 @@ class DatabaseTypeAndVersion:
         elif self.database_type == DatabaseType.TIDB:
             # https://hub.docker.com/r/pingcap/tidb/tags
             return ("docker.io/pingcap/tidb", f"v{self.version}")
+        elif self.database_type == DatabaseType.MARIADB_DEBUG:
+            return ("mariadb-debug", self.version)
         else:
             raise ValueError(f"Unsupported database type: {self.database_type}")
     
+    def needs_to_be_pulled(self) -> bool:
+        """
+        Returns whether the database image needs to be pulled.
+        """
+        return self.database_type != DatabaseType.MARIADB_DEBUG
+
 class DatabaseConnection:
     """
     Encodes the database connection details
