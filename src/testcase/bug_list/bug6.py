@@ -18,6 +18,7 @@ Original isolation level: REPETABLE READ
 Tested isolation level:   %s
 """
 
+
 def get_bug_runner(isolation_level: IsolationLevel):
     scenario_0 = f"""
     conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
@@ -59,20 +60,25 @@ def get_bug_runner(isolation_level: IsolationLevel):
     conn_1> ROLLBACK;
     """
 
-    setup_sql_script = context.Context.get_context().data_folder_path / "sql" / "mysql_bk_6.sql"
+    setup_sql_script = (
+        context.Context.get_context().data_folder_path / "sql" / "mysql_bk_6.sql"
+    )
     bug_runner = bug.Bug(
         bug_id=f"{bug_id} - {isolation_level.value}",
         description=description % isolation_level.value,
-        db_and_type=db_config.DatabaseTypeAndVersion(db_config.DatabaseType.MARIADB_DEBUG, "10.8.3"),
+        db_and_type=db_config.DatabaseTypeAndVersion(
+            db_config.DatabaseType.MARIADB_DEBUG, "10.8.3"
+        ),
         scenarios=[scenario_0],
-        setup_sql_script=setup_sql_script
+        setup_sql_script=setup_sql_script,
     )
     return bug_runner
 
 
 def get_bug_scenarios():
     scenarios = {
-        f"bug6_{i.name}": get_bug_runner(i) for i in IsolationLevel
+        f"bug6_{i.name}": get_bug_runner(i)
+        for i in IsolationLevel
         if i != ORIGINAL_ISOLATION_LEVEL
     }
     scenarios["bug6"] = get_bug_runner(ORIGINAL_ISOLATION_LEVEL)

@@ -18,6 +18,7 @@ Original isolation level: REPEATABLE READ
 Tested isolation level:   %s
 """
 
+
 def get_bug_runner(isolation_level: IsolationLevel):
     # default is repetable reads
     scenario_0 = f"""
@@ -37,19 +38,25 @@ def get_bug_runner(isolation_level: IsolationLevel):
     scenario_0 = scenario_0.replace("T0>", "conn_0>")
     scenario_0 = scenario_0.replace("T1>", "conn_1>")
 
-    setup_sql_script = context.Context.get_context().data_folder_path / "sql" / "mysql_bk_3.sql"
+    setup_sql_script = (
+        context.Context.get_context().data_folder_path / "sql" / "mysql_bk_3.sql"
+    )
     bug_runner = bug.Bug(
         bug_id=f"108528 - {isolation_level.value}",
         description=description % isolation_level.value,
-        db_and_type=db_config.DatabaseTypeAndVersion(db_config.DatabaseType.MYSQL, "8.0.23"),
+        db_and_type=db_config.DatabaseTypeAndVersion(
+            db_config.DatabaseType.MYSQL, "8.0.23"
+        ),
         scenarios=[scenario_0],
-        setup_sql_script=setup_sql_script
+        setup_sql_script=setup_sql_script,
     )
     return bug_runner
 
+
 def get_bug_scenarios():
     scenarios = {
-        f"bug3_{i.name}": get_bug_runner(i) for i in IsolationLevel
+        f"bug3_{i.name}": get_bug_runner(i)
+        for i in IsolationLevel
         if i != ORIGINAL_ISOLATION_LEVEL
     }
     scenarios["bug3"] = get_bug_runner(ORIGINAL_ISOLATION_LEVEL)

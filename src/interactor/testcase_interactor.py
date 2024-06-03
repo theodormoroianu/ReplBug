@@ -7,7 +7,7 @@ import interactor.helpers as helpers
 
 
 class TestcaseInteractor(cmd.Cmd):
-    prompt = 'test> '
+    prompt = "test> "
     instance = None
 
     @staticmethod
@@ -22,11 +22,13 @@ class TestcaseInteractor(cmd.Cmd):
     def do_test(self, arg):
         """Runs the "test" function."""
         import testcase.run_bugs as run_bugs
+
         run_bugs.test()
 
     def do_run(self, arg):
         """Runs the bugs."""
         import testcase.run_bugs as run_bugs
+
         run_bugs.run_bugs(arg.split())
 
     def do_bug(self, arg):
@@ -57,10 +59,9 @@ class TestcaseInteractor(cmd.Cmd):
             print("")
             return "quit"
         return super().precmd(line)
-    
+
     def default(self, line: str) -> None:
         args = line.split()
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
             return True
         return super().default(line)
-

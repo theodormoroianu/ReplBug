@@ -1,5 +1,6 @@
 import database.config as db_config
 
+
 def parse_db_type_and_version(arg) -> db_config.DatabaseTypeAndVersion:
     """
     Parses the database version and type from the given string.

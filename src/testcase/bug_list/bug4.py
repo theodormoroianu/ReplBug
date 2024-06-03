@@ -18,6 +18,7 @@ Original isolation level: READ COMMITTED
 Tested isolation level:   %s
 """
 
+
 def get_bug_runner(isolation_level: IsolationLevel):
     scenario_0 = f"""
     conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
@@ -81,20 +82,25 @@ def get_bug_runner(isolation_level: IsolationLevel):
     conn_0> COMMIT;
     """
 
-    setup_sql_script = context.Context.get_context().data_folder_path / "sql" / "mysql_bk_4.sql"
+    setup_sql_script = (
+        context.Context.get_context().data_folder_path / "sql" / "mysql_bk_4.sql"
+    )
     bug_runner = bug.Bug(
         bug_id=f"107887 - {isolation_level.value}",
         description=description % isolation_level.value,
-        db_and_type=db_config.DatabaseTypeAndVersion(db_config.DatabaseType.MYSQL, "8.0.23"),
+        db_and_type=db_config.DatabaseTypeAndVersion(
+            db_config.DatabaseType.MYSQL, "8.0.23"
+        ),
         scenarios=[scenario_0, scenario_1],
-        setup_sql_script=setup_sql_script
+        setup_sql_script=setup_sql_script,
     )
     return bug_runner
 
 
 def get_bug_scenarios():
     scenarios = {
-        f"bug4_{i.name}": get_bug_runner(i) for i in IsolationLevel
+        f"bug4_{i.name}": get_bug_runner(i)
+        for i in IsolationLevel
         if i != ORIGINAL_ISOLATION_LEVEL
     }
     scenarios["bug4"] = get_bug_runner(ORIGINAL_ISOLATION_LEVEL)

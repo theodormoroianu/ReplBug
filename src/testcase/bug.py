@@ -28,13 +28,13 @@ def parse_instructions(instructions: str) -> list[testcase_runner.Instruction]:
             if last != "":
                 result.append(testcase_runner.Instruction(conn_last, last))
                 last = ""
-            
+
             prefix, command = line.split(">", 1)
             last = command
             conn_last = int(prefix.split("_")[1])
         else:
             last += " " + line
-    
+
     if last != "":
         result.append(testcase_runner.Instruction(conn_last, last))
 
@@ -45,13 +45,14 @@ class Bug:
     """
     This class represents a discovered bug.
     """
+
     def __init__(
-            self,
-            bug_id: str,
-            description: str,
-            db_and_type: db_config.DatabaseTypeAndVersion,
-            scenarios: list[str],
-            setup_sql_script: Optional[pathlib.Path] = None,
+        self,
+        bug_id: str,
+        description: str,
+        db_and_type: db_config.DatabaseTypeAndVersion,
+        scenarios: list[str],
+        setup_sql_script: Optional[pathlib.Path] = None,
     ):
         self.bug_id = bug_id
         self.description = description
@@ -64,7 +65,11 @@ class Bug:
         """
         Saves the result of the bug from the user
         """
-        file = Context.get_context().data_folder_path / "results" / f"{self.bug_id}_result.md"
+        file = (
+            Context.get_context().data_folder_path
+            / "results"
+            / f"{self.bug_id}_result.md"
+        )
         file.parent.mkdir(parents=True, exist_ok=True)
 
         print("Saving results...")
@@ -77,7 +82,7 @@ class Bug:
         #     answer = input("> ")
         #     if answer.lower() != "y":
         #         return
-        
+
         # print("Please enter the result of the bug (CRL+C to stop):")
         result = [
             f"# Bug ID {self.bug_id}",
@@ -103,7 +108,6 @@ class Bug:
                 result.append(f"     - TID: {instr.transaction_id}")
                 result.append(f"     - Output: {instr.output}")
             result.append("")
-        
 
         # result.append("## User Observations")
         # print("\n".join(["# " + i for i in result]))
@@ -113,7 +117,7 @@ class Bug:
         #         result.append(line)
         #     except KeyboardInterrupt:
         #         break
-        
+
         with open(file, "w") as f:
             f.write("\n".join(result))
         print(f"Result saved in {file}.")
@@ -138,7 +142,7 @@ class Bug:
                 name=f"{self.bug_id} - Scenario {nr}",
                 instructions=parse_instructions(scenario_content),
                 db_and_type=self.db_and_type,
-                pre_run_instructions=pre_run_instruction
+                pre_run_instructions=pre_run_instruction,
             )
             # try:
             runner.run()

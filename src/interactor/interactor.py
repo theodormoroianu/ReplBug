@@ -4,10 +4,11 @@ import interactor.database_interactor as database_interactor
 import interactor.testcase_interactor as testcase_interactor
 import context
 
-HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history" 
+HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history"
+
 
 class MainInteractor(cmd.Cmd):
-    prompt = '> '
+    prompt = "> "
     instance = None
 
     @staticmethod
@@ -23,6 +24,7 @@ class MainInteractor(cmd.Cmd):
         # Load commmand history
         try:
             import readline
+
             readline.read_history_file(HISTORY_FILE)
         except:
             pass
@@ -31,6 +33,7 @@ class MainInteractor(cmd.Cmd):
         # Dump commmand history
         try:
             import readline
+
             readline.set_history_length(100)
             readline.write_history_file(HISTORY_FILE)
         except:
@@ -39,9 +42,9 @@ class MainInteractor(cmd.Cmd):
     def do_database(self, arg):
         """Allows the user to download and interact with a database."""
         try:
-            database_interactor.DatabaseInteractor\
-                .get_instance()\
-                .process_external_arg(arg)
+            database_interactor.DatabaseInteractor.get_instance().process_external_arg(
+                arg
+            )
         except KeyboardInterrupt as e:
             print("")
             pass
@@ -49,13 +52,13 @@ class MainInteractor(cmd.Cmd):
     def do_testcase(self, arg):
         """Runs the testcases."""
         try:
-            testcase_interactor.TestcaseInteractor\
-                .get_instance()\
-                .process_external_arg(arg)
+            testcase_interactor.TestcaseInteractor.get_instance().process_external_arg(
+                arg
+            )
         except KeyboardInterrupt as e:
             print("")
             pass
-    
+
     def do_test(self, arg):
         return self.do_testcase(arg)
 
@@ -69,7 +72,7 @@ class MainInteractor(cmd.Cmd):
 
     def help_help(self):
         print("Shows help menu.")
-    
+
     def precmd(self, line: str) -> str:
         if line == "EOF":
             print("")
@@ -81,7 +84,7 @@ class MainInteractor(cmd.Cmd):
 
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
             return True
-        
+
         if len(args) > 0 and args[0] == "db":
             self.do_database(" ".join(args[1:]))
             return
@@ -99,4 +102,3 @@ class MainInteractor(cmd.Cmd):
             self.onecmd(args)
         else:
             self.cmdloop()
-            

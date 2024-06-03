@@ -9,8 +9,9 @@ import database.open_multiple_sessions as db_open_sessions
 import context
 import interactor.helpers as helpers
 
+
 class DatabaseInteractor(cmd.Cmd):
-    prompt = 'db> '
+    prompt = "db> "
     instance = None
 
     @staticmethod
@@ -28,7 +29,7 @@ class DatabaseInteractor(cmd.Cmd):
         if not cache_path.exists():
             print("No databases downloaded.")
             return
-        
+
         print("Available databases:")
         for db in sorted(cache_path.iterdir()):
             print(f" * {db.name}")
@@ -44,7 +45,7 @@ class DatabaseInteractor(cmd.Cmd):
         except Exception as e:
             self.help_download()
             return
-        
+
         logging.info(f"Downloading database {db} version {version}, requested by user.")
         db_and_version = db_config.DatabaseTypeAndVersion(db, version)
         db_download.download_and_extract_db_binaries(db_and_version)
@@ -55,7 +56,7 @@ class DatabaseInteractor(cmd.Cmd):
         print("Downloads a database.")
         print("Usage: download <DB TYPE> <VERSION>")
         print("Example: download mysql 8.0.34")
-    
+
     def do_spawn(self, arg: str):
         """
         Spawns multiple shells connected to a database server.
@@ -67,8 +68,7 @@ class DatabaseInteractor(cmd.Cmd):
             self.help_spawn()
             return
         db_open_sessions.open_multiple_sessions(
-            db_config.DatabaseTypeAndVersion(db, version),
-            int(nr_shells)
+            db_config.DatabaseTypeAndVersion(db, version), int(nr_shells)
         )
 
     def do_start_server(self, arg: str):
@@ -88,7 +88,9 @@ class DatabaseInteractor(cmd.Cmd):
                 print(f"Port:          {connection.port}")
                 print(f"User:          {connection.user}")
                 print(f"Password:      {connection.password}")
-                print(f"Connect with:  {db_open_sessions.mysql_cli_command(db_and_version)}")
+                print(
+                    f"Connect with:  {db_open_sessions.mysql_cli_command(db_and_version)}"
+                )
             else:
                 time.sleep(2)
 
@@ -97,7 +99,7 @@ class DatabaseInteractor(cmd.Cmd):
                 input()
             except KeyboardInterrupt:
                 pass
-            
+
     def help_start_server(self):
         print("Starts a database server and waits for the user to connect to it.")
         print("Usage: start_server <DB TYPE>-<VERSION>")
@@ -114,7 +116,9 @@ class DatabaseInteractor(cmd.Cmd):
         print("  list         : Lists the downloaded available databases.")
         print("  download     : Downloads a database.")
         print("  spawn        : Spawns multiple shells connected to a database server.")
-        print("  start_db     : Starts a database server and waits for the user to connect to it.")
+        print(
+            "  start_db     : Starts a database server and waits for the user to connect to it."
+        )
 
     def help_help(self):
         print("Shows help menu.")
@@ -134,10 +138,9 @@ class DatabaseInteractor(cmd.Cmd):
             print("")
             return "quit"
         return super().precmd(line)
-    
+
     def default(self, line: str) -> None:
         args = line.split()
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
             return True
         return super().default(line)
-

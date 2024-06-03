@@ -19,7 +19,7 @@ def run_bugs(bugs: list[str]):
                 found = True
         if not found:
             logging.info("No bugs found for the provided regex: %s", bug_re)
-    
+
     logging.info(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
     for bug_name in bugs_to_run:
         bugs_to_run[bug_name].run()
@@ -28,6 +28,7 @@ def run_bugs(bugs: list[str]):
         print("No bugs found for the provided patterns.")
 
     input("Press enter to exit...")
+
 
 def test():
     pass

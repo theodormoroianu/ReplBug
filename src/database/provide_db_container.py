@@ -1,6 +1,7 @@
 """
 This module is responsible for providing the necessary binaries for the database.
 """
+
 import time
 from typing import Optional, Set, Tuple, Dict
 import atexit
@@ -16,11 +17,15 @@ from . import helpers
 from .podman_connection import PodmanConnection
 import context
 
+
 class DatabaseProvider:
     """
     Provides and cleans the necessary binaries for a specific database.
     """
-    def __init__(self, database_type_and_version: DatabaseTypeAndVersion, reconfigure_db=False):
+
+    def __init__(
+        self, database_type_and_version: DatabaseTypeAndVersion, reconfigure_db=False
+    ):
         self.container_id = None
         self.db_connection = None
         self.db_type_and_version = database_type_and_version
@@ -30,10 +35,12 @@ class DatabaseProvider:
         Starts the database and populates the `database_connection` attribute.
         """
         podman_connection = PodmanConnection.get_instance()
-        self.container_id, self.db_connection = podman_connection.create_container(self.db_type_and_version)
-        
+        self.container_id, self.db_connection = podman_connection.create_container(
+            self.db_type_and_version
+        )
+
         return self
-    
+
     def get_logs(self):
         """
         Get the logs of the container.
