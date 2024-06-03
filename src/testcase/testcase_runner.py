@@ -42,7 +42,7 @@ class TestcaseRunner:
         """
         logging.info(f"Running testcase {self.name} on {self.db_and_type}")
         with db_provider.DatabaseProvider(self.db_and_type) as provider:
-            conn = provider.database_connection.to_connection()
+            conn = provider.db_connection.to_connection()
             conn.cursor().execute("drop database if exists testdb;")
             conn.cursor().execute("create database testdb;")
             conn.cursor().execute("use testdb;")
@@ -76,7 +76,7 @@ class TestcaseRunner:
                 logging.info(f"Running instruction: {instruction.instruction}")
                 if instruction.transaction_id not in transaction_to_connection:
                     # create a new concurent connection for the transaction
-                    new_conn = provider.database_connection.to_connection()
+                    new_conn = provider.db_connection.to_connection()
                     new_conn.cursor().execute("use testdb;")
                     # set timeout of 3 seconds for lock wait
                     new_conn.cursor().execute("SET SESSION innodb_lock_wait_timeout = 3")

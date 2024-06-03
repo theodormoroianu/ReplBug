@@ -25,6 +25,14 @@ class DatabaseType(Enum):
         else:
             raise ValueError(f"Unsupported database type: {value}")
         
+    def used_port(self):
+        """
+        Returns the default port used by the database type.
+        """
+        if self == DatabaseType.TIDB:
+            return 4000
+        else:
+            return 3306
 
 class DatabaseTypeAndVersion:
     """
