@@ -1,4 +1,4 @@
-# Bug ID 108528 - READ COMMITTED
+# Bug ID 108528_READ_COMMITTED
 
 ## Description
 
@@ -58,3 +58,6 @@ Tested isolation level:   READ COMMITTED
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

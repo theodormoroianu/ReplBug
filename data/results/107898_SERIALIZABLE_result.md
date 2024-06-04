@@ -1,4 +1,4 @@
-# Bug ID 107898 - SERIALIZABLE
+# Bug ID 107898_SERIALIZABLE
 
 ## Description
 
@@ -39,6 +39,9 @@ Tested isolation level:   SERIALIZABLE
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
      - SQL:  SET LOCAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
@@ -56,3 +59,6 @@ Tested isolation level:   SERIALIZABLE
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

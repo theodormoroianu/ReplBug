@@ -1,4 +1,4 @@
-# Bug ID 107066 - REPEATABLE READ
+# Bug ID 107066_REPEATABLE_READ
 
 ## Description
 
@@ -41,15 +41,18 @@ Tested isolation level:   REPEATABLE READ
  * Instruction #6:
      - SQL:  select pkey from t_zcfqb where wkey = 121;
      - TID: 0
-     - Output: Error: 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
+     - Output: [(264001,), (264002,), (264003,), (264004,), (264005,), (264006,), (264007,), (264008,), (264009,), (264010,), (264011,), (264012,), (264013,), (264014,), (264015,), (264016,), (264017,), (264018,), (264019,), (264020,), (264021,), (264022,), (264023,), (264024,), (264025,), (264026,), (264027,), (264028,), (264029,), (264030,), (264031,), (264032,), (264033,), (264034,), (264035,), (264036,), (264037,), (264038,), (264039,), (264040,), (264041,), (264042,), (264043,), (264044,), (264045,), (264046,), (264047,), (264048,), (264049,)]
  * Instruction #7:
      - SQL:  ROLLBACK;
      - TID: 1
-     - Output: Skipped due to previous error.
+     - Output: None
  * Instruction #8:
      - SQL:  COMMIT;
      - TID: 0
-     - Output: Skipped due to previous error.
+     - Output: None
+
+ * Container logs:
+   No logs available.
 
 ### Scenario 1
  * Instruction #0:
@@ -72,3 +75,6 @@ Tested isolation level:   REPEATABLE READ
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

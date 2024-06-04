@@ -1,4 +1,4 @@
-# Bug ID 107898 - READ COMMITTED
+# Bug ID 107898_READ_COMMITTED
 
 ## Description
 
@@ -39,6 +39,9 @@ Tested isolation level:   READ COMMITTED
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
      - SQL:  SET LOCAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
@@ -56,3 +59,6 @@ Tested isolation level:   READ COMMITTED
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

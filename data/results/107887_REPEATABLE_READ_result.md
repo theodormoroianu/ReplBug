@@ -1,10 +1,10 @@
-# Bug ID 107887 - READ UNCOMMITTED
+# Bug ID 107887_REPEATABLE_READ
 
 ## Description
 
 Link:                     https://bugs.mysql.com/bug.php?id=107887
 Original isolation level: READ COMMITTED
-Tested isolation level:   READ UNCOMMITTED
+Tested isolation level:   REPEATABLE READ
 
 
 ## Details
@@ -15,11 +15,11 @@ Tested isolation level:   READ UNCOMMITTED
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
      - TID: 0
      - Output: None
  * Instruction #1:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
      - TID: 1
      - Output: None
  * Instruction #2:
@@ -51,6 +51,9 @@ Tested isolation level:   READ UNCOMMITTED
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
      - SQL:  START TRANSACTION;
@@ -68,3 +71,6 @@ Tested isolation level:   READ UNCOMMITTED
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

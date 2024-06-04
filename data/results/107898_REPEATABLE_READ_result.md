@@ -1,4 +1,4 @@
-# Bug ID 107898 - REPEATABLE READ
+# Bug ID 107898_REPEATABLE_READ
 
 ## Description
 
@@ -39,6 +39,9 @@ Tested isolation level:   REPEATABLE READ
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
      - SQL:  SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
@@ -56,3 +59,6 @@ Tested isolation level:   REPEATABLE READ
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

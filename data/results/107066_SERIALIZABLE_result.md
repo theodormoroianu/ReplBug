@@ -1,10 +1,10 @@
-# Bug ID 107066 - READ UNCOMMITTED
+# Bug ID 107066_SERIALIZABLE
 
 ## Description
 
 Link:                     https://bugs.mysql.com/bug.php?id=107066
 Original isolation level: REPEATABLE READ
-Tested isolation level:   READ UNCOMMITTED
+Tested isolation level:   SERIALIZABLE
 
 
 ## Details
@@ -15,11 +15,11 @@ Tested isolation level:   READ UNCOMMITTED
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - TID: 0
      - Output: None
  * Instruction #1:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - TID: 1
      - Output: None
  * Instruction #2:
@@ -51,9 +51,12 @@ Tested isolation level:   READ UNCOMMITTED
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - TID: 0
      - Output: None
  * Instruction #1:
@@ -72,3 +75,6 @@ Tested isolation level:   READ UNCOMMITTED
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
+
+ * Container logs:
+   No logs available.

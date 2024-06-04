@@ -1,10 +1,10 @@
-# Bug ID 29083 - REPEATABLE READ
+# Bug ID 29083_READ_UNCOMMITTED
 
 ## Description
 
 Link:                     https://jira.mariadb.org/browse/MDEV-29083
 Original isolation level: READ COMMITTED
-Tested isolation level:   REPEATABLE READ
+Tested isolation level:   READ UNCOMMITTED
 
 
 ## Details
@@ -15,11 +15,11 @@ Tested isolation level:   REPEATABLE READ
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
      - TID: 0
      - Output: None
  * Instruction #1:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
      - TID: 1
      - Output: None
  * Instruction #2:
@@ -51,6 +51,9 @@ Tested isolation level:   REPEATABLE READ
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
      - SQL:  insert into t_7sdcgd values (91, 167000, case when exists ( select * from (t_eu...
@@ -60,3 +63,6 @@ Tested isolation level:   REPEATABLE READ
      - SQL:  select * from t_7sdcgd where wkey = 91;
      - TID: 0
      - Output: Skipped due to previous error.
+
+ * Container logs:
+   No logs available.

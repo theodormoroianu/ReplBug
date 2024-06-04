@@ -1,10 +1,10 @@
-# Bug ID 29083 - READ UNCOMMITTED
+# Bug ID 29083_READ_COMMITTED
 
 ## Description
 
 Link:                     https://jira.mariadb.org/browse/MDEV-29083
 Original isolation level: READ COMMITTED
-Tested isolation level:   READ UNCOMMITTED
+Tested isolation level:   READ COMMITTED
 
 
 ## Details
@@ -15,11 +15,11 @@ Tested isolation level:   READ UNCOMMITTED
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
      - TID: 0
      - Output: None
  * Instruction #1:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
      - TID: 1
      - Output: None
  * Instruction #2:
@@ -51,12 +51,18 @@ Tested isolation level:   READ UNCOMMITTED
      - TID: 0
      - Output: None
 
+ * Container logs:
+   No logs available.
+
 ### Scenario 1
  * Instruction #0:
      - SQL:  insert into t_7sdcgd values (91, 167000, case when exists ( select * from (t_eu...
      - TID: 0
-     - Output: Error: 1242 (21000): Subquery returns more than 1 row
+     - Output: None
  * Instruction #1:
      - SQL:  select * from t_7sdcgd where wkey = 91;
      - TID: 0
-     - Output: Skipped due to previous error.
+     - Output: [(91, 167000, 2.0, 96, 71.64, '1c08ld')]
+
+ * Container logs:
+   No logs available.
