@@ -27,8 +27,6 @@ def run_bugs(bugs: list[str]):
     if not bugs_to_run:
         print("No bugs found for the provided patterns.")
 
-    input("Press enter to exit...")
-
 
 def test():
     pass

@@ -86,7 +86,7 @@ def get_bug_runner(isolation_level: IsolationLevel):
         context.Context.get_context().data_folder_path / "sql" / "mysql_bk_4.sql"
     )
     bug_runner = bug.Bug(
-        bug_id=f"107887 - {isolation_level.value}",
+        bug_id=f"107887_{isolation_level.name}",
         description=description % isolation_level.value,
         db_and_type=db_config.DatabaseTypeAndVersion(
             db_config.DatabaseType.MYSQL, "8.0.23"

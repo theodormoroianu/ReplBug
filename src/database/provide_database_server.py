@@ -221,9 +221,9 @@ class DatabaseProvider:
 
     @staticmethod
     def _kill_running_server_script_exiting():
-        print("Killing the running database server...", end="", flush=True)
+        # print("Killing the running database server...", end="", flush=True)
         DatabaseProvider._stop_running_server()
-        print("done.")
+        # print("done.")
 
 
 # register the cleanup function

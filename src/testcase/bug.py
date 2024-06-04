@@ -108,15 +108,16 @@ class Bug:
                 result.append(f"     - TID: {instr.transaction_id}")
                 result.append(f"     - Output: {instr.output}")
             result.append("")
-
-        # result.append("## User Observations")
-        # print("\n".join(["# " + i for i in result]))
-        # while True:
-        #     try:
-        #         line = input("# ")
-        #         result.append(line)
-        #     except KeyboardInterrupt:
-        #         break
+            result.append(" * Container logs:")
+            container_logs = [
+                "   > " + i
+                for i in runner.db_server_logs.split("\n")
+                if i.strip() != ""
+            ]
+            if container_logs != []:
+                result += container_logs + [""]
+            else:
+                result += ["   No logs available.", ""]
 
         with open(file, "w") as f:
             f.write("\n".join(result))
