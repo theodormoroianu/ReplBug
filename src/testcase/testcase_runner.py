@@ -38,7 +38,7 @@ class Instruction:
 class TransactionThread(threading.Thread):
     def __init__(self, conn: db_config.DatabaseConnection):
         super().__init__()
-        self.connection = conn.to_connection()
+        self.connection = conn.to_connection(autocommit=True)
 
         # Pick database and set timeout
         self.connection.cursor().execute("use testdb;")
@@ -115,7 +115,7 @@ class TestcaseRunner:
         with db_provider.DatabaseProvider(self.db_and_type) as provider:
             # Reset the environment before running the testcase, in case
             # it is not the first run.
-            conn = provider.db_connection.to_connection()
+            conn = provider.db_connection.to_connection(autocommit=True)
             conn.cursor().execute("drop database if exists testdb;")
             conn.cursor().execute("create database testdb;")
             conn.cursor().execute("use testdb;")
@@ -139,8 +139,8 @@ class TestcaseRunner:
                     for instr in self.instructions:
                         instr.output = "Skipped due to error in pre-run instructions."
                     return
-            conn.commit()
             conn.close()
+            time.sleep(1)
 
             # Mapping from transaction id to cursor / connection object
             transaction_id_to_thread: Dict[int, TransactionThread] = {}

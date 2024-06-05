@@ -104,7 +104,7 @@ class DatabaseConnection:
         self.password = password
         self.socket = socket
 
-    def to_connection(self) -> mysql.connector.MySQLConnection:
+    def to_connection(self, autocommit=None) -> mysql.connector.MySQLConnection:
         """
         Returns a MySQL connection object.
         """
@@ -119,6 +119,8 @@ class DatabaseConnection:
             args["password"] = self.password
         if self.port:
             args["port"] = self.port
+        if autocommit is not None:
+            args["autocommit"] = autocommit
 
         conn = mysql.connector.connect(**args)
         return conn

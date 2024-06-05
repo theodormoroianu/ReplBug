@@ -29,7 +29,7 @@ class TestcaseInteractor(cmd.Cmd):
         """Runs the bugs."""
         import testcase.run_bugs as run_bugs
 
-        run_bugs.run_bugs(arg.split())
+        run_bugs.run_bugs(arg.split() or [".*"])
 
     def do_bug(self, arg):
         """Runs the bugs."""
@@ -40,9 +40,27 @@ class TestcaseInteractor(cmd.Cmd):
         print("Available commands:")
         print("test - Runs the test function.")
         print("run - Runs the bugs.")
+        print("list - List the available bugs.")
 
     def help_help(self):
         print("Shows help menu.")
+
+    def do_list(self, arg):
+        """Lists the available bugs."""
+        import testcase.bug_list as bug_list
+
+        regexes = arg.split() or [".*"]
+        bugs = bug_list.get_bugs(regexes)
+        if not bugs:
+            print("No bugs found for the provided patterns.")
+            return
+
+        print("Available bugs:")
+        for bug in bugs:
+            print(f" * {bug}")
+
+    def help_list(self):
+        print("list [re]*\nLists the available bugs matching the provided regex.")
 
     def process_external_arg(self, args: str):
         """
