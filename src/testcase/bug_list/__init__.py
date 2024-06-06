@@ -66,6 +66,6 @@ def get_bugs(patterns: list[str]) -> Dict[str, bug.Bug]:
 
     for bug_re in patterns:
         for bug_name in _bug_list:
-            if re.match(bug_re, bug_name):
+            if re.match(f".*{bug_re}.*", bug_name):
                 bugs_to_run[bug_name] = _bug_list[bug_name]
     return bugs_to_run

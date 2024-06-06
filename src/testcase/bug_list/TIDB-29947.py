@@ -4,7 +4,7 @@ import database.config as db_config
 from testcase.helpers import *
 
 ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
-BUG_ID = "tidb-29947"
+BUG_ID = "TIDB-29947"
 LINK = "https://github.com/pingcap/tidb/issues/29947"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "5.2.1")
 

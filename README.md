@@ -13,8 +13,17 @@ We do not offer an exact list of the required system packages, as it depends on 
  * Configure the `.env` file with the desired settings.
  * Start the application by running the following command: `./src/main.py`. Use the `help` command in the CLI to get a list of all available commands.
 
-## DBMSs
+## Running the Databases in Docker
 
+The application uses _Podman_ to manage versions of _MySQL_, _MariaDB_ and _TiDB_ DBMSs. The docker images are pulled from their respective official repositories. The application uses the following images:
+
+ * `mysql:{version}`
+ * `mariadb:{version}`
+ * `pingcap/tidb:v{version}`
+
+## Running the Databases manually
+
+The application can also run the DBMSs without using _Podman_. The application will download the DBMSs from the official websites and extract them to the `{CACHE_FOLDER_PATH}/databases/` directory (by default `.cache/databases/`). The application will then start the DBMSs using the extracted binaries.
 All downloaded assets are placed in the `{CACHE_FOLDER_PATH}` directory (from `.env`). The application downloads the DBMSs from the official websites, and the URLs are hardcoded in the source code. The application downloads the following DBMSs:
 
 ### MySQL
@@ -38,7 +47,6 @@ The tools are downloaded from [here](https://docs.pingcap.com/tidb/stable/quick-
 ## Logging
 
 The application logs most of the actions in the `{CACHE_FOLDER_PATH}/logs/` directory (by default `.cache/logs/`). A new log file is created for each run of the application.
-
 
 
 
