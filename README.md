@@ -10,6 +10,9 @@ This repository contains the source code of a Python application, able to deploy
     - https://jira.mariadb.org/browse/MDEV-29398
     - https://jira.mariadb.org/browse/MDEV-29400
     - https://jira.mariadb.org/browse/MDEV-29494
+
+ * Not sure if we should consider those
+    - https://github.com/pingcap/tidb/issues/30413
     
 
 ## Installation
