@@ -2,6 +2,16 @@
 
 This repository contains the source code of a Python application, able to deploy arbitrary versions of the _MySQL_, _MariaDB_ and _TiDB_ DBMSs.
 
+## Bugs
+
+### TxCheck
+
+ * Need to add some way to handle bugs that don't occur every time.
+    - https://jira.mariadb.org/browse/MDEV-29398
+    - https://jira.mariadb.org/browse/MDEV-29400
+    - https://jira.mariadb.org/browse/MDEV-29494
+    
+
 ## Installation
 
 To install the _Python_ dependencies, run the following command: `pip3 install -r requirements.txt`.

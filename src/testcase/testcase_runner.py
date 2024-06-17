@@ -129,7 +129,7 @@ class TestcaseRunner:
                         ), "Should be a pre-run instruction."
                         cursor = conn.cursor()
                         it = cursor.execute(instruction.instruction, multi=True)
-                        for cur in it:
+                        for cur in it or []:
                             if cur.with_rows:
                                 output = cur.fetchall()
                                 instruction.output = output

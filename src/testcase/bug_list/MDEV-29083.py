@@ -3,6 +3,8 @@ import testcase.bug as bug
 import database.config as db_config
 from testcase.helpers import *
 
+# https://github.com/JZuming/TxCheck/blob/main/docs/mariadb_bugs.md
+
 ORIGINAL_ISOLATION_LEVEL = IsolationLevel.READ_COMMITTED
 BUG_ID = "MDEV-29083"
 LINK = "https://jira.mariadb.org/browse/MDEV-29083"
