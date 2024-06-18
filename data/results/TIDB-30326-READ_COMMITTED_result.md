@@ -8,7 +8,7 @@ Tested isolation level:   READ COMMITTED
 
 
 ## Details
- * Database: tidb-5.2.1
+ * Database: tidb-v5.4.0-local
  * Number of scenarios: 1
  * Initial setup script: /home/theodor/Projects/MasterThesis/data/sql/TIDB-30326_mysql_bk.sql
 
@@ -24,881 +24,1751 @@ Tested isolation level:   READ COMMITTED
      - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
 
  * Container logs:
-   > [2024/06/18 11:58:51.231 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=26] [cur_db=] [sql="drop database if exists testdb;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.232 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=26] [cur_db=] [sql="create database testdb;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.234 +00:00] [INFO] [ddl_worker.go:318] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:54, Type:create schema, State:none, SchemaState:queueing, SchemaID:53, TableID:0, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.233 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
-   > [2024/06/18 11:58:51.234 +00:00] [INFO] [ddl.go:546] ["[ddl] start DDL job"] [job="ID:54, Type:create schema, State:none, SchemaState:queueing, SchemaID:53, TableID:0, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.233 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="create database testdb;"]
-   > [2024/06/18 11:58:51.235 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:54, Type:create schema, State:none, SchemaState:queueing, SchemaID:53, TableID:0, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.233 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.236 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=26] [neededSchemaVersion=27] ["start time"=148.554µs] [phyTblIDs="[]"] [actionTypes="[]"]
-   > [2024/06/18 11:58:51.238 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=27] ["take time"=2.451175ms] [job="ID:54, Type:create schema, State:done, SchemaState:public, SchemaID:53, TableID:0, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.233 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.239 +00:00] [INFO] [ddl_worker.go:423] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:54, Type:create schema, State:synced, SchemaState:public, SchemaID:53, TableID:0, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.233 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.239 +00:00] [INFO] [ddl.go:601] ["[ddl] DDL job is finished"] [jobID=54]
-   > [2024/06/18 11:58:51.240 +00:00] [INFO] [callback.go:106] ["performing DDL change, must reload"]
-   > [2024/06/18 11:58:51.448 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=27] [cur_db=testdb] [sql="\n--\n-- Table structure for table `t_037irb`\n--\n\nDROP TABLE IF EXISTS `t_037irb`;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.449 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=27] [cur_db=testdb] [sql="CREATE TABLE `t_037irb` (\n  `c_nrh3o` int(11) DEFAULT NULL,\n  `c_nfauxb` text DEFAULT NULL,\n  `c_y5n4c` int(11) DEFAULT NULL,\n  `c_j9alg` double NOT NULL,\n  `c_4vix1d` text DEFAULT NULL,\n  `c_glkxdb` text DEFAULT NULL,\n  `c_2ykt0d` int(11) DEFAULT NULL,\n  `c_5fxv3c` double DEFAULT NULL,\n  PRIMARY KEY (`c_j9alg`) /*T![clustered_index] NONCLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.451 +00:00] [INFO] [ddl_worker.go:318] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:56, Type:create table, State:none, SchemaState:queueing, SchemaID:53, TableID:55, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.45 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
-   > [2024/06/18 11:58:51.451 +00:00] [INFO] [ddl.go:546] ["[ddl] start DDL job"] [job="ID:56, Type:create table, State:none, SchemaState:queueing, SchemaID:53, TableID:55, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.45 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="CREATE TABLE `t_037irb` (\n  `c_nrh3o` int(11) DEFAULT NULL,\n  `c_nfauxb` text DEFAULT NULL,\n  `c_y5n4c` int(11) DEFAULT NULL,\n  `c_j9alg` double NOT NULL,\n  `c_4vix1d` text DEFAULT NULL,\n  `c_glkxdb` text DEFAULT NULL,\n  `c_2ykt0d` int(11) DEFAULT NULL,\n  `c_5fxv3c` double DEFAULT NULL,\n  PRIMARY KEY (`c_j9alg`) /*T![clustered_index] NONCLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"]
-   > [2024/06/18 11:58:51.452 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:56, Type:create table, State:none, SchemaState:queueing, SchemaID:53, TableID:55, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.45 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.454 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=27] [neededSchemaVersion=28] ["start time"=478.557µs] [phyTblIDs="[55]"] [actionTypes="[8]"]
-   > [2024/06/18 11:58:51.456 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=28] ["take time"=2.025209ms] [job="ID:56, Type:create table, State:done, SchemaState:public, SchemaID:53, TableID:55, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.45 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.457 +00:00] [INFO] [ddl_worker.go:423] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:56, Type:create table, State:synced, SchemaState:public, SchemaID:53, TableID:55, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.45 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.458 +00:00] [INFO] [ddl.go:601] ["[ddl] DDL job is finished"] [jobID=56]
-   > [2024/06/18 11:58:51.458 +00:00] [INFO] [callback.go:106] ["performing DDL change, must reload"]
-   > [2024/06/18 11:58:51.458 +00:00] [INFO] [split_region.go:83] ["split batch regions request"] ["split key count"=1] ["batch count"=1] ["first batch, region ID"=50] ["first split key"=748000000000000037]
-   > [2024/06/18 11:58:51.459 +00:00] [INFO] [split_region.go:184] ["batch split regions complete"] ["batch region ID"=50] ["first at"=748000000000000037] ["first new region left"="{Id:50 StartKey:7480000000000000ff3300000000000000f8 EndKey:7480000000000000ff3700000000000000f8 RegionEpoch:{ConfVer:1 Version:2} Peers:[id:51 store_id:1 ] EncryptionMeta:<nil>}"] ["new region count"=1]
-   > [2024/06/18 11:58:51.459 +00:00] [INFO] [split_region.go:233] ["split regions complete"] ["region count"=1] ["region IDs"="[50]"]
-   > [2024/06/18 11:58:51.459 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=28] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_037irb` DISABLE KEYS */;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.460 +00:00] [WARN] [2pc.go:1598] ["schemaLeaseChecker is not set for this transaction"] [sessionID=5] [startTS=450550020560650241] [commitTS=450550020560650242]
-   > [2024/06/18 11:58:51.462 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=28] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_037irb` ENABLE KEYS */;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.463 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=28] [cur_db=testdb] [sql="\n--\n-- Temporary view structure for view `t_cpsvpb`\n--\n\nDROP TABLE IF EXISTS `t_cpsvpb`;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.463 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=28] [cur_db=testdb] [sql="/*!50001 DROP VIEW IF EXISTS `t_cpsvpb`*/;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.466 +00:00] [INFO] [ddl_worker.go:318] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:58, Type:create view, State:none, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:3, start time: 2024-06-18 11:58:51.465 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
-   > [2024/06/18 11:58:51.466 +00:00] [INFO] [ddl.go:546] ["[ddl] start DDL job"] [job="ID:58, Type:create view, State:none, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:3, start time: 2024-06-18 11:58:51.465 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="/*!50001 CREATE VIEW `t_cpsvpb` AS SELECT \n 1 AS `c0`,\n 1 AS `c2`,\n 1 AS `c3`,\n 1 AS `c4`,\n 1 AS `c5`,\n 1 AS `c6`,\n 1 AS `c7`,\n 1 AS `c8`,\n 1 AS `c9`,\n 1 AS `c10`,\n 1 AS `c11`,\n 1 AS `c12`,\n 1 AS `c13`,\n 1 AS `c14`*/;"]
-   > [2024/06/18 11:58:51.467 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:58, Type:create view, State:none, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.465 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.470 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=28] [neededSchemaVersion=29] ["start time"=656.376µs] [phyTblIDs="[57]"] [actionTypes="[2097152]"]
-   > [2024/06/18 11:58:51.472 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=29] ["take time"=2.244373ms] [job="ID:58, Type:create view, State:done, SchemaState:public, SchemaID:53, TableID:57, RowCount:0, ArgLen:3, start time: 2024-06-18 11:58:51.465 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.473 +00:00] [INFO] [ddl_worker.go:423] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:58, Type:create view, State:synced, SchemaState:public, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.465 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.475 +00:00] [INFO] [ddl.go:601] ["[ddl] DDL job is finished"] [jobID=58]
-   > [2024/06/18 11:58:51.475 +00:00] [INFO] [callback.go:106] ["performing DDL change, must reload"]
-   > [2024/06/18 11:58:51.476 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=29] [cur_db=testdb] [sql="\n--\n-- Table structure for table `t_x7zqmd`\n--\n\nDROP TABLE IF EXISTS `t_x7zqmd`;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.477 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=29] [cur_db=testdb] [sql="CREATE TABLE `t_x7zqmd` (\n  `c_8weeq` int(11) NOT NULL,\n  `c_13sfid` double DEFAULT NULL,\n  `c_hhjlmc` text DEFAULT NULL,\n  `c_3b1zld` int(11) DEFAULT NULL,\n  `c_6tu8wd` int(11) DEFAULT NULL,\n  `c_jyc_cd` double DEFAULT NULL,\n  PRIMARY KEY (`c_8weeq`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.478 +00:00] [INFO] [ddl_worker.go:318] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:60, Type:create table, State:none, SchemaState:queueing, SchemaID:53, TableID:59, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.477 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
-   > [2024/06/18 11:58:51.478 +00:00] [INFO] [ddl.go:546] ["[ddl] start DDL job"] [job="ID:60, Type:create table, State:none, SchemaState:queueing, SchemaID:53, TableID:59, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.477 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="CREATE TABLE `t_x7zqmd` (\n  `c_8weeq` int(11) NOT NULL,\n  `c_13sfid` double DEFAULT NULL,\n  `c_hhjlmc` text DEFAULT NULL,\n  `c_3b1zld` int(11) DEFAULT NULL,\n  `c_6tu8wd` int(11) DEFAULT NULL,\n  `c_jyc_cd` double DEFAULT NULL,\n  PRIMARY KEY (`c_8weeq`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"]
-   > [2024/06/18 11:58:51.479 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:60, Type:create table, State:none, SchemaState:queueing, SchemaID:53, TableID:59, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.477 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.481 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=29] [neededSchemaVersion=30] ["start time"=386.925µs] [phyTblIDs="[59]"] [actionTypes="[8]"]
-   > [2024/06/18 11:58:51.483 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=30] ["take time"=2.036243ms] [job="ID:60, Type:create table, State:done, SchemaState:public, SchemaID:53, TableID:59, RowCount:0, ArgLen:1, start time: 2024-06-18 11:58:51.477 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.484 +00:00] [INFO] [ddl_worker.go:423] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:60, Type:create table, State:synced, SchemaState:public, SchemaID:53, TableID:59, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.477 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.485 +00:00] [INFO] [ddl.go:601] ["[ddl] DDL job is finished"] [jobID=60]
-   > [2024/06/18 11:58:51.485 +00:00] [INFO] [callback.go:106] ["performing DDL change, must reload"]
-   > [2024/06/18 11:58:51.485 +00:00] [INFO] [split_region.go:83] ["split batch regions request"] ["split key count"=1] ["batch count"=1] ["first batch, region ID"=52] ["first split key"=74800000000000003b]
-   > [2024/06/18 11:58:51.486 +00:00] [INFO] [split_region.go:184] ["batch split regions complete"] ["batch region ID"=52] ["first at"=74800000000000003b] ["first new region left"="{Id:52 StartKey:7480000000000000ff3700000000000000f8 EndKey:7480000000000000ff3b00000000000000f8 RegionEpoch:{ConfVer:1 Version:2} Peers:[id:53 store_id:1 ] EncryptionMeta:<nil>}"] ["new region count"=1]
-   > [2024/06/18 11:58:51.486 +00:00] [INFO] [split_region.go:233] ["split regions complete"] ["region count"=1] ["region IDs"="[52]"]
-   > [2024/06/18 11:58:51.486 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_x7zqmd` DISABLE KEYS */;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.490 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_x7zqmd` ENABLE KEYS */;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.491 +00:00] [INFO] [session.go:2948] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="\n--\n-- Final view structure for view `t_cpsvpb`\n--\n\n/*!50001 DROP VIEW IF EXISTS `t_cpsvpb`*/;"] [user=root@127.0.0.1]
-   > [2024/06/18 11:58:51.492 +00:00] [INFO] [ddl_worker.go:318] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:61, Type:drop view, State:none, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
-   > [2024/06/18 11:58:51.492 +00:00] [INFO] [ddl.go:546] ["[ddl] start DDL job"] [job="ID:61, Type:drop view, State:none, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="\n--\n-- Final view structure for view `t_cpsvpb`\n--\n\n/*!50001 DROP VIEW IF EXISTS `t_cpsvpb`*/;"]
-   > [2024/06/18 11:58:51.493 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:61, Type:drop view, State:none, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.495 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=30] [neededSchemaVersion=31] ["start time"=139.474µs] [phyTblIDs="[57]"] [actionTypes="[16777216]"]
-   > [2024/06/18 11:58:51.497 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=31] ["take time"=2.271611ms] [job="ID:61, Type:drop view, State:running, SchemaState:write only, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.497 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:61, Type:drop view, State:running, SchemaState:write only, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.499 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=31] [neededSchemaVersion=32] ["start time"=112.934µs] [phyTblIDs="[]"] [actionTypes="[]"]
-   > [2024/06/18 11:58:51.501 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=32] ["take time"=2.16175ms] [job="ID:61, Type:drop view, State:running, SchemaState:delete only, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.502 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:61, Type:drop view, State:running, SchemaState:delete only, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.504 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=32] [neededSchemaVersion=33] ["start time"=139.893µs] [phyTblIDs="[]"] [actionTypes="[]"]
-   > [2024/06/18 11:58:51.506 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=33] ["take time"=2.186683ms] [job="ID:61, Type:drop view, State:done, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:2, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.507 +00:00] [INFO] [ddl_worker.go:423] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:61, Type:drop view, State:synced, SchemaState:queueing, SchemaID:53, TableID:57, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.491 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.509 +00:00] [INFO] [ddl.go:601] ["[ddl] DDL job is finished"] [jobID=61]
-   > [2024/06/18 11:58:51.509 +00:00] [INFO] [callback.go:106] ["performing DDL change, must reload"]
-   > [2024/06/18 11:58:51.514 +00:00] [INFO] [session.go:2203] ["Try to create a new txn inside a transaction auto commit"] [conn=5] [schemaVersion=33] [txnStartTS=450550020574019584] [txnScope=global]
-   > [2024/06/18 11:58:51.517 +00:00] [INFO] [ddl_worker.go:318] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:63, Type:create view, State:none, SchemaState:queueing, SchemaID:53, TableID:62, RowCount:0, ArgLen:3, start time: 2024-06-18 11:58:51.515 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
-   > [2024/06/18 11:58:51.517 +00:00] [INFO] [ddl.go:546] ["[ddl] start DDL job"] [job="ID:63, Type:create view, State:none, SchemaState:queueing, SchemaID:53, TableID:62, RowCount:0, ArgLen:3, start time: 2024-06-18 11:58:51.515 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="/*!50001 CREATE ALGORITHM=UNDEFINED */\n/*!50013 DEFINER=`root`@`127.0.0.1` SQL SECURITY DEFINER */\n/*!50001 VIEW `t_cpsvpb` (`c0`, `c2`, `c3`, `c4`, `c5`, `c6`, `c7`, `c8`, `c9`, `c10`, `c11`, `c12`, `c13`, `c14`) AS SELECT DISTINCT `subq_0`.`c1` AS `c0`,`subq_0`.`c2` AS `c2`,8 AS `c3`,CASE WHEN (`subq_0`.`c3` NOT IN (SELECT `ref_2`.`c_4vix1d` AS `c0` FROM `testdb`.`t_037irb` AS `ref_2` WHERE `ref_2`.`c_2ykt0d`<=`ref_2`.`c_nrh3o`)) AND (`subq_0`.`c3`<=(SELECT (SELECT `c_hhjlmc` AS `c_hhjlmc` FROM `testdb`.`t_x7zqmd` ORDER BY `c_hhjlmc` LIMIT 4,1) AS `c0` FROM `testdb`.`t_037irb` AS `ref_3` WHERE `subq_0`.`c1`!=`ref_3`.`c_2ykt0d`)) THEN `subq_0`.`c3` ELSE `subq_0`.`c3` END AS `c4`,CASE WHEN `subq_0`.`c1`>=(SELECT MAX(`c_8weeq`) AS `max(c_8weeq)` FROM `testdb`.`t_x7zqmd`) THEN `subq_0`.`c2` ELSE `subq_0`.`c2` END AS `c5`,`subq_0`.`c1` AS `c6`,`subq_0`.`c2` AS `c7`,`subq_0`.`c3` AS `c8`,`subq_0`.`c3` AS `c9`,`subq_0`.`c2` AS `c10`,`subq_0`.`c4` AS `c11`,COUNT(CAST(`subq_0`.`c2` AS DOUBLE)) OVER (PARTITION BY `subq_0`.`c4` ORDER BY `subq_0`.`c1`) AS `c12`,`subq_0`.`c3` AS `c13`,CAST(COALESCE(`subq_0`.`c3`, _UTF8MB4'9sx3k') AS CHAR) AS `c14` FROM (SELECT COUNT(CAST(`ref_1`.`c_jyc_cd` AS DOUBLE)) AS `c0`,AVG(CAST(`ref_1`.`c_3b1zld` AS SIGNED)) AS `c1`,MIN(CAST(`ref_1`.`c_jyc_cd` AS DOUBLE)) AS `c2`,`ref_0`.`c_glkxdb` AS `c3`,COUNT(CAST(`ref_1`.`c_13sfid` AS DOUBLE)) AS `c4` FROM `testdb`.`t_037irb` AS `ref_0` JOIN `testdb`.`t_x7zqmd` AS `ref_1` WHERE `ref_0`.`c_nrh3o`>`ref_1`.`c_8weeq` GROUP BY `ref_0`.`c_glkxdb`) AS `subq_0` WHERE (SELECT `c_8weeq` AS `c_8weeq` FROM `testdb`.`t_x7zqmd` ORDER BY `c_8weeq` LIMIT 2,1) IS NOT NULL */;"]
-   > [2024/06/18 11:58:51.518 +00:00] [INFO] [ddl_worker.go:727] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:63, Type:create view, State:none, SchemaState:queueing, SchemaID:53, TableID:62, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.515 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.522 +00:00] [INFO] [domain.go:129] ["diff load InfoSchema success"] [currentSchemaVersion=33] [neededSchemaVersion=34] ["start time"=735.157µs] [phyTblIDs="[62]"] [actionTypes="[2097152]"]
-   > [2024/06/18 11:58:51.523 +00:00] [INFO] [ddl_worker.go:912] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=34] ["take time"=2.287465ms] [job="ID:63, Type:create view, State:done, SchemaState:public, SchemaID:53, TableID:62, RowCount:0, ArgLen:3, start time: 2024-06-18 11:58:51.515 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.525 +00:00] [INFO] [ddl_worker.go:423] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:63, Type:create view, State:synced, SchemaState:public, SchemaID:53, TableID:62, RowCount:0, ArgLen:0, start time: 2024-06-18 11:58:51.515 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
-   > [2024/06/18 11:58:51.527 +00:00] [INFO] [ddl.go:601] ["[ddl] DDL job is finished"] [jobID=63]
-   > [2024/06/18 11:58:51.527 +00:00] [INFO] [callback.go:106] ["performing DDL change, must reload"]
-   > [2024/06/18 11:58:52.562 +00:00] [INFO] [set.go:127] ["set global var"] [conn=7] [name=tx_isolation] [val=READ-COMMITTED]
-   > [2024/06/18 11:58:52.862 +00:00] [ERROR] [misc.go:94] ["panic in the recoverable goroutine"] [r="\"invalid memory address or nil pointer dereference\""] ["stack trace"="github.com/pingcap/tidb/util.WithRecovery.func1\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:96\nruntime.gopanic\n\t/usr/local/go/src/runtime/panic.go:965\nruntime.panicmem\n\t/usr/local/go/src/runtime/panic.go:212\nruntime.sigpanic\n\t/usr/local/go/src/runtime/signal_unix.go:734\ngithub.com/pingcap/tidb/util/chunk.(*Chunk).NumRows\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/chunk/chunk.go:349\ngithub.com/pingcap/tidb/executor.(*vecGroupChecker).splitIntoGroups\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/aggregate.go:1456\ngithub.com/pingcap/tidb/executor.(*PipelinedWindowExec).getRowsInPartition\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/pipelined_window.go:188\ngithub.com/pingcap/tidb/executor.(*PipelinedWindowExec).Next\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/pipelined_window.go:124\ngithub.com/pingcap/tidb/executor.Next\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/executor.go:285\ngithub.com/pingcap/tidb/executor.(*ProjectionExec).unParallelExecute\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:193\ngithub.com/pingcap/tidb/executor.(*ProjectionExec).Next\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:179\ngithub.com/pingcap/tidb/executor.Next\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/executor.go:285\ngithub.com/pingcap/tidb/executor.(*CTEExec).computeSeedPart\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/cte.go:225\ngithub.com/pingcap/tidb/executor.(*CTEExec).Next\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/cte.go:160\ngithub.com/pingcap/tidb/executor.Next\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/executor.go:285\ngithub.com/pingcap/tidb/executor.(*HashJoinExec).fetchBuildSideRows\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:268\ngithub.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable.func2\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:702\ngithub.com/pingcap/tidb/util.WithRecovery\n\t/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99"]
-   > [2024/06/18 11:58:54.782 +00:00] [WARN] [coprocessor.go:192] ["buildCopTasks takes too much time"] [elapsed=746.379842ms] ["range len"=1] ["task len"=1]
+   > [2024/06/18 13:42:24.408 +00:00] [WARN] [conn.go:858] ["No user plugin set, assuming MySQL Native Password"] [conn=5] [user=root] [host=]
+   > [2024/06/18 13:42:24.411 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=28] [cur_db=] [sql="drop database if exists testdb;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.412 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=28] [cur_db=] [sql="create database testdb;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.414 +00:00] [INFO] [ddl_worker.go:313] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:58, Type:create schema, State:none, SchemaState:queueing, SchemaID:57, TableID:0, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.413 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
+   > [2024/06/18 13:42:24.414 +00:00] [INFO] [ddl.go:553] ["[ddl] start DDL job"] [job="ID:58, Type:create schema, State:none, SchemaState:queueing, SchemaID:57, TableID:0, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.413 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="create database testdb;"]
+   > [2024/06/18 13:42:24.414 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:58, Type:create schema, State:none, SchemaState:queueing, SchemaID:57, TableID:0, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.413 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.415 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=28] [neededSchemaVersion=29] ["start time"=78.781µs] [phyTblIDs="[]"] [actionTypes="[]"]
+   > [2024/06/18 13:42:24.417 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=29] ["take time"=2.198349ms] [job="ID:58, Type:create schema, State:done, SchemaState:public, SchemaID:57, TableID:0, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.413 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.417 +00:00] [INFO] [ddl_worker.go:418] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:58, Type:create schema, State:synced, SchemaState:public, SchemaID:57, TableID:0, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.413 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.418 +00:00] [INFO] [ddl.go:615] ["[ddl] DDL job is finished"] [jobID=58]
+   > [2024/06/18 13:42:24.418 +00:00] [INFO] [callback.go:107] ["performing DDL change, must reload"]
+   > [2024/06/18 13:42:24.423 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=29] [cur_db=testdb] [sql="\n--\n-- Table structure for table `t_037irb`\n--\n\nDROP TABLE IF EXISTS `t_037irb`;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.423 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=29] [cur_db=testdb] [sql="CREATE TABLE `t_037irb` (\n  `c_nrh3o` int(11) DEFAULT NULL,\n  `c_nfauxb` text DEFAULT NULL,\n  `c_y5n4c` int(11) DEFAULT NULL,\n  `c_j9alg` double NOT NULL,\n  `c_4vix1d` text DEFAULT NULL,\n  `c_glkxdb` text DEFAULT NULL,\n  `c_2ykt0d` int(11) DEFAULT NULL,\n  `c_5fxv3c` double DEFAULT NULL,\n  PRIMARY KEY (`c_j9alg`) /*T![clustered_index] NONCLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.424 +00:00] [INFO] [ddl_worker.go:313] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:60, Type:create table, State:none, SchemaState:queueing, SchemaID:57, TableID:59, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.423 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
+   > [2024/06/18 13:42:24.424 +00:00] [INFO] [ddl.go:553] ["[ddl] start DDL job"] [job="ID:60, Type:create table, State:none, SchemaState:queueing, SchemaID:57, TableID:59, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.423 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="CREATE TABLE `t_037irb` (\n  `c_nrh3o` int(11) DEFAULT NULL,\n  `c_nfauxb` text DEFAULT NULL,\n  `c_y5n4c` int(11) DEFAULT NULL,\n  `c_j9alg` double NOT NULL,\n  `c_4vix1d` text DEFAULT NULL,\n  `c_glkxdb` text DEFAULT NULL,\n  `c_2ykt0d` int(11) DEFAULT NULL,\n  `c_5fxv3c` double DEFAULT NULL,\n  PRIMARY KEY (`c_j9alg`) /*T![clustered_index] NONCLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"]
+   > [2024/06/18 13:42:24.424 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:60, Type:create table, State:none, SchemaState:queueing, SchemaID:57, TableID:59, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.423 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.425 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=29] [neededSchemaVersion=30] ["start time"=207.361µs] [phyTblIDs="[59]"] [actionTypes="[8]"]
+   > [2024/06/18 13:42:24.427 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=30] ["take time"=2.249613ms] [job="ID:60, Type:create table, State:done, SchemaState:public, SchemaID:57, TableID:59, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.423 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.428 +00:00] [INFO] [ddl_worker.go:418] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:60, Type:create table, State:synced, SchemaState:public, SchemaID:57, TableID:59, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.423 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.429 +00:00] [INFO] [ddl.go:615] ["[ddl] DDL job is finished"] [jobID=60]
+   > [2024/06/18 13:42:24.429 +00:00] [INFO] [callback.go:107] ["performing DDL change, must reload"]
+   > [2024/06/18 13:42:24.430 +00:00] [INFO] [split_region.go:85] ["split batch regions request"] ["split key count"=1] ["batch count"=1] ["first batch, region ID"=52] ["first split key"=74800000000000003b]
+   > [2024/06/18 13:42:24.430 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_037irb` DISABLE KEYS */;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.431 +00:00] [WARN] [2pc.go:1596] ["schemaLeaseChecker is not set for this transaction"] [sessionID=5] [startTS=450551649253720065] [commitTS=450551649253720066]
+   > [2024/06/18 13:42:24.432 +00:00] [INFO] [split_region.go:186] ["batch split regions complete"] ["batch region ID"=54] ["first at"=74800000000000003b] ["first new region left"="{Id:54 StartKey:7480000000000000ff3700000000000000f8 EndKey:7480000000000000ff3b00000000000000f8 RegionEpoch:{ConfVer:1 Version:2} Peers:[id:55 store_id:1 ] EncryptionMeta:<nil>}"] ["new region count"=1]
+   > [2024/06/18 13:42:24.432 +00:00] [INFO] [split_region.go:235] ["split regions complete"] ["region count"=1] ["region IDs"="[54]"]
+   > [2024/06/18 13:42:24.433 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_037irb` ENABLE KEYS */;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.433 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="\n--\n-- Temporary view structure for view `t_cpsvpb`\n--\n\nDROP TABLE IF EXISTS `t_cpsvpb`;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.433 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=30] [cur_db=testdb] [sql="/*!50001 DROP VIEW IF EXISTS `t_cpsvpb`*/;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.435 +00:00] [INFO] [ddl_worker.go:313] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:62, Type:create view, State:none, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.434 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
+   > [2024/06/18 13:42:24.435 +00:00] [INFO] [ddl.go:553] ["[ddl] start DDL job"] [job="ID:62, Type:create view, State:none, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.434 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="/*!50001 CREATE VIEW `t_cpsvpb` AS SELECT \n 1 AS `c0`,\n 1 AS `c2`,\n 1 AS `c3`,\n 1 AS `c4`,\n 1 AS `c5`,\n 1 AS `c6`,\n 1 AS `c7`,\n 1 AS `c8`,\n 1 AS `c9`,\n 1 AS `c10`,\n 1 AS `c11`,\n 1 AS `c12`,\n 1 AS `c13`,\n 1 AS `c14`*/;"]
+   > [2024/06/18 13:42:24.435 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:62, Type:create view, State:none, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.434 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.437 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=30] [neededSchemaVersion=31] ["start time"=524.444µs] [phyTblIDs="[61]"] [actionTypes="[2097152]"]
+   > [2024/06/18 13:42:24.440 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=31] ["take time"=2.854725ms] [job="ID:62, Type:create view, State:done, SchemaState:public, SchemaID:57, TableID:61, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.434 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.441 +00:00] [INFO] [ddl_worker.go:418] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:62, Type:create view, State:synced, SchemaState:public, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.434 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.442 +00:00] [INFO] [ddl.go:615] ["[ddl] DDL job is finished"] [jobID=62]
+   > [2024/06/18 13:42:24.442 +00:00] [INFO] [callback.go:107] ["performing DDL change, must reload"]
+   > [2024/06/18 13:42:24.443 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=31] [cur_db=testdb] [sql="\n--\n-- Table structure for table `t_x7zqmd`\n--\n\nDROP TABLE IF EXISTS `t_x7zqmd`;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.443 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=31] [cur_db=testdb] [sql="CREATE TABLE `t_x7zqmd` (\n  `c_8weeq` int(11) NOT NULL,\n  `c_13sfid` double DEFAULT NULL,\n  `c_hhjlmc` text DEFAULT NULL,\n  `c_3b1zld` int(11) DEFAULT NULL,\n  `c_6tu8wd` int(11) DEFAULT NULL,\n  `c_jyc_cd` double DEFAULT NULL,\n  PRIMARY KEY (`c_8weeq`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.445 +00:00] [INFO] [ddl_worker.go:313] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:64, Type:create table, State:none, SchemaState:queueing, SchemaID:57, TableID:63, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.444 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
+   > [2024/06/18 13:42:24.445 +00:00] [INFO] [ddl.go:553] ["[ddl] start DDL job"] [job="ID:64, Type:create table, State:none, SchemaState:queueing, SchemaID:57, TableID:63, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.444 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="CREATE TABLE `t_x7zqmd` (\n  `c_8weeq` int(11) NOT NULL,\n  `c_13sfid` double DEFAULT NULL,\n  `c_hhjlmc` text DEFAULT NULL,\n  `c_3b1zld` int(11) DEFAULT NULL,\n  `c_6tu8wd` int(11) DEFAULT NULL,\n  `c_jyc_cd` double DEFAULT NULL,\n  PRIMARY KEY (`c_8weeq`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"]
+   > [2024/06/18 13:42:24.446 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:64, Type:create table, State:none, SchemaState:queueing, SchemaID:57, TableID:63, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.444 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.447 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=31] [neededSchemaVersion=32] ["start time"=359.267µs] [phyTblIDs="[63]"] [actionTypes="[8]"]
+   > [2024/06/18 13:42:24.449 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=32] ["take time"=2.335728ms] [job="ID:64, Type:create table, State:done, SchemaState:public, SchemaID:57, TableID:63, RowCount:0, ArgLen:1, start time: 2024-06-18 13:42:24.444 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.450 +00:00] [INFO] [ddl_worker.go:418] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:64, Type:create table, State:synced, SchemaState:public, SchemaID:57, TableID:63, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.444 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.451 +00:00] [INFO] [ddl.go:615] ["[ddl] DDL job is finished"] [jobID=64]
+   > [2024/06/18 13:42:24.451 +00:00] [INFO] [callback.go:107] ["performing DDL change, must reload"]
+   > [2024/06/18 13:42:24.451 +00:00] [INFO] [split_region.go:85] ["split batch regions request"] ["split key count"=1] ["batch count"=1] ["first batch, region ID"=56] ["first split key"=74800000000000003f]
+   > [2024/06/18 13:42:24.452 +00:00] [INFO] [split_region.go:186] ["batch split regions complete"] ["batch region ID"=56] ["first at"=74800000000000003f] ["first new region left"="{Id:56 StartKey:7480000000000000ff3b00000000000000f8 EndKey:7480000000000000ff3f00000000000000f8 RegionEpoch:{ConfVer:1 Version:2} Peers:[id:57 store_id:1 ] EncryptionMeta:<nil>}"] ["new region count"=1]
+   > [2024/06/18 13:42:24.452 +00:00] [INFO] [split_region.go:235] ["split regions complete"] ["region count"=1] ["region IDs"="[56]"]
+   > [2024/06/18 13:42:24.452 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=32] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_x7zqmd` DISABLE KEYS */;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.455 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=32] [cur_db=testdb] [sql="/*!40000 ALTER TABLE `t_x7zqmd` ENABLE KEYS */;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.455 +00:00] [INFO] [session.go:2865] ["CRUCIAL OPERATION"] [conn=5] [schemaVersion=32] [cur_db=testdb] [sql="\n--\n-- Final view structure for view `t_cpsvpb`\n--\n\n/*!50001 DROP VIEW IF EXISTS `t_cpsvpb`*/;"] [user=root@127.0.0.1]
+   > [2024/06/18 13:42:24.456 +00:00] [INFO] [ddl_worker.go:313] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:65, Type:drop view, State:none, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
+   > [2024/06/18 13:42:24.456 +00:00] [INFO] [ddl.go:553] ["[ddl] start DDL job"] [job="ID:65, Type:drop view, State:none, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="\n--\n-- Final view structure for view `t_cpsvpb`\n--\n\n/*!50001 DROP VIEW IF EXISTS `t_cpsvpb`*/;"]
+   > [2024/06/18 13:42:24.456 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:65, Type:drop view, State:none, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.458 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=32] [neededSchemaVersion=33] ["start time"=92.541µs] [phyTblIDs="[61]"] [actionTypes="[16777216]"]
+   > [2024/06/18 13:42:24.460 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=33] ["take time"=2.300737ms] [job="ID:65, Type:drop view, State:running, SchemaState:write only, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.460 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:65, Type:drop view, State:running, SchemaState:write only, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.462 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=33] [neededSchemaVersion=34] ["start time"=118.312µs] [phyTblIDs="[]"] [actionTypes="[]"]
+   > [2024/06/18 13:42:24.464 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=34] ["take time"=2.753943ms] [job="ID:65, Type:drop view, State:running, SchemaState:delete only, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.465 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:65, Type:drop view, State:running, SchemaState:delete only, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.466 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=34] [neededSchemaVersion=35] ["start time"=105.671µs] [phyTblIDs="[]"] [actionTypes="[]"]
+   > [2024/06/18 13:42:24.469 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=35] ["take time"=2.574378ms] [job="ID:65, Type:drop view, State:done, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.470 +00:00] [INFO] [ddl_worker.go:418] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:65, Type:drop view, State:synced, SchemaState:queueing, SchemaID:57, TableID:61, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.455 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.471 +00:00] [INFO] [ddl.go:615] ["[ddl] DDL job is finished"] [jobID=65]
+   > [2024/06/18 13:42:24.471 +00:00] [INFO] [callback.go:107] ["performing DDL change, must reload"]
+   > [2024/06/18 13:42:24.477 +00:00] [INFO] [session.go:2108] ["Try to create a new txn inside a transaction auto commit"] [conn=5] [schemaVersion=35] [txnStartTS=450551649264992256] [txnScope=global]
+   > [2024/06/18 13:42:24.479 +00:00] [INFO] [ddl_worker.go:313] ["[ddl] add DDL jobs"] ["batch count"=1] [jobs="ID:67, Type:create view, State:none, SchemaState:queueing, SchemaID:57, TableID:66, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.478 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0; "]
+   > [2024/06/18 13:42:24.479 +00:00] [INFO] [ddl.go:553] ["[ddl] start DDL job"] [job="ID:67, Type:create view, State:none, SchemaState:queueing, SchemaID:57, TableID:66, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.478 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"] [query="/*!50001 CREATE ALGORITHM=UNDEFINED */\n/*!50013 DEFINER=`root`@`127.0.0.1` SQL SECURITY DEFINER */\n/*!50001 VIEW `t_cpsvpb` (`c0`, `c2`, `c3`, `c4`, `c5`, `c6`, `c7`, `c8`, `c9`, `c10`, `c11`, `c12`, `c13`, `c14`) AS SELECT DISTINCT `subq_0`.`c1` AS `c0`,`subq_0`.`c2` AS `c2`,8 AS `c3`,CASE WHEN (`subq_0`.`c3` NOT IN (SELECT `ref_2`.`c_4vix1d` AS `c0` FROM `testdb`.`t_037irb` AS `ref_2` WHERE `ref_2`.`c_2ykt0d`<=`ref_2`.`c_nrh3o`)) AND (`subq_0`.`c3`<=(SELECT (SELECT `c_hhjlmc` AS `c_hhjlmc` FROM `testdb`.`t_x7zqmd` ORDER BY `c_hhjlmc` LIMIT 4,1) AS `c0` FROM `testdb`.`t_037irb` AS `ref_3` WHERE `subq_0`.`c1`!=`ref_3`.`c_2ykt0d`)) THEN `subq_0`.`c3` ELSE `subq_0`.`c3` END AS `c4`,CASE WHEN `subq_0`.`c1`>=(SELECT MAX(`c_8weeq`) AS `max(c_8weeq)` FROM `testdb`.`t_x7zqmd`) THEN `subq_0`.`c2` ELSE `subq_0`.`c2` END AS `c5`,`subq_0`.`c1` AS `c6`,`subq_0`.`c2` AS `c7`,`subq_0`.`c3` AS `c8`,`subq_0`.`c3` AS `c9`,`subq_0`.`c2` AS `c10`,`subq_0`.`c4` AS `c11`,COUNT(CAST(`subq_0`.`c2` AS DOUBLE)) OVER (PARTITION BY `subq_0`.`c4` ORDER BY `subq_0`.`c1`) AS `c12`,`subq_0`.`c3` AS `c13`,CAST(COALESCE(`subq_0`.`c3`, _UTF8MB4'9sx3k') AS CHAR) AS `c14` FROM (SELECT COUNT(CAST(`ref_1`.`c_jyc_cd` AS DOUBLE)) AS `c0`,AVG(CAST(`ref_1`.`c_3b1zld` AS SIGNED)) AS `c1`,MIN(CAST(`ref_1`.`c_jyc_cd` AS DOUBLE)) AS `c2`,`ref_0`.`c_glkxdb` AS `c3`,COUNT(CAST(`ref_1`.`c_13sfid` AS DOUBLE)) AS `c4` FROM `testdb`.`t_037irb` AS `ref_0` JOIN `testdb`.`t_x7zqmd` AS `ref_1` WHERE `ref_0`.`c_nrh3o`>`ref_1`.`c_8weeq` GROUP BY `ref_0`.`c_glkxdb`) AS `subq_0` WHERE (SELECT `c_8weeq` AS `c_8weeq` FROM `testdb`.`t_x7zqmd` ORDER BY `c_8weeq` LIMIT 2,1) IS NOT NULL */;"]
+   > [2024/06/18 13:42:24.480 +00:00] [INFO] [ddl_worker.go:718] ["[ddl] run DDL job"] [worker="worker 3, tp general"] [job="ID:67, Type:create view, State:none, SchemaState:queueing, SchemaID:57, TableID:66, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.478 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.483 +00:00] [INFO] [domain.go:135] ["diff load InfoSchema success"] [currentSchemaVersion=35] [neededSchemaVersion=36] ["start time"=577.944µs] [phyTblIDs="[66]"] [actionTypes="[2097152]"]
+   > [2024/06/18 13:42:24.486 +00:00] [INFO] [ddl_worker.go:921] ["[ddl] wait latest schema version changed"] [worker="worker 3, tp general"] [ver=36] ["take time"=2.719929ms] [job="ID:67, Type:create view, State:done, SchemaState:public, SchemaID:57, TableID:66, RowCount:0, ArgLen:3, start time: 2024-06-18 13:42:24.478 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.487 +00:00] [INFO] [ddl_worker.go:418] ["[ddl] finish DDL job"] [worker="worker 3, tp general"] [job="ID:67, Type:create view, State:synced, SchemaState:public, SchemaID:57, TableID:66, RowCount:0, ArgLen:0, start time: 2024-06-18 13:42:24.478 +0000 UTC, Err:<nil>, ErrCount:0, SnapshotVersion:0"]
+   > [2024/06/18 13:42:24.488 +00:00] [INFO] [ddl.go:615] ["[ddl] DDL job is finished"] [jobID=67]
+   > [2024/06/18 13:42:24.489 +00:00] [INFO] [callback.go:107] ["performing DDL change, must reload"]
+   > [2024/06/18 13:42:25.530 +00:00] [WARN] [conn.go:858] ["No user plugin set, assuming MySQL Native Password"] [conn=7] [user=root] [host=]
+   > [2024/06/18 13:42:25.554 +00:00] [INFO] [set.go:139] ["set global var"] [conn=7] [name=tx_isolation] [val=READ-COMMITTED]
+   > [2024/06/18 13:42:25.825 +00:00] [ERROR] [misc.go:95] ["panic in the recoverable goroutine"] [r="\"invalid memory address or nil pointer dereference\""] ["stack trace"="github.com/pingcap/tidb/util.WithRecovery.func1\n\t/go/src/github.com/pingcap/tidb/util/misc.go:97\nruntime.gopanic\n\t/usr/local/go/src/runtime/panic.go:884\nruntime.panicmem\n\t/usr/local/go/src/runtime/panic.go:260\nruntime.sigpanic\n\t/usr/local/go/src/runtime/signal_unix.go:839\ngithub.com/pingcap/tidb/executor.(*vecGroupChecker).splitIntoGroups\n\t/go/src/github.com/pingcap/tidb/executor/aggregate.go:1457\ngithub.com/pingcap/tidb/executor.(*PipelinedWindowExec).getRowsInPartition\n\t/go/src/github.com/pingcap/tidb/executor/pipelined_window.go:189\ngithub.com/pingcap/tidb/executor.(*PipelinedWindowExec).Next\n\t/go/src/github.com/pingcap/tidb/executor/pipelined_window.go:125\ngithub.com/pingcap/tidb/executor.Next\n\t/go/src/github.com/pingcap/tidb/executor/executor.go:286\ngithub.com/pingcap/tidb/executor.(*ProjectionExec).unParallelExecute\n\t/go/src/github.com/pingcap/tidb/executor/projection.go:194\ngithub.com/pingcap/tidb/executor.(*ProjectionExec).Next\n\t/go/src/github.com/pingcap/tidb/executor/projection.go:180\ngithub.com/pingcap/tidb/executor.Next\n\t/go/src/github.com/pingcap/tidb/executor/executor.go:286\ngithub.com/pingcap/tidb/executor.(*CTEExec).computeSeedPart\n\t/go/src/github.com/pingcap/tidb/executor/cte.go:226\ngithub.com/pingcap/tidb/executor.(*CTEExec).Next\n\t/go/src/github.com/pingcap/tidb/executor/cte.go:161\ngithub.com/pingcap/tidb/executor.Next\n\t/go/src/github.com/pingcap/tidb/executor/executor.go:286\ngithub.com/pingcap/tidb/executor.(*SelectionExec).Next\n\t/go/src/github.com/pingcap/tidb/executor/executor.go:1317\ngithub.com/pingcap/tidb/executor.Next\n\t/go/src/github.com/pingcap/tidb/executor/executor.go:286\ngithub.com/pingcap/tidb/executor.(*HashJoinExec).fetchBuildSideRows\n\t/go/src/github.com/pingcap/tidb/executor/join.go:266\ngithub.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable.func2\n\t/go/src/github.com/pingcap/tidb/executor/join.go:715\ngithub.com/pingcap/tidb/util.WithRecovery\n\t/go/src/github.com/pingcap/tidb/util/misc.go:100"]
    > runtime: goroutine stack exceeds 1000000000-byte limit
-   > runtime: sp=0xc0321e0398 stack=[0xc0321e0000, 0xc0521e0000]
+   > runtime: sp=0xc032980390 stack=[0xc032980000, 0xc052980000]
    > fatal error: stack overflow
    > runtime stack:
-   > runtime.throw(0x3b1a561, 0xe)
-   > 	/usr/local/go/src/runtime/panic.go:1117 +0x72
+   > runtime.throw({0x3aa773d?, 0x590b5c0?})
+   > 	/usr/local/go/src/runtime/panic.go:1047 +0x5d fp=0x7f2072add888 sp=0x7f2072add858 pc=0x13b859d
    > runtime.newstack()
-   > 	/usr/local/go/src/runtime/stack.go:1069 +0x7ed
+   > 	/usr/local/go/src/runtime/stack.go:1103 +0x5cc fp=0x7f2072adda40 sp=0x7f2072add888 pc=0x13d35ec
    > runtime.morestack()
-   > 	/usr/local/go/src/runtime/asm_amd64.s:458 +0x8f
-   > goroutine 986 [running]:
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:182 +0x16f fp=0xc0321e03a8 sp=0xc0321e03a0 pc=0x1ee3a8f
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e03f0 sp=0xc0321e03a8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0438 sp=0xc0321e03f0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0480 sp=0xc0321e0438 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e04c8 sp=0xc0321e0480 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0510 sp=0xc0321e04c8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0558 sp=0xc0321e0510 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e05a0 sp=0xc0321e0558 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e05e8 sp=0xc0321e05a0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0630 sp=0xc0321e05e8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0678 sp=0xc0321e0630 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e06c0 sp=0xc0321e0678 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0708 sp=0xc0321e06c0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0750 sp=0xc0321e0708 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0798 sp=0xc0321e0750 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e07e0 sp=0xc0321e0798 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0828 sp=0xc0321e07e0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0870 sp=0xc0321e0828 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e08b8 sp=0xc0321e0870 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0900 sp=0xc0321e08b8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0948 sp=0xc0321e0900 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0990 sp=0xc0321e0948 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e09d8 sp=0xc0321e0990 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0a20 sp=0xc0321e09d8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0a68 sp=0xc0321e0a20 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0ab0 sp=0xc0321e0a68 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0af8 sp=0xc0321e0ab0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0b40 sp=0xc0321e0af8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0b88 sp=0xc0321e0b40 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0bd0 sp=0xc0321e0b88 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0c18 sp=0xc0321e0bd0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0c60 sp=0xc0321e0c18 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0ca8 sp=0xc0321e0c60 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0cf0 sp=0xc0321e0ca8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0d38 sp=0xc0321e0cf0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0d80 sp=0xc0321e0d38 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0dc8 sp=0xc0321e0d80 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0e10 sp=0xc0321e0dc8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0e58 sp=0xc0321e0e10 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0ea0 sp=0xc0321e0e58 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0ee8 sp=0xc0321e0ea0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0f30 sp=0xc0321e0ee8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0f78 sp=0xc0321e0f30 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e0fc0 sp=0xc0321e0f78 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1008 sp=0xc0321e0fc0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1050 sp=0xc0321e1008 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1098 sp=0xc0321e1050 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e10e0 sp=0xc0321e1098 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1128 sp=0xc0321e10e0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1170 sp=0xc0321e1128 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e11b8 sp=0xc0321e1170 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1200 sp=0xc0321e11b8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1248 sp=0xc0321e1200 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1290 sp=0xc0321e1248 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e12d8 sp=0xc0321e1290 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1320 sp=0xc0321e12d8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1368 sp=0xc0321e1320 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e13b0 sp=0xc0321e1368 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e13f8 sp=0xc0321e13b0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1440 sp=0xc0321e13f8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1488 sp=0xc0321e1440 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e14d0 sp=0xc0321e1488 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1518 sp=0xc0321e14d0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1560 sp=0xc0321e1518 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e15a8 sp=0xc0321e1560 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e15f0 sp=0xc0321e15a8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1638 sp=0xc0321e15f0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1680 sp=0xc0321e1638 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e16c8 sp=0xc0321e1680 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1710 sp=0xc0321e16c8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1758 sp=0xc0321e1710 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e17a0 sp=0xc0321e1758 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e17e8 sp=0xc0321e17a0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1830 sp=0xc0321e17e8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1878 sp=0xc0321e1830 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e18c0 sp=0xc0321e1878 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1908 sp=0xc0321e18c0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1950 sp=0xc0321e1908 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1998 sp=0xc0321e1950 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e19e0 sp=0xc0321e1998 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1a28 sp=0xc0321e19e0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1a70 sp=0xc0321e1a28 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1ab8 sp=0xc0321e1a70 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1b00 sp=0xc0321e1ab8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1b48 sp=0xc0321e1b00 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1b90 sp=0xc0321e1b48 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1bd8 sp=0xc0321e1b90 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1c20 sp=0xc0321e1bd8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1c68 sp=0xc0321e1c20 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011b5fd50, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1cb0 sp=0xc0321e1c68 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d8e3f0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1cf8 sp=0xc0321e1cb0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011d7ed70, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1d40 sp=0xc0321e1cf8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064e40, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1d88 sp=0xc0321e1d40 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc011042280, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1dd0 sp=0xc0321e1d88 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc0110647e0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1e18 sp=0xc0321e1dd0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011064780, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1e60 sp=0xc0321e1e18 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc011076720, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1ea8 sp=0xc0321e1e60 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x40385b8, 0xc00106f2c0, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1ef0 sp=0xc0321e1ea8 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc01165a020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1f38 sp=0xc0321e1ef0 pc=0x1ee3a1c
-   > github.com/pingcap/tidb/util/memory.reArrangeFallback(0x4038578, 0xc00046e020, 0x40385b8, 0xc0110647e0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/memory/tracker.go:193 +0xfc fp=0xc0321e1f80 sp=0xc0321e1f38 pc=0x1ee3a1c
+   > 	/usr/local/go/src/runtime/asm_amd64.s:570 +0x8b fp=0x7f2072adda48 sp=0x7f2072adda40 pc=0x13ec60b
+   > goroutine 1151 [running]:
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60?, 0xc0121a8300?}, {0x4012e60?, 0xc0121a8300?})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:183 +0x12c fp=0xc0329803a0 sp=0xc032980398 pc=0x1f5780c
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329803d8 sp=0xc0329803a0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980410 sp=0xc0329803d8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980448 sp=0xc032980410 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980480 sp=0xc032980448 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329804b8 sp=0xc032980480 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329804f0 sp=0xc0329804b8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980528 sp=0xc0329804f0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980560 sp=0xc032980528 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980598 sp=0xc032980560 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329805d0 sp=0xc032980598 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980608 sp=0xc0329805d0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980640 sp=0xc032980608 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980678 sp=0xc032980640 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329806b0 sp=0xc032980678 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329806e8 sp=0xc0329806b0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980720 sp=0xc0329806e8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980758 sp=0xc032980720 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980790 sp=0xc032980758 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329807c8 sp=0xc032980790 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980800 sp=0xc0329807c8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980838 sp=0xc032980800 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980870 sp=0xc032980838 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329808a8 sp=0xc032980870 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329808e0 sp=0xc0329808a8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980918 sp=0xc0329808e0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980950 sp=0xc032980918 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980988 sp=0xc032980950 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329809c0 sp=0xc032980988 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329809f8 sp=0xc0329809c0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980a30 sp=0xc0329809f8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980a68 sp=0xc032980a30 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980aa0 sp=0xc032980a68 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980ad8 sp=0xc032980aa0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980b10 sp=0xc032980ad8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980b48 sp=0xc032980b10 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980b80 sp=0xc032980b48 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980bb8 sp=0xc032980b80 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980bf0 sp=0xc032980bb8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980c28 sp=0xc032980bf0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980c60 sp=0xc032980c28 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980c98 sp=0xc032980c60 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980cd0 sp=0xc032980c98 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980d08 sp=0xc032980cd0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980d40 sp=0xc032980d08 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980d78 sp=0xc032980d40 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980db0 sp=0xc032980d78 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980de8 sp=0xc032980db0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980e20 sp=0xc032980de8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980e58 sp=0xc032980e20 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980e90 sp=0xc032980e58 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980ec8 sp=0xc032980e90 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980f00 sp=0xc032980ec8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980f38 sp=0xc032980f00 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980f70 sp=0xc032980f38 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980fa8 sp=0xc032980f70 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032980fe0 sp=0xc032980fa8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981018 sp=0xc032980fe0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981050 sp=0xc032981018 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981088 sp=0xc032981050 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329810c0 sp=0xc032981088 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329810f8 sp=0xc0329810c0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981130 sp=0xc0329810f8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981168 sp=0xc032981130 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329811a0 sp=0xc032981168 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329811d8 sp=0xc0329811a0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981210 sp=0xc0329811d8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981248 sp=0xc032981210 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981280 sp=0xc032981248 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329812b8 sp=0xc032981280 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329812f0 sp=0xc0329812b8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981328 sp=0xc0329812f0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981360 sp=0xc032981328 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981398 sp=0xc032981360 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329813d0 sp=0xc032981398 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981408 sp=0xc0329813d0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981440 sp=0xc032981408 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981478 sp=0xc032981440 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329814b0 sp=0xc032981478 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329814e8 sp=0xc0329814b0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981520 sp=0xc0329814e8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981558 sp=0xc032981520 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981590 sp=0xc032981558 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329815c8 sp=0xc032981590 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981600 sp=0xc0329815c8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981638 sp=0xc032981600 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981670 sp=0xc032981638 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329816a8 sp=0xc032981670 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329816e0 sp=0xc0329816a8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a82a0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981718 sp=0xc0329816e0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc000810660}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981750 sp=0xc032981718 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0004a50e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981788 sp=0xc032981750 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011a46f20}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329817c0 sp=0xc032981788 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618e0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329817f8 sp=0xc0329817c0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2180}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981830 sp=0xc0329817f8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011eb2160}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981868 sp=0xc032981830 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f618c0}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329818a0 sp=0xc032981868 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc012088600}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc0329818d8 sp=0xc0329818a0 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e20, 0xc011f61710}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981910 sp=0xc0329818d8 pc=0x1f577a5
+   > github.com/pingcap/tidb/util/memory.reArrangeFallback({0x4012e60, 0xc0121a8300}, {0x4012e60, 0xc0121a8300})
+   > 	/go/src/github.com/pingcap/tidb/util/memory/tracker.go:194 +0xc5 fp=0xc032981948 sp=0xc032981910 pc=0x1f577a5
    > ...additional frames elided...
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:699 +0x198
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:712 +0x22d
    > goroutine 1 [chan receive]:
-   > github.com/pingcap/tidb/server.(*Server).Run(0xc010f232b0, 0xc0114e54a0, 0xc01067fe00)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/server.go:338 +0x1c5
+   > runtime.gopark(0xc0105514a0?, 0xc0107b7dc0?, 0xbf?, 0xc1?, 0x37fc5c0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107b7d40 sp=0xc0107b7d20 pc=0x13bb516
+   > runtime.chanrecv(0xc0003a4c60, 0xc0107b7e30, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc0107b7dd0 sp=0xc0107b7d40 pc=0x13854bb
+   > runtime.chanrecv1(0xc0059ae9c0?, 0x0?)
+   > 	/usr/local/go/src/runtime/chan.go:442 +0x18 fp=0xc0107b7df8 sp=0xc0107b7dd0 pc=0x1384fb8
+   > github.com/pingcap/tidb/server.(*Server).Run(0xc0059ae9c0)
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:370 +0x1f0 fp=0xc0107b7e50 sp=0xc0107b7df8 pc=0x31e23d0
    > main.main()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/tidb-server/main.go:200 +0x33d
-   > goroutine 15 [select]:
-   > go.opencensus.io/stats/view.(*worker).start(0xc00015d980)
-   > 	/nfs/cache/mod/go.opencensus.io@v0.22.5/stats/view/worker.go:276 +0xcd
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:213 +0x539 fp=0xc0107b7f80 sp=0xc0107b7e50 pc=0x33af4b9
+   > runtime.main()
+   > 	/usr/local/go/src/runtime/proc.go:250 +0x212 fp=0xc0107b7fe0 sp=0xc0107b7f80 pc=0x13bb152
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107b7fe8 sp=0xc0107b7fe0 pc=0x13ee6e1
+   > goroutine 2 [force gc (idle)]:
+   > runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008efb0 sp=0xc00008ef90 pc=0x13bb516
+   > runtime.goparkunlock(...)
+   > 	/usr/local/go/src/runtime/proc.go:369
+   > runtime.forcegchelper()
+   > 	/usr/local/go/src/runtime/proc.go:302 +0xad fp=0xc00008efe0 sp=0xc00008efb0 pc=0x13bb3ad
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008efe8 sp=0xc00008efe0 pc=0x13ee6e1
+   > created by runtime.init.6
+   > 	/usr/local/go/src/runtime/proc.go:290 +0x25
+   > goroutine 3 [GC sweep wait]:
+   > runtime.gopark(0x1?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008f790 sp=0xc00008f770 pc=0x13bb516
+   > runtime.goparkunlock(...)
+   > 	/usr/local/go/src/runtime/proc.go:369
+   > runtime.bgsweep(0x0?)
+   > 	/usr/local/go/src/runtime/mgcsweep.go:297 +0xd7 fp=0xc00008f7c8 sp=0xc00008f790 pc=0x13a4337
+   > runtime.gcenable.func1()
+   > 	/usr/local/go/src/runtime/mgc.go:178 +0x26 fp=0xc00008f7e0 sp=0xc00008f7c8 pc=0x1398e06
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008f7e8 sp=0xc00008f7e0 pc=0x13ee6e1
+   > created by runtime.gcenable
+   > 	/usr/local/go/src/runtime/mgc.go:178 +0x6b
+   > goroutine 4 [GC scavenge wait]:
+   > runtime.gopark(0xc0000b8000?, 0x3fe2f28?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008ff70 sp=0xc00008ff50 pc=0x13bb516
+   > runtime.goparkunlock(...)
+   > 	/usr/local/go/src/runtime/proc.go:369
+   > runtime.(*scavengerState).park(0x5f57220)
+   > 	/usr/local/go/src/runtime/mgcscavenge.go:389 +0x53 fp=0xc00008ffa0 sp=0xc00008ff70 pc=0x13a2313
+   > runtime.bgscavenge(0x0?)
+   > 	/usr/local/go/src/runtime/mgcscavenge.go:622 +0x65 fp=0xc00008ffc8 sp=0xc00008ffa0 pc=0x13a2925
+   > runtime.gcenable.func2()
+   > 	/usr/local/go/src/runtime/mgc.go:179 +0x26 fp=0xc00008ffe0 sp=0xc00008ffc8 pc=0x1398da6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008ffe8 sp=0xc00008ffe0 pc=0x13ee6e1
+   > created by runtime.gcenable
+   > 	/usr/local/go/src/runtime/mgc.go:179 +0xaa
+   > goroutine 5 [finalizer wait]:
+   > runtime.gopark(0x5f58620?, 0xc000007860?, 0x0?, 0x0?, 0xc00008e770?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008e628 sp=0xc00008e608 pc=0x13bb516
+   > runtime.goparkunlock(...)
+   > 	/usr/local/go/src/runtime/proc.go:369
+   > runtime.runfinq()
+   > 	/usr/local/go/src/runtime/mfinal.go:180 +0x10f fp=0xc00008e7e0 sp=0xc00008e628 pc=0x1397f0f
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008e7e8 sp=0xc00008e7e0 pc=0x13ee6e1
+   > created by runtime.createfing
+   > 	/usr/local/go/src/runtime/mfinal.go:157 +0x45
+   > goroutine 6 [GC worker (idle)]:
+   > runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000090750 sp=0xc000090730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc0000907e0 sp=0xc000090750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0000907e8 sp=0xc0000907e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 7 [GC worker (idle)]:
+   > runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000090f50 sp=0xc000090f30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc000090fe0 sp=0xc000090f50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000090fe8 sp=0xc000090fe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 18 [GC worker (idle)]:
+   > runtime.gopark(0x3ada26e6be69?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008a750 sp=0xc00008a730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00008a7e0 sp=0xc00008a750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008a7e8 sp=0xc00008a7e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 8 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab1845f?, 0xc00005b1e0?, 0x18?, 0x14?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000091750 sp=0xc000091730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc0000917e0 sp=0xc000091750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0000917e8 sp=0xc0000917e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 19 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab3479e?, 0x3?, 0xfc?, 0xd9?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008af50 sp=0xc00008af30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00008afe0 sp=0xc00008af50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008afe8 sp=0xc00008afe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 9 [GC worker (idle)]:
+   > runtime.gopark(0x5f8be00?, 0x1?, 0x39?, 0x95?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000091f50 sp=0xc000091f30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc000091fe0 sp=0xc000091f50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000091fe8 sp=0xc000091fe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 20 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab17218?, 0x3?, 0x77?, 0x23?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008b750 sp=0xc00008b730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00008b7e0 sp=0xc00008b750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008b7e8 sp=0xc00008b7e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 10 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab3479e?, 0x3?, 0x75?, 0x5?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049e750 sp=0xc00049e730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00049e7e0 sp=0xc00049e750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049e7e8 sp=0xc00049e7e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 11 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab1778d?, 0x3?, 0x8d?, 0x19?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049ef50 sp=0xc00049ef30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00049efe0 sp=0xc00049ef50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049efe8 sp=0xc00049efe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 12 [GC worker (idle)]:
+   > runtime.gopark(0x5f8be00?, 0x1?, 0x55?, 0xe1?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049f750 sp=0xc00049f730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00049f7e0 sp=0xc00049f750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049f7e8 sp=0xc00049f7e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 13 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3aaf4172?, 0x3?, 0x1?, 0x13?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049ff50 sp=0xc00049ff30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00049ffe0 sp=0xc00049ff50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049ffe8 sp=0xc00049ffe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 14 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab3479e?, 0x1?, 0xc8?, 0xa8?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0004a0750 sp=0xc0004a0730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc0004a07e0 sp=0xc0004a0750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0004a07e8 sp=0xc0004a07e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 15 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab17218?, 0x1?, 0x40?, 0xaf?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0004a0f50 sp=0xc0004a0f30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc0004a0fe0 sp=0xc0004a0f50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0004a0fe8 sp=0xc0004a0fe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 34 [GC worker (idle)]:
+   > runtime.gopark(0x5f8be00?, 0x3?, 0x4d?, 0x51?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049a750 sp=0xc00049a730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc00049a7e0 sp=0xc00049a750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049a7e8 sp=0xc00049a7e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 16 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3ab3479e?, 0x1?, 0xa?, 0x76?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0004a1750 sp=0xc0004a1730 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc0004a17e0 sp=0xc0004a1750 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0004a17e8 sp=0xc0004a17e0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 50 [GC worker (idle)]:
+   > runtime.gopark(0x3ada3aaf7d78?, 0x1?, 0x82?, 0x98?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0004a1f50 sp=0xc0004a1f30 pc=0x13bb516
+   > runtime.gcBgMarkWorker()
+   > 	/usr/local/go/src/runtime/mgc.go:1235 +0xf1 fp=0xc0004a1fe0 sp=0xc0004a1f50 pc=0x139af51
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0004a1fe8 sp=0xc0004a1fe0 pc=0x13ee6e1
+   > created by runtime.gcBgMarkStartWorkers
+   > 	/usr/local/go/src/runtime/mgc.go:1159 +0x25
+   > goroutine 163 [chan receive]:
+   > runtime.gopark(0xc0004a2000?, 0x1?, 0x10?, 0xde?, 0x13d8de5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008ddb8 sp=0xc00008dd98 pc=0x13bb516
+   > runtime.chanrecv(0xc000bf69c0, 0xc00008df28, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc00008de48 sp=0xc00008ddb8 pc=0x13854bb
+   > runtime.chanrecv2(0x3b9aca00?, 0x13bb600?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc00008de70 sp=0xc00008de48 pc=0x1384ff8
+   > go.etcd.io/etcd/pkg/logutil.(*MergeLogger).outputLoop(0xc000575ad0)
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:173 +0x8c fp=0xc00008dfc8 sp=0xc00008de70 pc=0x1a12c4c
+   > go.etcd.io/etcd/pkg/logutil.NewMergeLogger.func1()
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:91 +0x26 fp=0xc00008dfe0 sp=0xc00008dfc8 pc=0x1a124c6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008dfe8 sp=0xc00008dfe0 pc=0x13ee6e1
+   > created by go.etcd.io/etcd/pkg/logutil.NewMergeLogger
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:91 +0xb6
+   > goroutine 22 [select]:
+   > runtime.gopark(0xc00008d788?, 0x3?, 0x58?, 0xde?, 0xc00008d772?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008d5f8 sp=0xc00008d5d8 pc=0x13bb516
+   > runtime.selectgo(0xc00008d788, 0xc00008d76c, 0xc000a2f680?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00008d738 sp=0xc00008d5f8 pc=0x13cbbdc
+   > go.opencensus.io/stats/view.(*worker).start(0xc000a2f680)
+   > 	/go/pkg/mod/go.opencensus.io@v0.23.0/stats/view/worker.go:276 +0xad fp=0xc00008d7c8 sp=0xc00008d738 pc=0x29900cd
+   > go.opencensus.io/stats/view.init.0.func1()
+   > 	/go/pkg/mod/go.opencensus.io@v0.23.0/stats/view/worker.go:34 +0x26 fp=0xc00008d7e0 sp=0xc00008d7c8 pc=0x298f346
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008d7e8 sp=0xc00008d7e0 pc=0x13ee6e1
    > created by go.opencensus.io/stats/view.init.0
-   > 	/nfs/cache/mod/go.opencensus.io@v0.22.5/stats/view/worker.go:34 +0x68
-   > goroutine 171 [chan receive]:
-   > go.etcd.io/etcd/pkg/logutil.(*MergeLogger).outputLoop(0xc000908588)
-   > 	/nfs/cache/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20200824191128-ae9734ed278b/pkg/logutil/merge_logger.go:173 +0x3ac
+   > 	/go/pkg/mod/go.opencensus.io@v0.23.0/stats/view/worker.go:34 +0x8d
+   > goroutine 48 [chan receive]:
+   > runtime.gopark(0xc0002fa060?, 0x13c1374?, 0x10?, 0xce?, 0x13d8de5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008cdb8 sp=0xc00008cd98 pc=0x13bb516
+   > runtime.chanrecv(0xc0002fb740, 0xc00008cf28, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc00008ce48 sp=0xc00008cdb8 pc=0x13854bb
+   > runtime.chanrecv2(0x3b9aca00?, 0x13bb600?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc00008ce70 sp=0xc00008ce48 pc=0x1384ff8
+   > go.etcd.io/etcd/pkg/logutil.(*MergeLogger).outputLoop(0xc0006208b8)
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:173 +0x8c fp=0xc00008cfc8 sp=0xc00008ce70 pc=0x1a12c4c
+   > go.etcd.io/etcd/pkg/logutil.NewMergeLogger.func1()
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:91 +0x26 fp=0xc00008cfe0 sp=0xc00008cfc8 pc=0x1a124c6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008cfe8 sp=0xc00008cfe0 pc=0x13ee6e1
    > created by go.etcd.io/etcd/pkg/logutil.NewMergeLogger
-   > 	/nfs/cache/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20200824191128-ae9734ed278b/pkg/logutil/merge_logger.go:91 +0x85
-   > goroutine 240 [chan receive]:
-   > go.etcd.io/etcd/pkg/logutil.(*MergeLogger).outputLoop(0xc0009093b0)
-   > 	/nfs/cache/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20200824191128-ae9734ed278b/pkg/logutil/merge_logger.go:173 +0x3ac
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:91 +0xb6
+   > goroutine 180 [chan receive]:
+   > runtime.gopark(0xc000bf6a80?, 0x2?, 0x10?, 0xd6?, 0x13d8de5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b1d5b8 sp=0xc000b1d598 pc=0x13bb516
+   > runtime.chanrecv(0xc000bf6a20, 0xc000b1d728, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000b1d648 sp=0xc000b1d5b8 pc=0x13854bb
+   > runtime.chanrecv2(0x3b9aca00?, 0x13bb600?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc000b1d670 sp=0xc000b1d648 pc=0x1384ff8
+   > go.etcd.io/etcd/pkg/logutil.(*MergeLogger).outputLoop(0xc0004b7a70)
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:173 +0x8c fp=0xc000b1d7c8 sp=0xc000b1d670 pc=0x1a12c4c
+   > go.etcd.io/etcd/pkg/logutil.NewMergeLogger.func1()
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:91 +0x26 fp=0xc000b1d7e0 sp=0xc000b1d7c8 pc=0x1a124c6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b1d7e8 sp=0xc000b1d7e0 pc=0x13ee6e1
    > created by go.etcd.io/etcd/pkg/logutil.NewMergeLogger
-   > 	/nfs/cache/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20200824191128-ae9734ed278b/pkg/logutil/merge_logger.go:91 +0x85
-   > goroutine 197 [chan receive]:
-   > go.etcd.io/etcd/pkg/logutil.(*MergeLogger).outputLoop(0xc0005065e8)
-   > 	/nfs/cache/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20200824191128-ae9734ed278b/pkg/logutil/merge_logger.go:173 +0x3ac
-   > created by go.etcd.io/etcd/pkg/logutil.NewMergeLogger
-   > 	/nfs/cache/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20200824191128-ae9734ed278b/pkg/logutil/merge_logger.go:91 +0x85
-   > goroutine 491 [chan receive]:
-   > github.com/pingcap/tidb/util/profile.HeapProfileForGlobalMemTracker(0xdf8475800)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/profile/trackerRecorder.go:32 +0xbf
-   > created by main.setHeapProfileTracker
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/tidb-server/main.go:266 +0x8d
-   > goroutine 492 [chan receive]:
-   > github.com/pingcap/tidb/util/systimemon.StartMonitor(0x3c23558, 0x3c228d0, 0xc000a0c5f0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/systimemon/systime_mon.go:31 +0x148
-   > created by main.setupMetrics
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/tidb-server/main.go:652 +0x105
-   > goroutine 493 [select]:
-   > github.com/pingcap/badger.(*DB).updateSize(0xc000aa3200, 0xc000c0bab8)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/db.go:1032 +0x108
-   > created by github.com/pingcap/badger.Open
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/db.go:327 +0xe14
-   > goroutine 494 [select]:
-   > github.com/pingcap/badger/epoch.(*ResourceManager).collectLoop(0xc000a0f1a0, 0xc000c0bad0)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/epoch/manager.go:101 +0xdc
-   > created by github.com/pingcap/badger/epoch.NewResourceManager
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/epoch/manager.go:79 +0xa7
-   > goroutine 495 [select]:
-   > github.com/pingcap/badger.Open.func4(0xc000692b68)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/db.go:341 +0x17c
-   > created by github.com/pingcap/badger.Open
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/db.go:338 +0x10a8
-   > goroutine 99 [select]:
-   > github.com/pingcap/badger.(*blobGCHandler).run(0xc00053b940, 0xc0004e68e8)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/blob.go:468 +0xd4
+   > 	/go/pkg/mod/go.etcd.io/etcd@v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9/pkg/logutil/merge_logger.go:91 +0xb6
+   > goroutine 1268 [select]:
+   > runtime.gopark(0xc00fd3a778?, 0x2?, 0x2?, 0x0?, 0xc00fd3a6ec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00fd3a558 sp=0xc00fd3a538 pc=0x13bb516
+   > runtime.selectgo(0xc00fd3a778, 0xc00fd3a6e8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00fd3a698 sp=0xc00fd3a558 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0105af5c0, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc00fd3a7b8 sp=0xc00fd3a698 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc00fd3a7e0 sp=0xc00fd3a7b8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00fd3a7e8 sp=0xc00fd3a7e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 294 [select]:
+   > runtime.gopark(0xc000b19708?, 0x2?, 0x0?, 0x0?, 0xc000b196e4?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b19568 sp=0xc000b19548 pc=0x13bb516
+   > runtime.selectgo(0xc000b19708, 0xc000b196e0, 0xc0000061a0?, 0x0, 0xc0000061a0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b196a8 sp=0xc000b19568 pc=0x13cbbdc
+   > github.com/pingcap/badger.(*blobGCHandler).run(0xc000c44380, 0xc000da4090)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/blob.go:468 +0xd6 fp=0xc000b197c0 sp=0xc000b196a8 pc=0x3288896
+   > github.com/pingcap/badger.(*blobManager).Open.func1()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/blob.go:292 +0x2a fp=0xc000b197e0 sp=0xc000b197c0 pc=0x328754a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b197e8 sp=0xc000b197e0 pc=0x13ee6e1
    > created by github.com/pingcap/badger.(*blobManager).Open
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/blob.go:292 +0x618
-   > goroutine 100 [select]:
-   > github.com/pingcap/badger.(*levelsController).runWorker(0xc0006f22a0, 0xc0004e6900, 0x0)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/levels.go:212 +0x185
-   > created by github.com/pingcap/badger.(*levelsController).startCompact
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/levels.go:180 +0x93
-   > goroutine 101 [select]:
-   > github.com/pingcap/badger.(*levelsController).runWorker(0xc0006f22a0, 0xc0004e6900, 0x0)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/levels.go:212 +0x185
-   > created by github.com/pingcap/badger.(*levelsController).startCompact
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/levels.go:180 +0x93
-   > goroutine 102 [select]:
-   > github.com/pingcap/badger.(*levelsController).runWorker(0xc0006f22a0, 0xc0004e6900, 0x1)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/levels.go:212 +0x185
-   > created by github.com/pingcap/badger.(*levelsController).startCompact
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/levels.go:180 +0x93
-   > goroutine 103 [chan receive]:
-   > github.com/pingcap/badger.(*DB).runFlushMemTable(0xc000aa3200, 0xc000a0a0a8, 0x0, 0x0)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/db.go:913 +0x190
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/blob.go:292 +0x5bd
+   > goroutine 431 [chan receive]:
+   > runtime.gopark(0x209a4ff3c8?, 0x0?, 0x78?, 0xfe?, 0x13d8de5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00009fe20 sp=0xc00009fe00 pc=0x13bb516
+   > runtime.chanrecv(0xc000b3e300, 0x0, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc00009feb0 sp=0xc00009fe20 pc=0x13854bb
+   > runtime.chanrecv1(0xdf8475800?, 0x1b?)
+   > 	/usr/local/go/src/runtime/chan.go:442 +0x18 fp=0xc00009fed8 sp=0xc00009feb0 pc=0x1384fb8
+   > github.com/pingcap/tidb/util/profile.HeapProfileForGlobalMemTracker(0xc000af8ba0?)
+   > 	/go/src/github.com/pingcap/tidb/util/profile/trackerRecorder.go:33 +0xa7 fp=0xc00009ffc8 sp=0xc00009fed8 pc=0x267adc7
+   > main.setHeapProfileTracker.func1()
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:279 +0x26 fp=0xc00009ffe0 sp=0xc00009ffc8 pc=0x33afc46
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00009ffe8 sp=0xc00009ffe0 pc=0x13ee6e1
+   > created by main.setHeapProfileTracker
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:279 +0xa5
+   > goroutine 432 [chan receive]:
+   > runtime.gopark(0xc000da1440?, 0x13c1374?, 0x38?, 0xde?, 0x13d8de5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000dadde0 sp=0xc000daddc0 pc=0x13bb516
+   > runtime.chanrecv(0xc000da13e0, 0x0, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000dade70 sp=0xc000dadde0 pc=0x13854bb
+   > runtime.chanrecv1(0x5f5e100?, 0x3ace4e4?)
+   > 	/usr/local/go/src/runtime/chan.go:442 +0x18 fp=0xc000dade98 sp=0xc000dade70 pc=0x1384fb8
+   > github.com/pingcap/tidb/util/systimemon.StartMonitor(0x3bccd98, 0x3bcc3f0, 0xc000af4f50)
+   > 	/go/src/github.com/pingcap/tidb/util/systimemon/systime_mon.go:32 +0x185 fp=0xc000dadfb8 sp=0xc000dade98 pc=0x33ac665
+   > main.setupMetrics.func3()
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:696 +0x31 fp=0xc000dadfe0 sp=0xc000dadfb8 pc=0x33b2df1
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000dadfe8 sp=0xc000dadfe0 pc=0x13ee6e1
+   > created by main.setupMetrics
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:696 +0x115
+   > goroutine 433 [select]:
+   > runtime.gopark(0xc000ee1f80?, 0x2?, 0x10?, 0x0?, 0xc000ee1f4c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee1dd0 sp=0xc000ee1db0 pc=0x13bb516
+   > runtime.selectgo(0xc000ee1f80, 0xc000ee1f48, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee1f10 sp=0xc000ee1dd0 pc=0x13cbbdc
+   > github.com/pingcap/badger.(*DB).updateSize(0x0?, 0xc000aef7b8)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:1039 +0x105 fp=0xc000ee1fc0 sp=0xc000ee1f10 pc=0x329a445
+   > github.com/pingcap/badger.Open.func5()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:328 +0x2a fp=0xc000ee1fe0 sp=0xc000ee1fc0 pc=0x329450a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee1fe8 sp=0xc000ee1fe0 pc=0x13ee6e1
    > created by github.com/pingcap/badger.Open
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/db.go:360 +0x17b0
-   > goroutine 345 [chan receive]:
-   > github.com/pingcap/badger.(*writeWorker).runMergeLSM(0xc0006e44c0, 0xc000506078)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/writer.go:154 +0xad
-   > created by github.com/pingcap/badger.startWriteWorker
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/writer.go:66 +0x1e8
-   > goroutine 344 [chan receive, locked to thread]:
-   > github.com/pingcap/badger.(*writeWorker).runWriteLSM(0xc0006e44c0, 0xc000506078)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/writer.go:141 +0x195
-   > created by github.com/pingcap/badger.startWriteWorker
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/writer.go:65 +0x1bc
-   > goroutine 343 [select]:
-   > github.com/pingcap/badger.(*writeWorker).runWriteVLog(0xc0006e44c0, 0xc000506078)
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/writer.go:94 +0x1dc
-   > created by github.com/pingcap/badger.startWriteWorker
-   > 	/nfs/cache/mod/github.com/pingcap/badger@v1.5.1-0.20200908111422-2e78ee155d19/writer.go:64 +0x190
-   > goroutine 346 [select]:
-   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.writeDBWorker.run(0xc00003a360, 0xc000f8a1c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:95 +0x205
-   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*dbWriter).Open
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:198 +0x8f
-   > goroutine 347 [select]:
-   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.writeLockWorker.run(0xc00003a3c0, 0xc000f8a1c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:147 +0x3e5
-   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*dbWriter).Open
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:205 +0xdc
-   > goroutine 348 [select]:
-   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*MVCCStore).runUpdateSafePointLoop(0xc0006e8080)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:1549 +0x28a
-   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.NewMVCCStore
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:84 +0x269
-   > goroutine 349 [select]:
-   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*MVCCStore).StartDeadlockDetection.func1(0xc0006e8080)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:1285 +0x8a
-   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*MVCCStore).StartDeadlockDetection
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:1283 +0x78
-   > goroutine 350 [select]:
-   > github.com/tikv/client-go/v2/oracle/oracles.(*pdOracle).updateTS(0xc000f89490, 0x4030f20, 0xc000052058, 0x77359400)
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/oracle/oracles/pd.go:227 +0x131
-   > created by github.com/tikv/client-go/v2/oracle/oracles.NewPdOracle
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/oracle/oracles/pd.go:75 +0xd3
-   > goroutine 351 [select]:
-   > github.com/tikv/client-go/v2/internal/locate.(*RegionCache).asyncCheckAndResolveLoop(0xc0006e8180, 0xdf8475800)
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/internal/locate/region_cache.go:395 +0xdc
-   > created by github.com/tikv/client-go/v2/internal/locate.NewRegionCache
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/internal/locate/region_cache.go:366 +0x259
-   > goroutine 352 [select]:
-   > github.com/tikv/client-go/v2/tikv.(*KVStore).runSafePointChecker(0xc00052e120)
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/tikv/kv.go:262 +0x136
-   > created by github.com/tikv/client-go/v2/tikv.NewKVStore
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/tikv/kv.go:185 +0x407
-   > goroutine 353 [select]:
-   > github.com/tikv/client-go/v2/tikv.(*KVStore).safeTSUpdater(0xc00052e120)
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/tikv/kv.go:540 +0x194
-   > created by github.com/tikv/client-go/v2/tikv.NewKVStore
-   > 	/nfs/cache/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20210820060448-daddf73a0706/tikv/kv.go:186 +0x429
-   > goroutine 498 [select]:
-   > github.com/dgraph-io/ristretto.(*defaultPolicy).processItems(0xc000438f90)
-   > 	/nfs/cache/mod/github.com/dgraph-io/ristretto@v0.0.1/policy.go:96 +0xa5
-   > created by github.com/dgraph-io/ristretto.newDefaultPolicy
-   > 	/nfs/cache/mod/github.com/dgraph-io/ristretto@v0.0.1/policy.go:80 +0x129
-   > goroutine 499 [select]:
-   > github.com/dgraph-io/ristretto.(*Cache).processItems(0xc00003a7e0)
-   > 	/nfs/cache/mod/github.com/dgraph-io/ristretto@v0.0.1/cache.go:257 +0x9d
-   > created by github.com/dgraph-io/ristretto.NewCache
-   > 	/nfs/cache/mod/github.com/dgraph-io/ristretto@v0.0.1/cache.go:155 +0x205
-   > goroutine 852 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).autoAnalyzeWorker(0xc010a9e900, 0x404ecf8, 0xc010f7e820)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1347 +0x165
-   > created by github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1184 +0x245
-   > goroutine 756 [select]:
-   > github.com/pingcap/tidb/ddl.(*worker).start(0xc010a8ea50, 0xc010a8a9c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/ddl_worker.go:177 +0x315
-   > created by github.com/pingcap/tidb/ddl.(*ddl).Start
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/ddl.go:364 +0x6a5
-   > goroutine 754 [select]:
-   > github.com/pingcap/tidb/ddl.(*ddl).limitDDLJobs(0xc010ae28c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/ddl_worker.go:265 +0x2d9
-   > created by github.com/pingcap/tidb/ddl.(*ddl).Start
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/ddl.go:346 +0x2d5
-   > goroutine 785 [sleep]:
-   > time.Sleep(0x3b9aca00)
-   > 	/usr/local/go/src/runtime/time.go:193 +0xd2
-   > github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).startCPUProfileWorker(0xc0003d5860)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:114 +0xb4
-   > created by github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).Run
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:92 +0xb7
-   > goroutine 849 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).TelemetryRotateSubWindowLoop.func1(0xc010a9e900)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1113 +0xd8
-   > created by github.com/pingcap/tidb/domain.(*Domain).TelemetryRotateSubWindowLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1106 +0x7f
-   > goroutine 757 [select]:
-   > github.com/pingcap/tidb/ddl.(*worker).start(0xc010a8eb00, 0xc010a8a9c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/ddl_worker.go:177 +0x315
-   > created by github.com/pingcap/tidb/ddl.(*ddl).Start
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/ddl.go:364 +0x6a5
-   > goroutine 850 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).loadStatsWorker(0xc010a9e900)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1226 +0x3cc
-   > created by github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1169 +0x2fa
-   > goroutine 761 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).topNSlowQueryLoop(0xc010a9e900)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:423 +0x1e5
-   > created by github.com/pingcap/tidb/domain.(*Domain).Init
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:771 +0x61c
-   > goroutine 786 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).globalBindHandleWorkerLoop.func1(0xc010a9e900, 0x404ecf8, 0xc000bd2080)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1014 +0x157
-   > created by github.com/pingcap/tidb/domain.(*Domain).globalBindHandleWorkerLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1001 +0x73
-   > goroutine 866 [chan receive]:
-   > github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).startAnalyzeProfileWorker(0xc0003d5860)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:141 +0xd4
-   > created by github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).Run
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:93 +0xd9
-   > goroutine 763 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).topologySyncerKeeper(0xc010a9e900)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:481 +0x193
-   > created by github.com/pingcap/tidb/domain.(*Domain).Init
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:778 +0x6c5
-   > goroutine 787 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).handleEvolvePlanTasksLoop.func1(0xc010a9e900, 0x404ecf8, 0xc000bd2080, 0x40773d8, 0xc0110f6600)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1050 +0xde
-   > created by github.com/pingcap/tidb/domain.(*Domain).handleEvolvePlanTasksLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1043 +0x8f
-   > goroutine 868 [IO wait]:
-   > internal/poll.runtime_pollWait(0x7f8dea7cdff0, 0x72, 0x0)
-   > 	/usr/local/go/src/runtime/netpoll.go:222 +0x55
-   > internal/poll.(*pollDesc).wait(0xc0114e8698, 0x72, 0x0, 0x0, 0x3b05d89)
-   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:87 +0x45
-   > internal/poll.(*pollDesc).waitRead(...)
-   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:92
-   > internal/poll.(*FD).Accept(0xc0114e8680, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
-   > 	/usr/local/go/src/internal/poll/fd_unix.go:401 +0x212
-   > net.(*netFD).accept(0xc0114e8680, 0x37bb380, 0x1, 0xc011134450)
-   > 	/usr/local/go/src/net/fd_unix.go:172 +0x45
-   > net.(*TCPListener).accept(0xc0114ee060, 0xc0113efd70, 0xc0113efd78, 0x10)
-   > 	/usr/local/go/src/net/tcpsock_posix.go:139 +0x32
-   > net.(*TCPListener).Accept(0xc0114ee060, 0x3c1ef90, 0xc010f232b0, 0xc0115c6480, 0x0)
-   > 	/usr/local/go/src/net/tcpsock.go:261 +0x65
-   > github.com/pingcap/tidb/server.(*Server).startNetworkListener(0xc010f232b0, 0x4022c80, 0xc0114ee060, 0xc01115d300, 0xc010f80ea0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/server.go:347 +0x6a
-   > created by github.com/pingcap/tidb/server.(*Server).Run
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/server.go:332 +0x11b
-   > goroutine 984 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6ee00, 0x4, 0xc011b55ab0, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc0119cf8c0, 0xc011b5fcf0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 848 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).TelemetryReportLoop.func1(0xc010a9e900, 0x40773d8, 0xc010f6e600)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1084 +0x12f
-   > created by github.com/pingcap/tidb/domain.(*Domain).TelemetryReportLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1076 +0x2b8
-   > goroutine 762 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).infoSyncerKeeper(0xc010a9e900)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:455 +0x138
-   > created by github.com/pingcap/tidb/domain.(*Domain).Init
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:774 +0x65b
-   > goroutine 855 [syscall]:
-   > os/signal.signal_recv(0x0)
-   > 	/usr/local/go/src/runtime/sigqueue.go:168 +0xa5
-   > os/signal.loop()
-   > 	/usr/local/go/src/os/signal/signal_unix.go:23 +0x25
-   > created by os/signal.Notify.func1.1
-   > 	/usr/local/go/src/os/signal/signal.go:151 +0x45
-   > goroutine 760 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).loadSchemaInLoop(0xc010a9e900, 0x4030ee8, 0xc010a7b940, 0xa7a358200)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:513 +0x218
-   > created by github.com/pingcap/tidb/domain.(*Domain).Init
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:768 +0x734
-   > goroutine 980 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6ee00, 0x0, 0xc011b55ab0, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc0119cf7c0, 0xc011b5fcb0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 983 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6ee00, 0x3, 0xc011b55ab0, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc0119cf880, 0xc011b5fce0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 755 [select]:
-   > github.com/pingcap/tidb/ddl.(*delRange).startEmulator(0xc010afa050)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/delete_range.go:143 +0x128
-   > created by github.com/pingcap/tidb/ddl.(*delRange).start
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/ddl/delete_range.go:125 +0x6a
-   > goroutine 867 [IO wait]:
-   > internal/poll.runtime_pollWait(0x7f8dea7cdf08, 0x72, 0x0)
-   > 	/usr/local/go/src/runtime/netpoll.go:222 +0x55
-   > internal/poll.(*pollDesc).wait(0xc0114e8718, 0x72, 0x0, 0x0, 0x3b05d89)
-   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:87 +0x45
-   > internal/poll.(*pollDesc).waitRead(...)
-   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:92
-   > internal/poll.(*FD).Accept(0xc0114e8700, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
-   > 	/usr/local/go/src/internal/poll/fd_unix.go:401 +0x212
-   > net.(*netFD).accept(0xc0114e8700, 0xc, 0x7f8e1129df18, 0x10)
-   > 	/usr/local/go/src/net/fd_unix.go:172 +0x45
-   > net.(*TCPListener).accept(0xc0114ee078, 0x11ed178, 0xc, 0x37efe60)
-   > 	/usr/local/go/src/net/tcpsock_posix.go:139 +0x32
-   > net.(*TCPListener).Accept(0xc0114ee078, 0xc011567240, 0x20, 0x7f8e1129df18, 0x20)
-   > 	/usr/local/go/src/net/tcpsock.go:261 +0x65
-   > github.com/soheilhy/cmux.(*cMux).Serve(0xc01157e140, 0x0, 0x0)
-   > 	/nfs/cache/mod/github.com/soheilhy/cmux@v0.1.4/cmux.go:162 +0x96
-   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer(0xc010f232b0, 0xc01156a2c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:370 +0x49f
-   > github.com/pingcap/tidb/server.(*Server).startHTTPServer(0xc010f232b0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:346 +0x12a7
-   > created by github.com/pingcap/tidb/server.(*Server).startStatusHTTP
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:59 +0x3f
-   > goroutine 843 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).LoadSysVarCacheLoop.func1(0xc010a9e900, 0xc010f3a490, 0x6fc23ac00, 0x40773d8, 0xc010f6e000)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:932 +0x125
-   > created by github.com/pingcap/tidb/domain.(*Domain).LoadSysVarCacheLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:923 +0xf6
-   > goroutine 840 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).LoadPrivilegeLoop.func1(0xc010a9e900, 0xc010f3a330, 0x45d964b800, 0x40773d8, 0xc000be2000)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:883 +0x125
-   > created by github.com/pingcap/tidb/domain.(*Domain).LoadPrivilegeLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:874 +0x1f0
-   > goroutine 853 [select]:
-   > github.com/pingcap/tidb/util/expensivequery.(*Handle).Run(0xc010a77f20)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/expensivequery/expensivequery.go:60 +0x337
-   > created by main.createServer
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/tidb-server/main.go:631 +0x1c7
-   > goroutine 783 [select]:
-   > github.com/pingcap/tidb/util/topsql/reporter.(*RemoteTopSQLReporter).collectWorker(0xc01116a7e0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:325 +0x1bb
-   > created by github.com/pingcap/tidb/util/topsql/reporter.NewRemoteTopSQLReporter
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:158 +0x1a7
-   > goroutine 782 [chan receive]:
-   > github.com/pingcap/tidb/util/signal.SetupSignalHandler.func2(0xc0114f8120, 0xc0114e54a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:52 +0x52
-   > created by github.com/pingcap/tidb/util/signal.SetupSignalHandler
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:51 +0x194
-   > goroutine 851 [select]:
-   > github.com/pingcap/tidb/domain.(*Domain).updateStatsWorker(0xc010a9e900, 0x40773d8, 0xc010f6ec00, 0x404ecf8, 0xc010f7e820)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1294 +0x288
-   > created by github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/domain/domain.go:1181 +0x1d6
-   > goroutine 784 [select]:
-   > github.com/pingcap/tidb/util/topsql/reporter.(*RemoteTopSQLReporter).reportWorker(0xc01116a7e0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:497 +0x211
-   > created by github.com/pingcap/tidb/util/topsql/reporter.NewRemoteTopSQLReporter
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:159 +0x1c9
-   > goroutine 859 [chan receive]:
-   > github.com/soheilhy/cmux.muxListener.Accept(...)
-   > 	/nfs/cache/mod/github.com/soheilhy/cmux@v0.1.4/cmux.go:229
-   > google.golang.org/grpc.(*Server).Serve(0xc010f7c820, 0x4023c40, 0xc0114ee648, 0x0, 0x0)
-   > 	/nfs/cache/mod/google.golang.org/grpc@v1.29.1/server.go:621 +0x27f
-   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer.func1()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:361 +0x58
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011568580, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:360 +0x405
-   > goroutine 856 [chan receive]:
-   > github.com/pingcap/tidb/util/signal.SetupSignalHandler.func1(0xc0114f80c0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:36 +0x72
-   > created by github.com/pingcap/tidb/util/signal.SetupSignalHandler
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:33 +0xb9
-   > goroutine 860 [chan receive]:
-   > github.com/soheilhy/cmux.muxListener.Accept(...)
-   > 	/nfs/cache/mod/github.com/soheilhy/cmux@v0.1.4/cmux.go:229
-   > net/http.(*Server).Serve(0xc010f35340, 0x4023c40, 0xc0114ee630, 0x0, 0x0)
-   > 	/usr/local/go/src/net/http/server.go:2981 +0x285
-   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:366 +0x58
-   > github.com/pingcap/tidb/util.WithRecovery(0xc0115685a0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/http_status.go:365 +0x488
-   > goroutine 982 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6ee00, 0x2, 0xc011b55ab0, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc0119cf840, 0xc011b5fcd0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 985 [semacquire]:
-   > sync.runtime_Semacquire(0xc011c6efd4)
-   > 	/usr/local/go/src/runtime/sema.go:56 +0x45
-   > sync.(*WaitGroup).Wait(0xc011c6efd4)
-   > 	/usr/local/go/src/sync/waitgroup.go:130 +0x65
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).waitJoinWorkersAndCloseResultChan(0xc011c6ee00)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:399 +0x3d
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011b5fd00, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:342 +0x336
-   > goroutine 930 [chan receive]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).Next(0xc011c6fc00, 0x4030f90, 0xc0119d22a0, 0xc011d6f310, 0xc011a72b80, 0x28aeca3)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:668 +0x87
-   > github.com/pingcap/tidb/executor.Next(0x4030f90, 0xc0119d22a0, 0x40359f8, 0xc011c6fc00, 0xc011d6f310, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/executor.go:285 +0x2de
-   > github.com/pingcap/tidb/executor.(*ProjectionExec).unParallelExecute(0xc011d20100, 0x4030f90, 0xc0119d22a0, 0xc011d6fc20, 0x0, 0x35346118bc00)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:193 +0xb2
-   > github.com/pingcap/tidb/executor.(*ProjectionExec).Next(0xc011d20100, 0x4030f90, 0xc0119d22a0, 0xc011d6fc20, 0xc011e17e30, 0x40773d8)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:179 +0x73
-   > github.com/pingcap/tidb/executor.Next(0x4030f90, 0xc0119d22a0, 0x4035f78, 0xc011d20100, 0xc011d6fc20, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/executor.go:285 +0x2de
-   > github.com/pingcap/tidb/executor.(*recordSet).Next(0xc011d6fb80, 0x4030f90, 0xc0119d22a0, 0xc011d6fc20, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/adapter.go:145 +0xb5
-   > github.com/pingcap/tidb/server.(*tidbResultSet).Next(0xc011d6fbd0, 0x4030f90, 0xc0119d22a0, 0xc011d6fc20, 0xc01198d2a8, 0x400)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/driver_tidb.go:305 +0x51
-   > github.com/pingcap/tidb/server.(*clientConn).writeChunks(0xc0115c6480, 0x4030f90, 0xc0119d22a0, 0x4049e68, 0xc011d6fbd0, 0x20000, 0x5d958d8, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/conn.go:2016 +0x4de
-   > github.com/pingcap/tidb/server.(*clientConn).writeResultset(0xc0115c6480, 0x4030f90, 0xc0119d22a0, 0x4049e68, 0xc011d6fbd0, 0x29e00, 0x0, 0x0, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/conn.go:1964 +0x20e
-   > github.com/pingcap/tidb/server.(*clientConn).handleStmt(0xc0115c6480, 0x4030ee8, 0xc0119d22a0, 0x404e488, 0xc0119ca4b0, 0x5d958d8, 0x0, 0x0, 0x1, 0x0, ...)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/conn.go:1844 +0x3e5
-   > github.com/pingcap/tidb/server.(*clientConn).handleQuery(0xc0115c6480, 0x4030ee8, 0xc0115fe140, 0xc0005e01a1, 0x18c, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/conn.go:1690 +0x492
-   > github.com/pingcap/tidb/server.(*clientConn).dispatch(0xc0115c6480, 0x4030ee8, 0xc0115fe140, 0xc0005e01a0, 0x18d, 0x18c, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/conn.go:1215 +0xafd
-   > github.com/pingcap/tidb/server.(*clientConn).Run(0xc0115c6480, 0x4030f90, 0xc0119c7cb0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/conn.go:978 +0x296
-   > github.com/pingcap/tidb/server.(*Server).onConn(0xc010f232b0, 0xc0115c6480)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/server.go:501 +0xa53
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:328 +0xf5c
+   > goroutine 434 [select]:
+   > runtime.gopark(0xc000ee2788?, 0x2?, 0x0?, 0x30?, 0xc000ee2764?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee25e8 sp=0xc000ee25c8 pc=0x13bb516
+   > runtime.selectgo(0xc000ee2788, 0xc000ee2760, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee2728 sp=0xc000ee25e8 pc=0x13cbbdc
+   > github.com/pingcap/badger/epoch.(*ResourceManager).collectLoop(0x0?, 0xc000aef7e8)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/epoch/manager.go:101 +0xd3 fp=0xc000ee27c0 sp=0xc000ee2728 pc=0x3257a13
+   > github.com/pingcap/badger/epoch.NewResourceManager.func1()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/epoch/manager.go:79 +0x2a fp=0xc000ee27e0 sp=0xc000ee27c0 pc=0x32577aa
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee27e8 sp=0xc000ee27e0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger/epoch.NewResourceManager
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/epoch/manager.go:79 +0xdd
+   > goroutine 435 [select]:
+   > runtime.gopark(0xc000da9e68?, 0x2?, 0x8?, 0xe1?, 0xc000da9e3c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000da9cc0 sp=0xc000da9ca0 pc=0x13bb516
+   > runtime.selectgo(0xc000da9e68, 0xc000da9e38, 0x0?, 0x1, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000da9e00 sp=0xc000da9cc0 pc=0x13cbbdc
+   > github.com/pingcap/badger.Open.func4()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:342 +0x155 fp=0xc000da9fe0 sp=0xc000da9e00 pc=0x3294495
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000da9fe8 sp=0xc000da9fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.Open
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:339 +0x11f8
+   > goroutine 295 [select]:
+   > runtime.gopark(0xc00049bf60?, 0x2?, 0x4?, 0x30?, 0xc00049bf2c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049bd98 sp=0xc00049bd78 pc=0x13bb516
+   > runtime.selectgo(0xc00049bf60, 0xc00049bf28, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00049bed8 sp=0xc00049bd98 pc=0x13cbbdc
+   > github.com/pingcap/badger.(*levelsController).runWorker(0xc000ae81c0, 0xc000da40c0, 0x0)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:212 +0x1fb fp=0xc00049bfb8 sp=0xc00049bed8 pc=0x32a297b
+   > github.com/pingcap/badger.(*levelsController).startCompact.func1()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:180 +0x2e fp=0xc00049bfe0 sp=0xc00049bfb8 pc=0x32a274e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049bfe8 sp=0xc00049bfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.(*levelsController).startCompact
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:180 +0x65
+   > goroutine 296 [select]:
+   > runtime.gopark(0xc00049c760?, 0x2?, 0x4?, 0x30?, 0xc00049c72c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049c598 sp=0xc00049c578 pc=0x13bb516
+   > runtime.selectgo(0xc00049c760, 0xc00049c728, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00049c6d8 sp=0xc00049c598 pc=0x13cbbdc
+   > github.com/pingcap/badger.(*levelsController).runWorker(0xc000ae81c0, 0xc000da40c0, 0x0)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:212 +0x1fb fp=0xc00049c7b8 sp=0xc00049c6d8 pc=0x32a297b
+   > github.com/pingcap/badger.(*levelsController).startCompact.func1()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:180 +0x2e fp=0xc00049c7e0 sp=0xc00049c7b8 pc=0x32a274e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049c7e8 sp=0xc00049c7e0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.(*levelsController).startCompact
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:180 +0x65
+   > goroutine 297 [select]:
+   > runtime.gopark(0xc00049cf60?, 0x2?, 0x4?, 0x30?, 0xc00049cf2c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049cd98 sp=0xc00049cd78 pc=0x13bb516
+   > runtime.selectgo(0xc00049cf60, 0xc00049cf28, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00049ced8 sp=0xc00049cd98 pc=0x13cbbdc
+   > github.com/pingcap/badger.(*levelsController).runWorker(0xc000ae81c0, 0xc000da40c0, 0x1)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:212 +0x1fb fp=0xc00049cfb8 sp=0xc00049ced8 pc=0x32a297b
+   > github.com/pingcap/badger.(*levelsController).startCompact.func1()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:180 +0x2e fp=0xc00049cfe0 sp=0xc00049cfb8 pc=0x32a274e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049cfe8 sp=0xc00049cfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.(*levelsController).startCompact
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/levels.go:180 +0x65
+   > goroutine 298 [chan receive]:
+   > runtime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00009eac0 sp=0xc00009eaa0 pc=0x13bb516
+   > runtime.chanrecv(0xc000af98c0, 0xc00009ec60, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc00009eb50 sp=0xc00009eac0 pc=0x13854bb
+   > runtime.chanrecv2(0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc00009eb78 sp=0xc00009eb50 pc=0x1384ff8
+   > github.com/pingcap/badger.(*DB).runFlushMemTable(0xc000ebad80, 0x0?)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:920 +0xdd fp=0xc00009efc0 sp=0xc00009eb78 pc=0x3298efd
+   > github.com/pingcap/badger.Open.func6()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:361 +0x2a fp=0xc00009efe0 sp=0xc00009efc0 pc=0x329430a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00009efe8 sp=0xc00009efe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.Open
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/db.go:361 +0x158d
+   > goroutine 884 [chan receive]:
+   > runtime.gopark(0xcf947df5?, 0x0?, 0x80?, 0xe?, 0x138c1bf?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0115f0df8 sp=0xc0115f0dd8 pc=0x13bb516
+   > runtime.chanrecv(0xc01203b7a0, 0xc0115f0f38, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc0115f0e88 sp=0xc0115f0df8 pc=0x13854bb
+   > runtime.chanrecv2(0xc011c3bd00?, 0x35182e0?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc0115f0eb0 sp=0xc0115f0e88 pc=0x1384ff8
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).Close(0xc011c3bb00)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:123 +0x385 fp=0xc0115f0f58 sp=0xc0115f0eb0 pc=0x305fcc5
+   > github.com/pingcap/tidb/executor.(*baseExecutor).Close(0xc010b022a0?)
+   > 	/go/src/github.com/pingcap/tidb/executor/executor.go:181 +0x7c fp=0xc0115f0f98 sp=0xc0115f0f58 pc=0x2feeadc
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).Close(0xc011f099e0)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:329 +0x1cf fp=0xc0115f1000 sp=0xc0115f0f98 pc=0x30997af
+   > github.com/pingcap/tidb/executor.(*recordSet).Close(0xc012047950)
+   > 	/go/src/github.com/pingcap/tidb/executor/adapter.go:176 +0x2a fp=0xc0115f1040 sp=0xc0115f1000 pc=0x2f612ca
+   > github.com/pingcap/tidb/session.(*execStmtResult).Close(0xc0120728a0)
+   > 	/go/src/github.com/pingcap/tidb/session/session.go:1734 +0x36 fp=0xc0115f1090 sp=0xc0115f1040 pc=0x314b676
+   > github.com/pingcap/tidb/server.(*tidbResultSet).Close(0x3f35b9291ac54203?)
+   > 	/go/src/github.com/pingcap/tidb/server/driver_tidb.go:324 +0x3c fp=0xc0115f10b0 sp=0xc0115f1090 pc=0x31c611c
+   > github.com/pingcap/tidb/server.ResultSet.Close-fm()
+   > 	<autogenerated>:1 +0x2b fp=0xc0115f10c8 sp=0xc0115f10b0 pc=0x31f7acb
+   > github.com/pingcap/tidb/parser/terror.Call(0xc0115f11d8?)
+   > 	/go/src/github.com/pingcap/tidb/parser/terror/terror.go:298 +0x31 fp=0xc0115f1208 sp=0xc0115f10c8 pc=0x1b74a51
+   > github.com/pingcap/tidb/server.(*clientConn).handleStmt.func1()
+   > 	/go/src/github.com/pingcap/tidb/server/conn.go:1911 +0x26 fp=0xc0115f1220 sp=0xc0115f1208 pc=0x31bbd26
+   > github.com/pingcap/tidb/server.(*clientConn).handleStmt(0xc0110ec500, {0x400d608, 0xc010664740}, {0x401fff0, 0xc0114831d0}, {0x5f8a1a8, 0x0, 0x0}, 0x1)
+   > 	/go/src/github.com/pingcap/tidb/server/conn.go:1934 +0x413 fp=0xc0115f12f0 sp=0xc0115f1220 pc=0x31bbaf3
+   > github.com/pingcap/tidb/server.(*clientConn).handleQuery(0xc0110ec500, {0x400d608, 0xc010664740}, {0xc000a68821, 0x18c})
+   > 	/go/src/github.com/pingcap/tidb/server/conn.go:1775 +0x774 fp=0xc0115f1468 sp=0xc0115f12f0 pc=0x31ba494
+   > github.com/pingcap/tidb/server.(*clientConn).dispatch(0xc0110ec500, {0x400d6b0, 0xc0110f06f0?}, {0xc000a68820, 0x18d, 0x18d})
+   > 	/go/src/github.com/pingcap/tidb/server/conn.go:1279 +0x1025 fp=0xc0115f1858 sp=0xc0115f1468 pc=0x31b6045
+   > github.com/pingcap/tidb/server.(*clientConn).Run(0xc0110ec500, {0x400d6b0, 0xc0110f06f0})
+   > 	/go/src/github.com/pingcap/tidb/server/conn.go:1034 +0x253 fp=0xc0115f1e18 sp=0xc0115f1858 pc=0x31b2b33
+   > github.com/pingcap/tidb/server.(*Server).onConn(0xc0059ae9c0, 0xc0110ec500)
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:550 +0x6c5 fp=0xc0115f1fc0 sp=0xc0115f1e18 pc=0x31e4165
+   > github.com/pingcap/tidb/server.(*Server).startNetworkListener.func2()
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:453 +0x2a fp=0xc0115f1fe0 sp=0xc0115f1fc0 pc=0x31e300a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0115f1fe8 sp=0xc0115f1fe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/server.(*Server).startNetworkListener
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/server/server.go:404 +0x8fc
-   > goroutine 981 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6ee00, 0x1, 0xc011b55ab0, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:453 +0x5ca
+   > goroutine 765 [select]:
+   > runtime.gopark(0xc010025eb0?, 0x2?, 0x16?, 0x0?, 0xc010025e5c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010025cc8 sp=0xc010025ca8 pc=0x13bb516
+   > runtime.selectgo(0xc010025eb0, 0xc010025e58, 0xc0059ae9c0?, 0x0, 0x2?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010025e08 sp=0xc010025cc8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/util/expensivequery.(*Handle).Run(0xc0003a2078)
+   > 	/go/src/github.com/pingcap/tidb/util/expensivequery/expensivequery.go:61 +0x198 fp=0xc010025fc8 sp=0xc010025e08 pc=0x2695d58
+   > main.createServer.func1()
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:675 +0x26 fp=0xc010025fe0 sp=0xc010025fc8 pc=0x33b2be6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010025fe8 sp=0xc010025fe0 pc=0x13ee6e1
+   > created by main.createServer
+   > 	/go/src/github.com/pingcap/tidb/tidb-server/main.go:675 +0x439
+   > goroutine 436 [select]:
+   > runtime.gopark(0xc000daaf78?, 0x3?, 0x25?, 0x48?, 0xc000daaf32?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000daad98 sp=0xc000daad78 pc=0x13bb516
+   > runtime.selectgo(0xc000daaf78, 0xc000daaf2c, 0x1?, 0x0, 0xc000161a00?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000daaed8 sp=0xc000daad98 pc=0x13cbbdc
+   > github.com/pingcap/badger.(*writeWorker).runWriteVLog(0xc000726100, 0xc000b20018)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:94 +0x137 fp=0xc000daafc0 sp=0xc000daaed8 pc=0x32b28b7
+   > github.com/pingcap/badger.startWriteWorker.func2()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:64 +0x2a fp=0xc000daafe0 sp=0xc000daafc0 pc=0x32b238a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000daafe8 sp=0xc000daafe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.startWriteWorker
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:64 +0x1f9
+   > goroutine 437 [chan receive, locked to thread]:
+   > runtime.gopark(0xc000dabe98?, 0x1456628?, 0xf?, 0x0?, 0x1?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000dabe68 sp=0xc000dabe48 pc=0x13bb516
+   > runtime.chanrecv(0xc000ee7320, 0xc000dabf88, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000dabef8 sp=0xc000dabe68 pc=0x13854bb
+   > runtime.chanrecv2(0xc000e978c0?, 0x3f047820e7c5e643?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc000dabf20 sp=0xc000dabef8 pc=0x1384ff8
+   > github.com/pingcap/badger.(*writeWorker).runWriteLSM(0xc000726100, 0x0?)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:141 +0x15e fp=0xc000dabfc0 sp=0xc000dabf20 pc=0x32b2efe
+   > github.com/pingcap/badger.startWriteWorker.func3()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:65 +0x2a fp=0xc000dabfe0 sp=0xc000dabfc0 pc=0x32b232a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000dabfe8 sp=0xc000dabfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.startWriteWorker
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:65 +0x24d
+   > goroutine 438 [chan receive]:
+   > runtime.gopark(0xc000f00078?, 0x0?, 0x0?, 0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000dbfea8 sp=0xc000dbfe88 pc=0x13bb516
+   > runtime.chanrecv(0xc000ee7380, 0xc000dbff88, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000dbff38 sp=0xc000dbfea8 pc=0x13854bb
+   > runtime.chanrecv2(0xc000c62020?, 0x0?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc000dbff60 sp=0xc000dbff38 pc=0x1384ff8
+   > github.com/pingcap/badger.(*writeWorker).runMergeLSM(0xc000b1c238?, 0x174b991?)
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:154 +0x9b fp=0xc000dbffc0 sp=0xc000dbff60 pc=0x32b307b
+   > github.com/pingcap/badger.startWriteWorker.func4()
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:66 +0x2a fp=0xc000dbffe0 sp=0xc000dbffc0 pc=0x32b22ca
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000dbffe8 sp=0xc000dbffe0 pc=0x13ee6e1
+   > created by github.com/pingcap/badger.startWriteWorker
+   > 	/go/pkg/mod/github.com/pingcap/badger@v1.5.1-0.20210831093107-2f6cb8008145/writer.go:66 +0x2a5
+   > goroutine 439 [select]:
+   > runtime.gopark(0xc000dacf88?, 0x2?, 0x0?, 0x0?, 0xc000dacf4c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000dacda0 sp=0xc000dacd80 pc=0x13bb516
+   > runtime.selectgo(0xc000dacf88, 0xc000dacf48, 0xc010b72060?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000dacee0 sp=0xc000dacda0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.writeDBWorker.run({0xc000ee7440?, 0xc000ceac40?})
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:96 +0x145 fp=0xc000dacfc0 sp=0xc000dacee0 pc=0x3308de5
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*dbWriter).Open.func1()
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:202 +0x2a fp=0xc000dacfe0 sp=0xc000dacfc0 pc=0x330996a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000dacfe8 sp=0xc000dacfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*dbWriter).Open
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:199 +0xc5
+   > goroutine 440 [select]:
+   > runtime.gopark(0xc00009de70?, 0x2?, 0x90?, 0xde?, 0xc00009de1c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00009dc58 sp=0xc00009dc38 pc=0x13bb516
+   > runtime.selectgo(0xc00009de70, 0xc00009de18, 0x13?, 0x0, 0xc0108f8600?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00009dd98 sp=0xc00009dc58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.writeLockWorker.run({0xc000ee74a0?, 0xc000ceac40?})
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:148 +0x15f fp=0xc00009dfc0 sp=0xc00009dd98 pc=0x33093bf
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*dbWriter).Open.func2()
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:209 +0x2a fp=0xc00009dfe0 sp=0xc00009dfc0 pc=0x330990a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00009dfe8 sp=0xc00009dfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*dbWriter).Open
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/write.go:206 +0x159
+   > goroutine 441 [select]:
+   > runtime.gopark(0xc000b18718?, 0x2?, 0x0?, 0xbe?, 0xc000b18704?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b18588 sp=0xc000b18568 pc=0x13bb516
+   > runtime.selectgo(0xc000b18718, 0xc000b18700, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b186c8 sp=0xc000b18588 pc=0x13cbbdc
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*MVCCStore).runUpdateSafePointLoop(0xc00075ba80)
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:1550 +0x217 fp=0xc000b187c8 sp=0xc000b186c8 pc=0x32facd7
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.NewMVCCStore.func1()
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:85 +0x26 fp=0xc000b187e0 sp=0xc000b187c8 pc=0x32ed406
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b187e8 sp=0xc000b187e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.NewMVCCStore
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:85 +0x337
+   > goroutine 442 [select]:
+   > runtime.gopark(0xc000b18fb0?, 0x2?, 0x0?, 0x0?, 0xc000b18f9c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b18e28 sp=0xc000b18e08 pc=0x13bb516
+   > runtime.selectgo(0xc000b18fb0, 0xc000b18f98, 0xc000b191f0?, 0x0, 0xc000b5f598?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b18f68 sp=0xc000b18e28 pc=0x13cbbdc
+   > github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*MVCCStore).StartDeadlockDetection.func1()
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:1286 +0x7b fp=0xc000b18fe0 sp=0xc000b18f68 pc=0x32f895b
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b18fe8 sp=0xc000b18fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/store/mockstore/unistore/tikv.(*MVCCStore).StartDeadlockDetection
+   > 	/go/src/github.com/pingcap/tidb/store/mockstore/unistore/tikv/mvcc.go:1284 +0xb6
+   > goroutine 443 [select]:
+   > runtime.gopark(0xc0000a2f78?, 0x2?, 0x0?, 0x30?, 0xc0000a2f3c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0000a2dc0 sp=0xc0000a2da0 pc=0x13bb516
+   > runtime.selectgo(0xc0000a2f78, 0xc0000a2f38, 0xc000b1b7b0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0000a2f00 sp=0xc0000a2dc0 pc=0x13cbbdc
+   > github.com/tikv/client-go/v2/oracle/oracles.(*pdOracle).updateTS(0xc000a2c850, {0x400d640, 0xc000056058}, 0x0?)
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/oracle/oracles/pd.go:229 +0x128 fp=0xc0000a2fb0 sp=0xc0000a2f00 pc=0x1e9b548
+   > github.com/tikv/client-go/v2/oracle/oracles.NewPdOracle.func1()
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/oracle/oracles/pd.go:77 +0x32 fp=0xc0000a2fe0 sp=0xc0000a2fb0 pc=0x1e9a772
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0000a2fe8 sp=0xc0000a2fe0 pc=0x13ee6e1
+   > created by github.com/tikv/client-go/v2/oracle/oracles.NewPdOracle
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/oracle/oracles/pd.go:77 +0x119
+   > goroutine 444 [select]:
+   > runtime.gopark(0xc000b1ff78?, 0x3?, 0x20?, 0x0?, 0xc000b1ff5a?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b1fde0 sp=0xc000b1fdc0 pc=0x13bb516
+   > runtime.selectgo(0xc000b1ff78, 0xc000b1ff54, 0x1000200000002?, 0x0, 0xc000630260?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b1ff20 sp=0xc000b1fde0 pc=0x13cbbdc
+   > github.com/tikv/client-go/v2/internal/locate.(*RegionCache).asyncCheckAndResolveLoop(0xc00075bb80, 0xc000b20018?)
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/internal/locate/region_cache.go:399 +0xd1 fp=0xc000b1ffc0 sp=0xc000b1ff20 pc=0x1e6bff1
+   > github.com/tikv/client-go/v2/internal/locate.NewRegionCache.func1()
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/internal/locate/region_cache.go:370 +0x2a fp=0xc000b1ffe0 sp=0xc000b1ffc0 pc=0x1e6bc6a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b1ffe8 sp=0xc000b1ffe0 pc=0x13ee6e1
+   > created by github.com/tikv/client-go/v2/internal/locate.NewRegionCache
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/internal/locate/region_cache.go:370 +0x2e6
+   > goroutine 445 [select]:
+   > runtime.gopark(0xc000b1df10?, 0x2?, 0x0?, 0x30?, 0xc000b1deac?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000dbbd10 sp=0xc000dbbcf0 pc=0x13bb516
+   > runtime.selectgo(0xc000dbbf10, 0xc000b1dea8, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000dbbe50 sp=0xc000dbbd10 pc=0x13cbbdc
+   > github.com/tikv/client-go/v2/tikv.(*KVStore).runSafePointChecker(0xc000c48360)
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/tikv/kv.go:264 +0x12b fp=0xc000dbbfc8 sp=0xc000dbbe50 pc=0x1ed6f0b
+   > github.com/tikv/client-go/v2/tikv.NewKVStore.func1()
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/tikv/kv.go:187 +0x26 fp=0xc000dbbfe0 sp=0xc000dbbfc8 pc=0x1ed6d06
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000dbbfe8 sp=0xc000dbbfe0 pc=0x13ee6e1
+   > created by github.com/tikv/client-go/v2/tikv.NewKVStore
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/tikv/kv.go:187 +0x3d6
+   > goroutine 446 [select]:
+   > runtime.gopark(0xc010becf80?, 0x2?, 0x0?, 0xbe?, 0xc010becf44?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010becdc8 sp=0xc010becda8 pc=0x13bb516
+   > runtime.selectgo(0xc010becf80, 0xc010becf40, 0xc000c44500?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010becf08 sp=0xc010becdc8 pc=0x13cbbdc
+   > github.com/tikv/client-go/v2/tikv.(*KVStore).safeTSUpdater(0xc000c48360)
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/tikv/kv.go:544 +0x165 fp=0xc010becfc8 sp=0xc010becf08 pc=0x1ed8e65
+   > github.com/tikv/client-go/v2/tikv.NewKVStore.func2()
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/tikv/kv.go:188 +0x26 fp=0xc010becfe0 sp=0xc010becfc8 pc=0x1ed6ca6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010becfe8 sp=0xc010becfe0 pc=0x13ee6e1
+   > created by github.com/tikv/client-go/v2/tikv.NewKVStore
+   > 	/go/pkg/mod/github.com/tikv/client-go/v2@v2.0.0-alpha.0.20211102120533-b8cc5a319d96/tikv/kv.go:188 +0x416
+   > goroutine 447 [select]:
+   > runtime.gopark(0xc000ee0f98?, 0x2?, 0x0?, 0x0?, 0xc000ee0f6c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee0de8 sp=0xc000ee0dc8 pc=0x13bb516
+   > runtime.selectgo(0xc000ee0f98, 0xc000ee0f68, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee0f28 sp=0xc000ee0de8 pc=0x13cbbdc
+   > github.com/dgraph-io/ristretto.(*defaultPolicy).processItems(0xc000508d80)
+   > 	/go/pkg/mod/github.com/dgraph-io/ristretto@v0.0.1/policy.go:96 +0x91 fp=0xc000ee0fc8 sp=0xc000ee0f28 pc=0x23cf0d1
+   > github.com/dgraph-io/ristretto.newDefaultPolicy.func1()
+   > 	/go/pkg/mod/github.com/dgraph-io/ristretto@v0.0.1/policy.go:80 +0x26 fp=0xc000ee0fe0 sp=0xc000ee0fc8 pc=0x23cef86
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee0fe8 sp=0xc000ee0fe0 pc=0x13ee6e1
+   > created by github.com/dgraph-io/ristretto.newDefaultPolicy
+   > 	/go/pkg/mod/github.com/dgraph-io/ristretto@v0.0.1/policy.go:80 +0x156
+   > goroutine 448 [select]:
+   > runtime.gopark(0xc000ee2f98?, 0x2?, 0x60?, 0x99?, 0xc000ee2f74?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee2df0 sp=0xc000ee2dd0 pc=0x13bb516
+   > runtime.selectgo(0xc000ee2f98, 0xc000ee2f70, 0xffffffffffffffff?, 0x0, 0xa?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee2f30 sp=0xc000ee2df0 pc=0x13cbbdc
+   > github.com/dgraph-io/ristretto.(*Cache).processItems(0xc000ee7860)
+   > 	/go/pkg/mod/github.com/dgraph-io/ristretto@v0.0.1/cache.go:257 +0x85 fp=0xc000ee2fc8 sp=0xc000ee2f30 pc=0x23ce025
+   > github.com/dgraph-io/ristretto.NewCache.func2()
+   > 	/go/pkg/mod/github.com/dgraph-io/ristretto@v0.0.1/cache.go:155 +0x26 fp=0xc000ee2fe0 sp=0xc000ee2fc8 pc=0x23cd846
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee2fe8 sp=0xc000ee2fe0 pc=0x13ee6e1
+   > created by github.com/dgraph-io/ristretto.NewCache
+   > 	/go/pkg/mod/github.com/dgraph-io/ristretto@v0.0.1/cache.go:155 +0x485
+   > goroutine 604 [select]:
+   > runtime.gopark(0xc0107dff58?, 0x4?, 0xab?, 0x62?, 0xc0107dfda8?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107dfbf8 sp=0xc0107dfbd8 pc=0x13bb516
+   > runtime.selectgo(0xc0107dff58, 0xc0107dfda0, 0xc00009ce38?, 0x0, 0x1?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107dfd38 sp=0xc0107dfbf8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/ddl.(*worker).start(0xc010b10f20, 0xc00fda8180)
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl_worker.go:178 +0x318 fp=0xc0107dffc0 sp=0xc0107dfd38 pc=0x2622e98
+   > github.com/pingcap/tidb/ddl.(*ddl).Start.func2()
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl.go:369 +0x2a fp=0xc0107dffe0 sp=0xc0107dffc0 pc=0x25e9a6a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107dffe8 sp=0xc0107dffe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/ddl.(*ddl).Start
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl.go:369 +0x5c5
+   > goroutine 602 [select]:
+   > runtime.gopark(0xc00fb3bf38?, 0x2?, 0x0?, 0x0?, 0xc00fb3befc?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00fb3bd50 sp=0xc00fb3bd30 pc=0x13bb516
+   > runtime.selectgo(0xc00fb3bf38, 0xc00fb3bef8, 0x1?, 0x0, 0x2?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00fb3be90 sp=0xc00fb3bd50 pc=0x13cbbdc
+   > github.com/pingcap/tidb/ddl.(*ddl).limitDDLJobs(0xc0009c4ee0)
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl_worker.go:263 +0x173 fp=0xc00fb3bfc8 sp=0xc00fb3be90 pc=0x2623fd3
+   > github.com/pingcap/tidb/ddl.(*ddl).Start.func1()
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl.go:351 +0x26 fp=0xc00fb3bfe0 sp=0xc00fb3bfc8 pc=0x25e9ac6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00fb3bfe8 sp=0xc00fb3bfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/ddl.(*ddl).Start
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl.go:351 +0x2ea
+   > goroutine 1267 [select]:
+   > runtime.gopark(0xc00049b778?, 0x2?, 0x2?, 0x0?, 0xc00049b6ec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00049b558 sp=0xc00049b538 pc=0x13bb516
+   > runtime.selectgo(0xc00049b778, 0xc00049b6e8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00049b698 sp=0xc00049b558 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0105af580, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc00049b7b8 sp=0xc00049b698 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc00049b7e0 sp=0xc00049b7b8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00049b7e8 sp=0xc00049b7e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 759 [select]:
+   > runtime.gopark(0xc0107fbfa8?, 0x2?, 0x3?, 0x30?, 0xc0107fbf84?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107fbe08 sp=0xc0107fbde8 pc=0x13bb516
+   > runtime.selectgo(0xc0107fbfa8, 0xc0107fbf80, 0xc010adf500?, 0x0, 0xc0105a6fc0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107fbf48 sp=0xc0107fbe08 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).TelemetryRotateSubWindowLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1169 +0xcc fp=0xc0107fbfe0 sp=0xc0107fbf48 pc=0x26a5c4c
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107fbfe8 sp=0xc0107fbfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).TelemetryRotateSubWindowLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1162 +0x8f
+   > goroutine 762 [select]:
+   > runtime.gopark(0xc0112eff78?, 0x2?, 0x3?, 0x30?, 0xc0112eff4c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0112efdd0 sp=0xc0112efdb0 pc=0x13bb516
+   > runtime.selectgo(0xc0112eff78, 0xc0112eff48, 0xc0106d8af0?, 0x0, 0xc00049d658?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0112eff10 sp=0xc0112efdd0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).autoAnalyzeWorker(0xc0008c8a20, {0x401ea10, 0xc010685340})
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1425 +0x105 fp=0xc0112effb8 sp=0xc0112eff10 pc=0x26a8bc5
+   > github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop.func4()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1262 +0x2e fp=0xc0112effe0 sp=0xc0112effb8 pc=0x26a654e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0112effe8 sp=0xc0112effe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1262 +0x31a
+   > goroutine 851 [select]:
+   > runtime.gopark(0xc000b1bf40?, 0x2?, 0x4?, 0x0?, 0xc000b1bf04?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b1bd88 sp=0xc000b1bd68 pc=0x13bb516
+   > runtime.selectgo(0xc000b1bf40, 0xc000b1bf00, 0x100000001?, 0x0, 0xc0005a7220?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b1bec8 sp=0xc000b1bd88 pc=0x13cbbdc
+   > github.com/pingcap/tidb/util/topsql/reporter.(*RemoteTopSQLReporter).reportWorker(0xc0059b2d20)
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:499 +0x1ae fp=0xc000b1bfc8 sp=0xc000b1bec8 pc=0x254924e
+   > github.com/pingcap/tidb/util/topsql/reporter.NewRemoteTopSQLReporter.func2()
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:161 +0x26 fp=0xc000b1bfe0 sp=0xc000b1bfc8 pc=0x2546bc6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b1bfe8 sp=0xc000b1bfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/util/topsql/reporter.NewRemoteTopSQLReporter
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:161 +0x1f6
+   > goroutine 722 [select]:
+   > runtime.gopark(0xc00fd3f6f0?, 0x2?, 0x0?, 0x0?, 0xc00fd3f6bc?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00fd3f538 sp=0xc00fd3f518 pc=0x13bb516
+   > runtime.selectgo(0xc00fd3f6f0, 0xc00fd3f6b8, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00fd3f678 sp=0xc00fd3f538 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).globalConfigSyncerKeeper(0xc0008c8a20)
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:510 +0xe5 fp=0xc00fd3f7c8 sp=0xc00fd3f678 pc=0x269f405
+   > github.com/pingcap/tidb/domain.(*Domain).Init.func13()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:830 +0x26 fp=0xc00fd3f7e0 sp=0xc00fd3f7c8 pc=0x26a2a06
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00fd3f7e8 sp=0xc00fd3f7e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).Init
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:830 +0xedc
+   > goroutine 764 [chan receive]:
+   > runtime.gopark(0xc010cd9b38?, 0xc0000e3ba0?, 0x48?, 0x8e?, 0x13d8de5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00fd38df0 sp=0xc00fd38dd0 pc=0x13bb516
+   > runtime.chanrecv(0xc00fb70900, 0xc00fd38f38, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc00fd38e80 sp=0xc00fd38df0 pc=0x13854bb
+   > runtime.chanrecv2(0x9356907420000?, 0xc0003589c0?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc00fd38ea8 sp=0xc00fd38e80 pc=0x1384ff8
+   > github.com/pingcap/tidb/server.NewServer.func1()
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:209 +0x98 fp=0xc00fd38fe0 sp=0xc00fd38ea8 pc=0x31e1638
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00fd38fe8 sp=0xc00fd38fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/server.NewServer
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:208 +0x32a
+   > goroutine 758 [select]:
+   > runtime.gopark(0xc0107faf28?, 0x2?, 0x0?, 0x30?, 0xc0107faed4?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107fad48 sp=0xc0107fad28 pc=0x13bb516
+   > runtime.selectgo(0xc0107faf28, 0xc0107faed0, 0x9?, 0x0, 0x15?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107fae88 sp=0xc0107fad48 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).TelemetryReportLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1140 +0x11c fp=0xc0107fafe0 sp=0xc0107fae88 pc=0x26a573c
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107fafe8 sp=0xc0107fafe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).TelemetryReportLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1132 +0x285
+   > goroutine 761 [select]:
+   > runtime.gopark(0xc0108f1f28?, 0x6?, 0x50?, 0x60?, 0xc0108f1bb4?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0108f1a20 sp=0xc0108f1a00 pc=0x13bb516
+   > runtime.selectgo(0xc0108f1f28, 0xc0108f1ba8, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0108f1b60 sp=0xc0108f1a20 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).updateStatsWorker(0xc0008c8a20, {0x309938e?, 0xc000afb300?}, {0x401ea10, 0xc010685340})
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1372 +0x234 fp=0xc0108f1fa8 sp=0xc0108f1b60 pc=0x26a7e54
+   > github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop.func3()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1259 +0x36 fp=0xc0108f1fe0 sp=0xc0108f1fa8 pc=0x26a65b6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0108f1fe8 sp=0xc0108f1fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1259 +0x29a
+   > goroutine 1089 [select]:
+   > runtime.gopark(0xc000ee3f78?, 0x2?, 0x2?, 0x0?, 0xc000ee3eec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee3d58 sp=0xc000ee3d38 pc=0x13bb516
+   > runtime.selectgo(0xc000ee3f78, 0xc000ee3ee8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee3e98 sp=0xc000ee3d58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0105af500, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc000ee3fb8 sp=0xc000ee3e98 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc000ee3fe0 sp=0xc000ee3fb8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee3fe8 sp=0xc000ee3fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1147 [select]:
+   > runtime.gopark(0xc010e6ae10?, 0x2?, 0x78?, 0xb2?, 0xc010e6ad8c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010e6abe0 sp=0xc010e6abc0 pc=0x13bb516
+   > runtime.selectgo(0xc010e6ae10, 0xc010e6ad88, 0xc00feeb190?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010e6ad20 sp=0xc010e6abe0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c3b8c0, 0x2, {0x5f8a1a8, 0x0, 0x0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:441 +0x4f4 fp=0xc010e6af10 sp=0xc010e6ad20 pc=0x30626b4
    > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc0119cf800, 0xc011b5fcc0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:335 +0xb3 fp=0xc010e6af90 sp=0xc010e6af10 pc=0x30613d3
+   > github.com/pingcap/tidb/util.WithRecovery(0x400d6b0?, 0xc012003a10?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc010e6afc0 sp=0xc010e6af90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func4()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x2a fp=0xc010e6afe0 sp=0xc010e6afc0 pc=0x30612ea
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010e6afe8 sp=0xc010e6afe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 979 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).wait4BuildSide(0xc011c6ee00, 0xc0119d22a0, 0x40365b8, 0xc011c19380)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:244 +0x88
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchProbeSideChunks(0xc011c6ee00, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:223 +0x26f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x1c9
+   > goroutine 797 [select]:
+   > runtime.gopark(0xc0107fb718?, 0x3?, 0x0?, 0x30?, 0xc0107fb68a?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107becc8 sp=0xc0107beca8 pc=0x13bb516
+   > runtime.selectgo(0xc0107bef18, 0xc0107fb684, 0x0?, 0x0, 0x13bb516?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107bee08 sp=0xc0107becc8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).LoadSysVarCacheLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:989 +0x145 fp=0xc0107befe0 sp=0xc0107bee08 pc=0x26a3dc5
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107befe8 sp=0xc0107befe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).LoadSysVarCacheLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:980 +0x172
+   > goroutine 767 [syscall]:
+   > runtime.notetsleepg(0x13c2505?, 0xc0005dcc80?)
+   > 	/usr/local/go/src/runtime/lock_futex.go:236 +0x34 fp=0xc0107f9fa0 sp=0xc0107f9f68 pc=0x138acd4
+   > os/signal.signal_recv()
+   > 	/usr/local/go/src/runtime/sigqueue.go:152 +0x2f fp=0xc0107f9fc0 sp=0xc0107f9fa0 pc=0x13ea6cf
+   > os/signal.loop()
+   > 	/usr/local/go/src/os/signal/signal_unix.go:23 +0x19 fp=0xc0107f9fe0 sp=0xc0107f9fc0 pc=0x2cac7f9
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107f9fe8 sp=0xc0107f9fe0 pc=0x13ee6e1
+   > created by os/signal.Notify.func1.1
+   > 	/usr/local/go/src/os/signal/signal.go:151 +0x2a
+   > goroutine 768 [chan receive]:
+   > runtime.gopark(0x5f8be00?, 0xc0107f9720?, 0x28?, 0xc3?, 0x0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107f96a0 sp=0xc0107f9680 pc=0x13bb516
+   > runtime.chanrecv(0xc0105a7c80, 0xc0107f97a0, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc0107f9730 sp=0xc0107f96a0 pc=0x13854bb
+   > runtime.chanrecv1(0xc0107f97d0?, 0x2fe82d7?)
+   > 	/usr/local/go/src/runtime/chan.go:442 +0x18 fp=0xc0107f9758 sp=0xc0107f9730 pc=0x1384fb8
+   > github.com/pingcap/tidb/util/signal.SetupSignalHandler.func1()
+   > 	/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:37 +0x4f fp=0xc0107f97e0 sp=0xc0107f9758 pc=0x33ac32f
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107f97e8 sp=0xc0107f97e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/util/signal.SetupSignalHandler
+   > 	/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:34 +0xb6
+   > goroutine 769 [chan receive]:
+   > runtime.gopark(0x13f4d05?, 0x0?, 0x0?, 0x0?, 0xc010b25f58?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010b25e60 sp=0xc010b25e40 pc=0x13bb516
+   > runtime.chanrecv(0xc0105a7ce0, 0xc010b25f80, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc010b25ef0 sp=0xc010b25e60 pc=0x13854bb
+   > runtime.chanrecv1(0x0?, 0x0?)
+   > 	/usr/local/go/src/runtime/chan.go:442 +0x18 fp=0xc010b25f18 sp=0xc010b25ef0 pc=0x1384fb8
+   > github.com/pingcap/tidb/util/signal.SetupSignalHandler.func2()
+   > 	/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:53 +0x45 fp=0xc010b25fe0 sp=0xc010b25f18 pc=0x33ac105
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010b25fe8 sp=0xc010b25fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/util/signal.SetupSignalHandler
+   > 	/go/src/github.com/pingcap/tidb/util/signal/signal_posix.go:52 +0x19f
+   > goroutine 852 [sleep]:
+   > runtime.gopark(0x3adb52d7b390?, 0x0?, 0x88?, 0x1f?, 0x25412d5?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010b21f58 sp=0xc010b21f38 pc=0x13bb516
+   > time.Sleep(0x3b9aca00)
+   > 	/usr/local/go/src/runtime/time.go:195 +0x135 fp=0xc010b21f98 sp=0xc010b21f58 pc=0x13eaf15
+   > github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).startCPUProfileWorker(0xc000056058?)
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:115 +0x65 fp=0xc010b21fc8 sp=0xc010b21f98 pc=0x2540065
+   > github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).Run.func1()
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:93 +0x26 fp=0xc010b21fe0 sp=0xc010b21fc8 pc=0x253fea6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010b21fe8 sp=0xc010b21fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).Run
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:93 +0xca
+   > goroutine 850 [select]:
+   > runtime.gopark(0xc010b21780?, 0x3?, 0x4?, 0x30?, 0xc010b2173a?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010b215a8 sp=0xc010b21588 pc=0x13bb516
+   > runtime.selectgo(0xc010b21780, 0xc010b21734, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010b216e8 sp=0xc010b215a8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/util/topsql/reporter.(*RemoteTopSQLReporter).collectWorker(0xc0059b2d20)
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:327 +0x13a fp=0xc010b217c8 sp=0xc010b216e8 pc=0x2547eda
+   > github.com/pingcap/tidb/util/topsql/reporter.NewRemoteTopSQLReporter.func1()
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:160 +0x26 fp=0xc010b217e0 sp=0xc010b217c8 pc=0x2546c26
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010b217e8 sp=0xc010b217e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/util/topsql/reporter.NewRemoteTopSQLReporter
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/reporter/reporter.go:160 +0x1b6
+   > goroutine 605 [select]:
+   > runtime.gopark(0xc0107e3f58?, 0x4?, 0xab?, 0x62?, 0xc0107e3da8?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107e3bf8 sp=0xc0107e3bd8 pc=0x13bb516
+   > runtime.selectgo(0xc0107e3f58, 0xc0107e3da0, 0xc000e2ee38?, 0x0, 0x1?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107e3d38 sp=0xc0107e3bf8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/ddl.(*worker).start(0xc010b10fd0, 0xc00fda8180)
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl_worker.go:178 +0x318 fp=0xc0107e3fc0 sp=0xc0107e3d38 pc=0x2622e98
+   > github.com/pingcap/tidb/ddl.(*ddl).Start.func2()
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl.go:369 +0x2a fp=0xc0107e3fe0 sp=0xc0107e3fc0 pc=0x25e9a6a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107e3fe8 sp=0xc0107e3fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/ddl.(*ddl).Start
+   > 	/go/src/github.com/pingcap/tidb/ddl/ddl.go:369 +0x5c5
+   > goroutine 766 [select, locked to thread]:
+   > runtime.gopark(0xc000b1cfa8?, 0x2?, 0x6?, 0x0?, 0xc000b1cfa4?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b1ce18 sp=0xc000b1cdf8 pc=0x13bb516
+   > runtime.selectgo(0xc000b1cfa8, 0xc000b1cfa0, 0x0?, 0x0, 0xc010aea120?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b1cf58 sp=0xc000b1ce18 pc=0x13cbbdc
+   > runtime.ensureSigM.func1()
+   > 	/usr/local/go/src/runtime/signal_unix.go:995 +0x1b0 fp=0xc000b1cfe0 sp=0xc000b1cf58 pc=0x13d0070
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b1cfe8 sp=0xc000b1cfe0 pc=0x13ee6e1
+   > created by runtime.ensureSigM
+   > 	/usr/local/go/src/runtime/signal_unix.go:978 +0xbd
+   > goroutine 854 [IO wait]:
+   > runtime.gopark(0x3?, 0xc0106384e0?, 0x6?, 0x0?, 0xc000d4b8d0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000d4b860 sp=0xc000d4b840 pc=0x13bb516
+   > runtime.netpollblock(0x203004?, 0x106384e0?, 0xc0?)
+   > 	/usr/local/go/src/runtime/netpoll.go:526 +0xf7 fp=0xc000d4b898 sp=0xc000d4b860 pc=0x13b38f7
+   > internal/poll.runtime_pollWait(0x7f209a265618, 0x72)
+   > 	/usr/local/go/src/runtime/netpoll.go:305 +0x89 fp=0xc000d4b8b8 sp=0xc000d4b898 pc=0x13e7d09
+   > internal/poll.(*pollDesc).wait(0xc000e7dd80?, 0xc01061f0e0?, 0x0)
+   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x32 fp=0xc000d4b8e0 sp=0xc000d4b8b8 pc=0x1465192
+   > internal/poll.(*pollDesc).waitRead(...)
+   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:89
+   > internal/poll.(*FD).Accept(0xc000e7dd80)
+   > 	/usr/local/go/src/internal/poll/fd_unix.go:614 +0x234 fp=0xc000d4b978 sp=0xc000d4b8e0 pc=0x146a594
+   > net.(*netFD).accept(0xc000e7dd80)
+   > 	/usr/local/go/src/net/fd_unix.go:172 +0x35 fp=0xc000d4ba30 sp=0xc000d4b978 pc=0x1589055
+   > net.(*TCPListener).accept(0xc0104d3668)
+   > 	/usr/local/go/src/net/tcpsock_posix.go:142 +0x28 fp=0xc000d4ba60 sp=0xc000d4ba30 pc=0x15a5088
+   > net.(*TCPListener).Accept(0xc0104d3668)
+   > 	/usr/local/go/src/net/tcpsock.go:288 +0x3d fp=0xc000d4ba90 sp=0xc000d4ba60 pc=0x15a40fd
+   > github.com/soheilhy/cmux.(*cMux).Serve(0xc010a2a000)
+   > 	/go/pkg/mod/github.com/soheilhy/cmux@v0.1.4/cmux.go:162 +0xa9 fp=0xc000d4bb20 sp=0xc000d4ba90 pc=0x2dc5da9
+   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer(0xc0059ae9c0, 0xc010565100)
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:466 +0x4f7 fp=0xc000d4bc90 sp=0xc000d4bb20 pc=0x31dab17
+   > github.com/pingcap/tidb/server.(*Server).startHTTPServer(0xc0059ae9c0)
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:442 +0x15d0 fp=0xc000d4bfc8 sp=0xc000d4bc90 pc=0x31d9f10
+   > github.com/pingcap/tidb/server.(*Server).startStatusHTTP.func1()
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:62 +0x26 fp=0xc000d4bfe0 sp=0xc000d4bfc8 pc=0x31d65c6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000d4bfe8 sp=0xc000d4bfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/server.(*Server).startStatusHTTP
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:62 +0x56
+   > goroutine 855 [IO wait]:
+   > runtime.gopark(0x18?, 0xc00590e000?, 0x40?, 0x28?, 0xc0107bfb70?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107bfb00 sp=0xc0107bfae0 pc=0x13bb516
+   > runtime.netpollblock(0x14?, 0x2432d05?, 0x0?)
+   > 	/usr/local/go/src/runtime/netpoll.go:526 +0xf7 fp=0xc0107bfb38 sp=0xc0107bfb00 pc=0x13b38f7
+   > internal/poll.runtime_pollWait(0x7f209a2657f8, 0x72)
+   > 	/usr/local/go/src/runtime/netpoll.go:305 +0x89 fp=0xc0107bfb58 sp=0xc0107bfb38 pc=0x13e7d09
+   > internal/poll.(*pollDesc).wait(0xc000e7db80?, 0xc0107bfd20?, 0x0)
+   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x32 fp=0xc0107bfb80 sp=0xc0107bfb58 pc=0x1465192
+   > internal/poll.(*pollDesc).waitRead(...)
+   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:89
+   > internal/poll.(*FD).Accept(0xc000e7db80)
+   > 	/usr/local/go/src/internal/poll/fd_unix.go:614 +0x234 fp=0xc0107bfc18 sp=0xc0107bfb80 pc=0x146a594
+   > net.(*netFD).accept(0xc000e7db80)
+   > 	/usr/local/go/src/net/fd_unix.go:172 +0x35 fp=0xc0107bfcd0 sp=0xc0107bfc18 pc=0x1589055
+   > net.(*TCPListener).accept(0xc0104d3650)
+   > 	/usr/local/go/src/net/tcpsock_posix.go:142 +0x28 fp=0xc0107bfd00 sp=0xc0107bfcd0 pc=0x15a5088
+   > net.(*TCPListener).Accept(0xc0104d3650)
+   > 	/usr/local/go/src/net/tcpsock.go:288 +0x3d fp=0xc0107bfd30 sp=0xc0107bfd00 pc=0x15a40fd
+   > github.com/pingcap/tidb/server.(*Server).startNetworkListener(0xc0059ae9c0, {0x400b9b0, 0xc0104d3650}, 0x0, 0xc000b1c668?)
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:383 +0xa6 fp=0xc0107bffa8 sp=0xc0107bfd30 pc=0x31e25a6
+   > github.com/pingcap/tidb/server.(*Server).Run.func1()
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:368 +0x34 fp=0xc0107bffe0 sp=0xc0107bffa8 pc=0x31e24d4
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107bffe8 sp=0xc0107bffe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/server.(*Server).Run
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:368 +0x145
+   > goroutine 853 [chan receive]:
+   > runtime.gopark(0xc000e925a0?, 0xc010a6baa0?, 0x20?, 0xbc?, 0x100000000000058?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b1ede0 sp=0xc000b1edc0 pc=0x13bb516
+   > runtime.chanrecv(0xc0002fa840, 0xc000b1ef08, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000b1ee70 sp=0xc000b1ede0 pc=0x13854bb
+   > runtime.chanrecv1(0x0?, 0xe?)
+   > 	/usr/local/go/src/runtime/chan.go:442 +0x18 fp=0xc000b1ee98 sp=0xc000b1ee70 pc=0x1384fb8
+   > github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).startAnalyzeProfileWorker(0xc0004d1b90)
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:142 +0x7c fp=0xc000b1efc8 sp=0xc000b1ee98 pc=0x25402bc
+   > github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).Run.func2()
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:94 +0x26 fp=0xc000b1efe0 sp=0xc000b1efc8 pc=0x253fe46
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b1efe8 sp=0xc000b1efe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/util/topsql/tracecpu.(*sqlCPUProfiler).Run
+   > 	/go/src/github.com/pingcap/tidb/util/topsql/tracecpu/profile.go:94 +0x10a
+   > goroutine 733 [select]:
+   > runtime.gopark(0xc000da7f28?, 0x2?, 0x4?, 0x30?, 0xc000da7ed4?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000da7d48 sp=0xc000da7d28 pc=0x13bb516
+   > runtime.selectgo(0xc000da7f28, 0xc000da7ed0, 0xc00052b800?, 0x0, 0xc0009868c0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000da7e88 sp=0xc000da7d48 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).handleEvolvePlanTasksLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1106 +0x107 fp=0xc000da7fe0 sp=0xc000da7e88 pc=0x26a4fe7
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000da7fe8 sp=0xc000da7fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).handleEvolvePlanTasksLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1099 +0xe5
+   > goroutine 856 [IO wait]:
+   > runtime.gopark(0x7f2071a3ff00?, 0xc000e2eb58?, 0xeb?, 0x6d?, 0xc000e2eb78?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000e2eb08 sp=0xc000e2eae8 pc=0x13bb516
+   > runtime.netpollblock(0x7f2073097308?, 0x67?, 0x0?)
+   > 	/usr/local/go/src/runtime/netpoll.go:526 +0xf7 fp=0xc000e2eb40 sp=0xc000e2eb08 pc=0x13b38f7
+   > internal/poll.runtime_pollWait(0x7f209a265708, 0x72)
+   > 	/usr/local/go/src/runtime/netpoll.go:305 +0x89 fp=0xc000e2eb60 sp=0xc000e2eb40 pc=0x13e7d09
+   > internal/poll.(*pollDesc).wait(0xc000e7dc00?, 0x1?, 0x0)
+   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x32 fp=0xc000e2eb88 sp=0xc000e2eb60 pc=0x1465192
+   > internal/poll.(*pollDesc).waitRead(...)
+   > 	/usr/local/go/src/internal/poll/fd_poll_runtime.go:89
+   > internal/poll.(*FD).Accept(0xc000e7dc00)
+   > 	/usr/local/go/src/internal/poll/fd_unix.go:614 +0x234 fp=0xc000e2ec20 sp=0xc000e2eb88 pc=0x146a594
+   > net.(*netFD).accept(0xc000e7dc00)
+   > 	/usr/local/go/src/net/fd_unix.go:172 +0x35 fp=0xc000e2ecd8 sp=0xc000e2ec20 pc=0x1589055
+   > net.(*UnixListener).accept(0x7f2073072078?)
+   > 	/usr/local/go/src/net/unixsock_posix.go:166 +0x1c fp=0xc000e2ed00 sp=0xc000e2ecd8 pc=0x15aba1c
+   > net.(*UnixListener).Accept(0xc010579b00)
+   > 	/usr/local/go/src/net/unixsock.go:260 +0x3d fp=0xc000e2ed30 sp=0xc000e2ed00 pc=0x15aa0bd
+   > github.com/pingcap/tidb/server.(*Server).startNetworkListener(0xc0059ae9c0, {0x400b9e0, 0xc010579b00}, 0x1, 0xc010b237b8?)
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:383 +0xa6 fp=0xc000e2efa8 sp=0xc000e2ed30 pc=0x31e25a6
+   > github.com/pingcap/tidb/server.(*Server).Run.func2()
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:369 +0x37 fp=0xc000e2efe0 sp=0xc000e2efa8 pc=0x31e2477
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000e2efe8 sp=0xc000e2efe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/server.(*Server).Run
+   > 	/go/src/github.com/pingcap/tidb/server/server.go:369 +0x1db
+   > goroutine 732 [select]:
+   > runtime.gopark(0xc0112f3e90?, 0x3?, 0x20?, 0xf9?, 0xc0112f3e02?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0112f3c70 sp=0xc0112f3c50 pc=0x13bb516
+   > runtime.selectgo(0xc0112f3e90, 0xc0112f3dfc, 0x3a8be78?, 0x0, 0x141f32a?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0112f3db0 sp=0xc0112f3c70 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).globalBindHandleWorkerLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1071 +0x16f fp=0xc0112f3fe0 sp=0xc0112f3db0 pc=0x26a476f
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0112f3fe8 sp=0xc0112f3fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).globalBindHandleWorkerLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1058 +0xad
+   > goroutine 723 [select]:
+   > runtime.gopark(0xc00008be78?, 0x3?, 0x4?, 0x30?, 0xc00008bdf2?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00008bc78 sp=0xc00008bc58 pc=0x13bb516
+   > runtime.selectgo(0xc00008be78, 0xc00008bdec, 0x1?, 0x0, 0x2?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00008bdb8 sp=0xc00008bc78 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).topologySyncerKeeper(0xc0008c8a20)
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:533 +0x165 fp=0xc00008bfc8 sp=0xc00008bdb8 pc=0x269f8c5
+   > github.com/pingcap/tidb/domain.(*Domain).Init.func14()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:834 +0x26 fp=0xc00008bfe0 sp=0xc00008bfc8 pc=0x26a29a6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00008bfe8 sp=0xc00008bfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).Init
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:834 +0xf3d
+   > goroutine 609 [select]:
+   > runtime.gopark(0xc000ee16f8?, 0x3?, 0x4?, 0x30?, 0xc000ee1682?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee1508 sp=0xc000ee14e8 pc=0x13bb516
+   > runtime.selectgo(0xc000ee16f8, 0xc000ee167c, 0x0?, 0x0, 0xc010ac49c0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee1648 sp=0xc000ee1508 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).infoSyncerKeeper(0xc0008c8a20)
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:487 +0x165 fp=0xc000ee17c8 sp=0xc000ee1648 pc=0x269ee45
+   > github.com/pingcap/tidb/domain.(*Domain).Init.func12()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:829 +0x26 fp=0xc000ee17e0 sp=0xc000ee17c8 pc=0x26a2a66
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee17e8 sp=0xc000ee17e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).Init
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:829 +0xe95
+   > goroutine 608 [select]:
+   > runtime.gopark(0xc00fd3ef78?, 0x3?, 0x4?, 0x30?, 0xc00fd3ef12?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00fd3ed60 sp=0xc00fd3ed40 pc=0x13bb516
+   > runtime.selectgo(0xc00fd3ef78, 0xc00fd3ef0c, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc00fd3eea0 sp=0xc00fd3ed60 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).topNSlowQueryLoop(0xc0008c8a20)
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:455 +0x194 fp=0xc00fd3efc8 sp=0xc00fd3eea0 pc=0x269e914
+   > github.com/pingcap/tidb/domain.(*Domain).Init.func11()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:828 +0x26 fp=0xc00fd3efe0 sp=0xc00fd3efc8 pc=0x26a2ac6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00fd3efe8 sp=0xc00fd3efe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).Init
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:828 +0xe52
+   > goroutine 607 [select]:
+   > runtime.gopark(0xc010021f50?, 0x4?, 0x4?, 0x30?, 0xc010021d00?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010021b78 sp=0xc010021b58 pc=0x13bb516
+   > runtime.selectgo(0xc010021f50, 0xc010021cf8, 0x400ccd0?, 0x0, 0x1e?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010021cb8 sp=0xc010021b78 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).loadSchemaInLoop(0xc0008c8a20, {0x400d608, 0xc000e32240}, 0xc00049b7b8?)
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:565 +0x1aa fp=0xc010021fb0 sp=0xc010021cb8 pc=0x26a00aa
+   > github.com/pingcap/tidb/domain.(*Domain).Init.func10()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:825 +0x32 fp=0xc010021fe0 sp=0xc010021fb0 pc=0x26a2b32
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010021fe8 sp=0xc010021fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).Init
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:825 +0xdeb
+   > goroutine 794 [select]:
+   > runtime.gopark(0xc000b1af18?, 0x3?, 0x0?, 0x30?, 0xc000b1ae9a?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107bdcd8 sp=0xc0107bdcb8 pc=0x13bb516
+   > runtime.selectgo(0xc0107bdf18, 0xc000b1ae94, 0xc0005e2ae0?, 0x0, 0xc010577ec0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107bde18 sp=0xc0107bdcd8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).LoadPrivilegeLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:939 +0x145 fp=0xc0107bdfe0 sp=0xc0107bde18 pc=0x26a3585
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107bdfe8 sp=0xc0107bdfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).LoadPrivilegeLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:930 +0x205
+   > goroutine 603 [select]:
+   > runtime.gopark(0xc000dbef90?, 0x2?, 0x0?, 0x0?, 0xc000dbef6c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000dbedf0 sp=0xc000dbedd0 pc=0x13bb516
+   > runtime.selectgo(0xc000dbef90, 0xc000dbef68, 0x0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000dbef30 sp=0xc000dbedf0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/ddl.(*delRange).startEmulator(0xc01062c420)
+   > 	/go/src/github.com/pingcap/tidb/ddl/delete_range.go:144 +0x125 fp=0xc000dbefc8 sp=0xc000dbef30 pc=0x262b9e5
+   > github.com/pingcap/tidb/ddl.(*delRange).start.func1()
+   > 	/go/src/github.com/pingcap/tidb/ddl/delete_range.go:126 +0x26 fp=0xc000dbefe0 sp=0xc000dbefc8 pc=0x262b7a6
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000dbefe8 sp=0xc000dbefe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/ddl.(*delRange).start
+   > 	/go/src/github.com/pingcap/tidb/ddl/delete_range.go:126 +0x6d
+   > goroutine 1145 [select]:
+   > runtime.gopark(0xc010e6ee10?, 0x2?, 0x58?, 0xb2?, 0xc010e6ed8c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010e6ebe0 sp=0xc010e6ebc0 pc=0x13bb516
+   > runtime.selectgo(0xc010e6ee10, 0xc010e6ed88, 0x8?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010e6ed20 sp=0xc010e6ebe0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c3b8c0, 0x0, {0x5f8a1a8, 0x0, 0x0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:441 +0x4f4 fp=0xc010e6ef10 sp=0xc010e6ed20 pc=0x30626b4
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:335 +0xb3 fp=0xc010e6ef90 sp=0xc010e6ef10 pc=0x30613d3
+   > github.com/pingcap/tidb/util.WithRecovery(0x0?, 0x0?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc010e6efc0 sp=0xc010e6ef90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func4()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x2a fp=0xc010e6efe0 sp=0xc010e6efc0 pc=0x30612ea
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010e6efe8 sp=0xc010e6efe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x1c9
+   > goroutine 760 [select]:
+   > runtime.gopark(0xc011b4dd48?, 0x2?, 0x18?, 0xef?, 0xc011b4dc94?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc011b4db08 sp=0xc011b4dae8 pc=0x13bb516
+   > runtime.selectgo(0xc011b4dd48, 0xc011b4dc90, 0xc0106d8af0?, 0x0, 0x1?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc011b4dc48 sp=0xc011b4db08 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).loadStatsWorker(0xc0008c8a20)
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1304 +0x485 fp=0xc011b4dfc8 sp=0xc011b4dc48 pc=0x26a6ea5
+   > github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1247 +0x26 fp=0xc011b4dfe0 sp=0xc011b4dfc8 pc=0x26a6666
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc011b4dfe8 sp=0xc011b4dfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).UpdateTableStatsLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1247 +0x105
+   > goroutine 763 [select]:
+   > runtime.gopark(0xc010b1e7a8?, 0x2?, 0x3?, 0x30?, 0xc010b1e77c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000da8e00 sp=0xc000da8de0 pc=0x13bb516
+   > runtime.selectgo(0xc000da8fa8, 0xc010b1e778, 0xc000afb3c0?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000da8f40 sp=0xc000da8e00 pc=0x13cbbdc
+   > github.com/pingcap/tidb/domain.(*Domain).PlanReplayerLoop.func1()
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1191 +0xf6 fp=0xc000da8fe0 sp=0xc000da8f40 pc=0x26a5f36
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000da8fe8 sp=0xc000da8fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/domain.(*Domain).PlanReplayerLoop
+   > 	/go/src/github.com/pingcap/tidb/domain/domain.go:1182 +0x6c
+   > goroutine 868 [chan receive]:
+   > runtime.gopark(0x50?, 0xc010502180?, 0x8?, 0x9d?, 0x138c1bf?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000db9c80 sp=0xc000db9c60 pc=0x13bb516
+   > runtime.chanrecv(0xc0101b8fc0, 0xc000db9d48, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000db9d10 sp=0xc000db9c80 pc=0x13854bb
+   > runtime.chanrecv2(0x141e886?, 0xc0058b6dd0?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc000db9d38 sp=0xc000db9d10 pc=0x1384ff8
+   > github.com/soheilhy/cmux.muxListener.Accept(...)
+   > 	/go/pkg/mod/github.com/soheilhy/cmux@v0.1.4/cmux.go:229
+   > github.com/soheilhy/cmux.(*muxListener).Accept(0x5828400?)
+   > 	<autogenerated>:1 +0x45 fp=0xc000db9d68 sp=0xc000db9d38 pc=0x2dc7625
+   > net/http.(*onceCloseListener).Accept(0x400d640?)
+   > 	<autogenerated>:1 +0x2a fp=0xc000db9d80 sp=0xc000db9d68 pc=0x16e0c6a
+   > net/http.(*Server).Serve(0xc01063c000, {0x400cb50, 0xc010690768})
+   > 	/usr/local/go/src/net/http/server.go:3070 +0x385 fp=0xc000db9eb0 sp=0xc000db9d80 pc=0x16b6f45
+   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer.func2()
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:462 +0x3e fp=0xc000db9f90 sp=0xc000db9eb0 pc=0x31dadbe
+   > github.com/pingcap/tidb/util.WithRecovery(0x400d640?, 0xc000056058?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc000db9fc0 sp=0xc000db9f90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer.func6()
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:461 +0x28 fp=0xc000db9fe0 sp=0xc000db9fc0 pc=0x31dad48
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000db9fe8 sp=0xc000db9fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:461 +0x4ea
+   > goroutine 867 [chan receive]:
+   > runtime.gopark(0x3a8bf40?, 0xc0107b9cf8?, 0xfc?, 0xb?, 0xa?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107b9cb0 sp=0xc0107b9c90 pc=0x13bb516
+   > runtime.chanrecv(0xc0101b9020, 0xc0107b9d78, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc0107b9d40 sp=0xc0107b9cb0 pc=0x13854bb
+   > runtime.chanrecv2(0xc00fd758e8?, 0x2?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc0107b9d68 sp=0xc0107b9d40 pc=0x1384ff8
+   > github.com/soheilhy/cmux.muxListener.Accept(...)
+   > 	/go/pkg/mod/github.com/soheilhy/cmux@v0.1.4/cmux.go:229
+   > github.com/soheilhy/cmux.(*muxListener).Accept(0x3ff0f40?)
+   > 	<autogenerated>:1 +0x45 fp=0xc0107b9d98 sp=0xc0107b9d68 pc=0x2dc7625
+   > google.golang.org/grpc.(*Server).Serve(0xc00045b1e0, {0x400cb50, 0xc010690780})
+   > 	/go/pkg/mod/google.golang.org/grpc@v1.29.1/server.go:621 +0x362 fp=0xc0107b9eb0 sp=0xc0107b9d98 pc=0x19749a2
+   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer.func1()
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:457 +0x3e fp=0xc0107b9f90 sp=0xc0107b9eb0 pc=0x31db01e
+   > github.com/pingcap/tidb/util.WithRecovery(0x400d640?, 0xc0101b8de0?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc0107b9fc0 sp=0xc0107b9f90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer.func5()
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:456 +0x28 fp=0xc0107b9fe0 sp=0xc0107b9fc0 pc=0x31dafa8
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107b9fe8 sp=0xc0107b9fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/server.(*Server).startStatusServerAndRPCServer
+   > 	/go/src/github.com/pingcap/tidb/server/http_status.go:456 +0x42c
+   > goroutine 1146 [select]:
+   > runtime.gopark(0xc0107f7e10?, 0x2?, 0x68?, 0xb2?, 0xc0107f7d8c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107f7be0 sp=0xc0107f7bc0 pc=0x13bb516
+   > runtime.selectgo(0xc0107f7e10, 0xc0107f7d88, 0x13cb293?, 0x0, 0x13cc174?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107f7d20 sp=0xc0107f7be0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c3b8c0, 0x1, {0x5f8a1a8, 0x0, 0x0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:441 +0x4f4 fp=0xc0107f7f10 sp=0xc0107f7d20 pc=0x30626b4
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:335 +0xb3 fp=0xc0107f7f90 sp=0xc0107f7f10 pc=0x30613d3
+   > github.com/pingcap/tidb/util.WithRecovery(0x23de786?, 0xc000bb3d40?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc0107f7fc0 sp=0xc0107f7f90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func4()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x2a fp=0xc0107f7fe0 sp=0xc0107f7fc0 pc=0x30612ea
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107f7fe8 sp=0xc0107f7fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x1c9
+   > goroutine 1266 [select]:
+   > runtime.gopark(0xc000ee3778?, 0x2?, 0x2?, 0x0?, 0xc000ee36ec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ee3558 sp=0xc000ee3538 pc=0x13bb516
+   > runtime.selectgo(0xc000ee3778, 0xc000ee36e8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ee3698 sp=0xc000ee3558 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0105af540, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc000ee37b8 sp=0xc000ee3698 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc000ee37e0 sp=0xc000ee37b8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ee37e8 sp=0xc000ee37e0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1144 [select]:
+   > runtime.gopark(0xc010befe30?, 0x2?, 0x80?, 0x57?, 0xc010befe1c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010befca8 sp=0xc010befc88 pc=0x13bb516
+   > runtime.selectgo(0xc010befe30, 0xc010befe18, 0xc011480e40?, 0x0, 0x2fef900?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010befde8 sp=0xc010befca8 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).wait4BuildSide(0xc011c3b8c0)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:242 +0x6f fp=0xc010befe60 sp=0xc010befde8 pc=0x30605ef
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchProbeSideChunks(0xc011c3b8c0, {0x400d6b0, 0xc01127c9f0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:221 +0x233 fp=0xc010beff28 sp=0xc010befe60 pc=0x3060333
    > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func1()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:324 +0xa9
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011993580, 0xc011b5fca0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:322 +0x8f fp=0xc010beff90 sp=0xc010beff28 pc=0x306156f
+   > github.com/pingcap/tidb/util.WithRecovery(0x23de786?, 0xc000bb3e40?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc010beffc0 sp=0xc010beff90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func3()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:320 +0x2a fp=0xc010beffe0 sp=0xc010beffc0 pc=0x30614aa
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010beffe8 sp=0xc010beffe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:322 +0xfd
-   > goroutine 978 [chan receive]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).buildHashTableForList(0xc011c6ee00, 0xc011bc6720, 0xc011bc2840, 0xc011b5fd20)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:758 +0x327
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable(0xc011c6ee00, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:713 +0x1b3
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:320 +0x14f
+   > goroutine 1088 [select]:
+   > runtime.gopark(0xc0121e9f78?, 0x2?, 0xa0?, 0x9d?, 0xc0121e9eec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0121e9d58 sp=0xc0121e9d38 pc=0x13bb516
+   > runtime.selectgo(0xc0121e9f78, 0xc0121e9ee8, 0xc000df1400?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0121e9e98 sp=0xc0121e9d58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0105af4c0, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc0121e9fb8 sp=0xc0121e9e98 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc0121e9fe0 sp=0xc0121e9fb8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0121e9fe8 sp=0xc0121e9fe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1143 [chan receive]:
+   > runtime.gopark(0xc011a29630?, 0xc011e95f80?, 0x3?, 0x0?, 0xc000e2fcf8?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000e2fca8 sp=0xc000e2fc88 pc=0x13bb516
+   > runtime.chanrecv(0xc011e95ec0, 0xc000e2fe08, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000e2fd38 sp=0xc000e2fca8 pc=0x13854bb
+   > runtime.chanrecv2(0xc00fb967b0?, 0x4012e60?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc000e2fd60 sp=0xc000e2fd38 pc=0x1384ff8
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).buildHashTableForList(0xc011c3b8c0, 0x1?)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:762 +0x2d6 fp=0xc000e2fe78 sp=0xc000e2fd60 pc=0x3065af6
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable(0xc011c3b8c0, {0x400d6b0?, 0xc01127c9f0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:726 +0x23f fp=0xc000e2ff28 sp=0xc000e2fe78 pc=0x30653ff
    > github.com/pingcap/tidb/executor.(*HashJoinExec).Next.func1()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:658 +0xa9
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011993560, 0xc011b5fbf0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:671 +0x8f fp=0xc000e2ff90 sp=0xc000e2ff28 pc=0x306504f
+   > github.com/pingcap/tidb/util.WithRecovery(0x23de786?, 0xc000ef0f00?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc000e2ffc0 sp=0xc000e2ff90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).Next.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:669 +0x2a fp=0xc000e2ffe0 sp=0xc000e2ffc0 pc=0x3064f8a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000e2ffe8 sp=0xc000e2ffe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).Next
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:656 +0x305
-   > goroutine 964 [chan receive]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).Next(0xc011c6ee00, 0x4030f90, 0xc0119d22a0, 0xc011d6fc70, 0x0, 0x2)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:668 +0x87
-   > github.com/pingcap/tidb/executor.Next(0x4030f90, 0xc0119d22a0, 0x40359f8, 0xc011c6ee00, 0xc011d6fc70, 0x0, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/executor.go:285 +0x2de
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchProbeSideChunks(0xc011c6fc00, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:211 +0x1d4
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func1()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:324 +0xa9
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011e22300, 0xc011d7ebb0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:322 +0xfd
-   > goroutine 965 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6fc00, 0x0, 0xc011d61b00, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:669 +0x5b2
+   > goroutine 1142 [chan receive]:
+   > runtime.gopark(0x13c37d1?, 0xc000e2d9d0?, 0x0?, 0x38?, 0xc011b5be10?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000e2d9c0 sp=0xc000e2d9a0 pc=0x13bb516
+   > runtime.chanrecv(0xc011e95e60, 0xc000e2db10, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc000e2da50 sp=0xc000e2d9c0 pc=0x13854bb
+   > runtime.chanrecv2(0xc011c3b8c0?, 0x400d6b0?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc000e2da78 sp=0xc000e2da50 pc=0x1384ff8
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).Next(0xc011c3b8c0, {0x400d6b0?, 0xc01127c9f0?}, 0xc012047090)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:681 +0x652 fp=0xc000e2db38 sp=0xc000e2da78 pc=0x3064d52
+   > github.com/pingcap/tidb/executor.Next({0x400d6b0, 0xc01127c9f0}, {0x40101a0, 0xc011c3b8c0}, 0xc012047090)
+   > 	/go/src/github.com/pingcap/tidb/executor/executor.go:286 +0x4a8 fp=0xc000e2dc78 sp=0xc000e2db38 pc=0x2fef688
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).unParallelExecute(0xc011f098c0, {0x400d6b0?, 0xc01127c9f0?}, 0xc011e979a0)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:194 +0xb8 fp=0xc000e2dcc8 sp=0xc000e2dc78 pc=0x3098758
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).Next(0xc011f098c0, {0x400d6b0, 0xc01127c9f0}, 0xc011e989a0?)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:180 +0x5a fp=0xc000e2dd00 sp=0xc000e2dcc8 pc=0x309861a
+   > github.com/pingcap/tidb/executor.Next({0x400d6b0, 0xc01127c9f0}, {0x4010760, 0xc011f098c0}, 0xc011e979a0)
+   > 	/go/src/github.com/pingcap/tidb/executor/executor.go:286 +0x4a8 fp=0xc000e2de40 sp=0xc000e2dd00 pc=0x2fef688
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchBuildSideRows(0xc011c3bb00, {0x400d6b0, 0xc01127c9f0}, 0xc011e958c0, 0xc01106ff80)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:266 +0x1a5 fp=0xc000e2df10 sp=0xc000e2de40 pc=0x3060845
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:715 +0xab fp=0xc000e2df90 sp=0xc000e2df10 pc=0x306572b
+   > github.com/pingcap/tidb/util.WithRecovery(0x23de786?, 0xc000ef0f00?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc000e2dfc0 sp=0xc000e2df90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable.func4()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:712 +0x2a fp=0xc000e2dfe0 sp=0xc000e2dfc0 pc=0x306558a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000e2dfe8 sp=0xc000e2dfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:712 +0x22d
+   > goroutine 1158 [chan receive]:
+   > runtime.gopark(0xc011a29630?, 0xc011e95980?, 0x3?, 0x0?, 0xc0107bccf8?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107bcca8 sp=0xc0107bcc88 pc=0x13bb516
+   > runtime.chanrecv(0xc011e958c0, 0xc0107bce08, 0x1)
+   > 	/usr/local/go/src/runtime/chan.go:583 +0x49b fp=0xc0107bcd38 sp=0xc0107bcca8 pc=0x13854bb
+   > runtime.chanrecv2(0xc00fb967b0?, 0x4012e60?)
+   > 	/usr/local/go/src/runtime/chan.go:447 +0x18 fp=0xc0107bcd60 sp=0xc0107bcd38 pc=0x1384ff8
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).buildHashTableForList(0xc011c3bb00, 0x1?)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:762 +0x2d6 fp=0xc0107bce78 sp=0xc0107bcd60 pc=0x3065af6
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndBuildHashTable(0xc011c3bb00, {0x400d6b0?, 0xc01127c9f0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:726 +0x23f fp=0xc0107bcf28 sp=0xc0107bce78 pc=0x30653ff
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).Next.func1()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:671 +0x8f fp=0xc0107bcf90 sp=0xc0107bcf28 pc=0x306504f
+   > github.com/pingcap/tidb/util.WithRecovery(0x0?, 0x0?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc0107bcfc0 sp=0xc0107bcf90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).Next.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:669 +0x2a fp=0xc0107bcfe0 sp=0xc0107bcfc0 pc=0x3064f8a
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107bcfe8 sp=0xc0107bcfe0 pc=0x13ee6e1
+   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).Next
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:669 +0x5b2
+   > goroutine 1148 [select]:
+   > runtime.gopark(0xc0107fb610?, 0x2?, 0x88?, 0xb2?, 0xc0107fb58c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0107fb3e0 sp=0xc0107fb3c0 pc=0x13bb516
+   > runtime.selectgo(0xc0107fb610, 0xc0107fb588, 0xc00feeb148?, 0x0, 0x20?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0107fb520 sp=0xc0107fb3e0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c3b8c0, 0x3, {0x5f8a1a8, 0x0, 0x0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:441 +0x4f4 fp=0xc0107fb710 sp=0xc0107fb520 pc=0x30626b4
    > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011d10c40, 0xc011d7ebc0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:335 +0xb3 fp=0xc0107fb790 sp=0xc0107fb710 pc=0x30613d3
+   > github.com/pingcap/tidb/util.WithRecovery(0x400d6b0?, 0xc0120020c0?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc0107fb7c0 sp=0xc0107fb790 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func4()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x2a fp=0xc0107fb7e0 sp=0xc0107fb7c0 pc=0x30612ea
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0107fb7e8 sp=0xc0107fb7e0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 966 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6fc00, 0x1, 0xc011d61b00, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x1c9
+   > goroutine 1149 [select]:
+   > runtime.gopark(0xc000ede610?, 0x2?, 0x98?, 0xb2?, 0xc000ede58c?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000ede3e0 sp=0xc000ede3c0 pc=0x13bb516
+   > runtime.selectgo(0xc000ede610, 0xc000ede588, 0xc00feeb100?, 0x0, 0x13cc174?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000ede520 sp=0xc000ede3e0 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c3b8c0, 0x4, {0x5f8a1a8, 0x0, 0x0})
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:441 +0x4f4 fp=0xc000ede710 sp=0xc000ede520 pc=0x30626b4
    > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011d10c80, 0xc011d7ebd0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:335 +0xb3 fp=0xc000ede790 sp=0xc000ede710 pc=0x30613d3
+   > github.com/pingcap/tidb/util.WithRecovery(0x400d6b0?, 0xc011f075f0?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc000ede7c0 sp=0xc000ede790 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func4()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x2a fp=0xc000ede7e0 sp=0xc000ede7c0 pc=0x30612ea
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000ede7e8 sp=0xc000ede7e0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 967 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6fc00, 0x2, 0xc011d61b00, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011d10cc0, 0xc011d7ebe0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:333 +0x1c9
+   > goroutine 1150 [semacquire]:
+   > runtime.gopark(0xc00fd3cfd0?, 0x26a5025?, 0x20?, 0x1?, 0x40424f0?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc00fd3ce78 sp=0xc00fd3ce58 pc=0x13bb516
+   > runtime.goparkunlock(...)
+   > 	/usr/local/go/src/runtime/proc.go:369
+   > runtime.semacquire1(0xc011c3bab8, 0x0?, 0x1, 0x0)
+   > 	/usr/local/go/src/runtime/sema.go:150 +0x1fe fp=0xc00fd3cee0 sp=0xc00fd3ce78 pc=0x13cce5e
+   > sync.runtime_Semacquire(0x0?)
+   > 	/usr/local/go/src/runtime/sema.go:62 +0x25 fp=0xc00fd3cf10 sp=0xc00fd3cee0 pc=0x13e9f65
+   > sync.(*WaitGroup).Wait(0xc0107140c0?)
+   > 	/usr/local/go/src/sync/waitgroup.go:139 +0x52 fp=0xc00fd3cf38 sp=0xc00fd3cf10 pc=0x13fd1f2
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).waitJoinWorkersAndCloseResultChan(0xc011c3b8c0)
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:395 +0x33 fp=0xc00fd3cf78 sp=0xc00fd3cf38 pc=0x3061fb3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).waitJoinWorkersAndCloseResultChan-fm()
+   > 	<autogenerated>:1 +0x26 fp=0xc00fd3cf90 sp=0xc00fd3cf78 pc=0x31277c6
+   > github.com/pingcap/tidb/util.WithRecovery(0x5f539a0?, 0xc00fd3cf18?)
+   > 	/go/src/github.com/pingcap/tidb/util/misc.go:100 +0x53 fp=0xc00fd3cfc0 sp=0xc00fd3cf90 pc=0x1ffabd3
+   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func5()
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:338 +0x28 fp=0xc00fd3cfe0 sp=0xc00fd3cfc0 pc=0x3061288
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc00fd3cfe8 sp=0xc00fd3cfe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 968 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6fc00, 0x3, 0xc011d61b00, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011d10d00, 0xc011d7ebf0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 969 [select]:
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).runJoinWorker(0xc011c6fc00, 0x4, 0xc011d61b00, 0x1, 0x1)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:445 +0x33f
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable.func2()
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:339 +0xc5
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011d10d40, 0xc011d7ec00)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:337 +0x1ab
-   > goroutine 970 [semacquire]:
-   > sync.runtime_Semacquire(0xc011c6fdd4)
-   > 	/usr/local/go/src/runtime/sema.go:56 +0x45
-   > sync.(*WaitGroup).Wait(0xc011c6fdd4)
-   > 	/usr/local/go/src/sync/waitgroup.go:130 +0x65
-   > github.com/pingcap/tidb/executor.(*HashJoinExec).waitJoinWorkersAndCloseResultChan(0xc011c6fc00)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:399 +0x3d
-   > github.com/pingcap/tidb/util.WithRecovery(0xc011d7ec10, 0x0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/util/misc.go:99 +0x4f
-   > created by github.com/pingcap/tidb/executor.(*HashJoinExec).fetchAndProbeHashTable
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/join.go:342 +0x336
-   > goroutine 94 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc00106e5a0, 0xc011f0c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc001078040, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
+   > 	/go/src/github.com/pingcap/tidb/executor/join.go:338 +0x3b8
+   > goroutine 1219 [select]:
+   > runtime.gopark(0xc010bf2f78?, 0x2?, 0xa0?, 0x2d?, 0xc010bf2eec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc010bf2d58 sp=0xc010bf2d38 pc=0x13bb516
+   > runtime.selectgo(0xc010bf2f78, 0xc010bf2ee8, 0xc000df1400?, 0x0, 0x4020f40?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc010bf2e98 sp=0xc010bf2d58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc00fc76040, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc010bf2fb8 sp=0xc010bf2e98 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc010bf2fe0 sp=0xc010bf2fb8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc010bf2fe8 sp=0xc010bf2fe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 95 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc00106e6c0, 0xc011f0c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc001078080, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1220 [select]:
+   > runtime.gopark(0xc000b1df78?, 0x2?, 0x78?, 0xdd?, 0xc000b1deec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc000b1dd58 sp=0xc000b1dd38 pc=0x13bb516
+   > runtime.selectgo(0xc000b1df78, 0xc000b1dee8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc000b1de98 sp=0xc000b1dd58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc00fc76080, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc000b1dfb8 sp=0xc000b1de98 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc000b1dfe0 sp=0xc000b1dfb8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc000b1dfe8 sp=0xc000b1dfe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 96 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc00106e7e0, 0xc011f0c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0010780c0, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1221 [select]:
+   > runtime.gopark(0xc0122a9f78?, 0x2?, 0x0?, 0x0?, 0xc0122a9eec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0122a9d58 sp=0xc0122a9d38 pc=0x13bb516
+   > runtime.selectgo(0xc0122a9f78, 0xc0122a9ee8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0122a9e98 sp=0xc0122a9d58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc00fc760c0, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc0122a9fb8 sp=0xc0122a9e98 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc0122a9fe0 sp=0xc0122a9fb8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0122a9fe8 sp=0xc0122a9fe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 97 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc00106e900, 0xc011f0c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc001078100, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1222 [select]:
+   > runtime.gopark(0xc0122aa778?, 0x2?, 0x0?, 0x0?, 0xc0122aa6ec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0122aa558 sp=0xc0122aa538 pc=0x13bb516
+   > runtime.selectgo(0xc0122aa778, 0xc0122aa6e8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0122aa698 sp=0xc0122aa558 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc00fc76100, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc0122aa7b8 sp=0xc0122aa698 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc0122aa7e0 sp=0xc0122aa7b8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0122aa7e8 sp=0xc0122aa7e0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1042 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc00106ea20, 0xc011f0c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc001078140, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b
+   > goroutine 1223 [select]:
+   > runtime.gopark(0xc0122aaf78?, 0x2?, 0x0?, 0x0?, 0xc0122aaeec?)
+   > 	/usr/local/go/src/runtime/proc.go:363 +0xd6 fp=0xc0122aad58 sp=0xc0122aad38 pc=0x13bb516
+   > runtime.selectgo(0xc0122aaf78, 0xc0122aaee8, 0x3aac226?, 0x0, 0x0?, 0x1)
+   > 	/usr/local/go/src/runtime/select.go:328 +0x7bc fp=0xc0122aae98 sp=0xc0122aad58 pc=0x13cbbdc
+   > github.com/pingcap/tidb/executor.readProjectionInput(...)
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:460
+   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc00fc76140, {0x400d6b0?, 0xc01127c9f0?})
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:428 +0x194 fp=0xc0122aafb8 sp=0xc0122aae98 pc=0x309a0f4
+   > github.com/pingcap/tidb/executor.(*ProjectionExec).prepare.func2()
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x2e fp=0xc0122aafe0 sp=0xc0122aafb8 pc=0x309938e
+   > runtime.goexit()
+   > 	/usr/local/go/src/runtime/asm_amd64.s:1594 +0x1 fp=0xc0122aafe8 sp=0xc0122aafe0 pc=0x13ee6e1
    > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1040 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc01167a180, 0xc01167c000, 0xc0105cca00)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc011678040, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
-   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1041 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc01167a2a0, 0xc01167c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc011678080, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
-   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1058 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc01167a3c0, 0xc01167c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc0116780c0, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
-   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1059 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc01167a4e0, 0xc01167c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc011678100, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
-   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1060 [select]:
-   > github.com/pingcap/tidb/executor.readProjectionInput(0xc01167a600, 0xc01167c000, 0x3b1ee58)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:459 +0x86
-   > github.com/pingcap/tidb/executor.(*projectionWorker).run(0xc011678140, 0x4030f90, 0xc0119d22a0)
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:427 +0x129
-   > created by github.com/pingcap/tidb/executor.(*ProjectionExec).prepare
-   > 	/home/jenkins/agent/workspace/optimization-build-tidb-linux-amd/go/src/github.com/pingcap/tidb/executor/projection.go:275 +0x78f
-   > goroutine 1006 [chan receive]:
-   > gopkg.in/natefinch/lumberjack%2ev2.(*Logger).millRun(0xc000a0e7e0)
-   > 	/nfs/cache/mod/gopkg.in/natefinch/lumberjack.v2@v2.0.0/lumberjack.go:379 +0x5d
-   > created by gopkg.in/natefinch/lumberjack%2ev2.(*Logger).mill.func1
-   > 	/nfs/cache/mod/gopkg.in/natefinch/lumberjack.v2@v2.0.0/lumberjack.go:390 +0x75
+   > 	/go/src/github.com/pingcap/tidb/executor/projection.go:276 +0x69b

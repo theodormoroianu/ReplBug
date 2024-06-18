@@ -12,7 +12,6 @@ class DatabaseType(Enum):
     MARIADB = "mariadb"
     MYSQL = "mysql"
     TIDB = "tidb"
-    MARIADB_DEBUG = "mariadb-debug"
 
     @staticmethod
     def from_str(value: str) -> "DatabaseType":
@@ -22,8 +21,6 @@ class DatabaseType(Enum):
             return DatabaseType.MYSQL
         elif value == "tidb":
             return DatabaseType.TIDB
-        elif value == "mariadb-debug":
-            return DatabaseType.MARIADB_DEBUG
         else:
             raise ValueError(f"Unsupported database type: {value}")
 
@@ -42,28 +39,45 @@ class DatabaseTypeAndVersion:
     Encodes the database type and version
     """
 
-    def __init__(self, database_type: DatabaseType, version: str):
+    def __init__(
+        self, database_type: DatabaseType, version: str, needs_to_be_pulled=True
+    ):
+        """
+        Creates a new DatabaseTypeAndVersion object.
+
+        :param database_type: The type of the database.
+        :param version: The version of the database.
+        :param needs_to_be_pulled: Whether the image needs to be pulled or it is built locally.
+        """
         self.database_type = database_type
         self.version = version
+        self.needs_to_be_pulled = needs_to_be_pulled
 
     def __str__(self):
-        return f"{self.database_type.value}-{self.version}"
+        return f"{self.database_type.value}-{self.version}" + (
+            "" if self.needs_to_be_pulled else "-local"
+        )
 
     def __eq__(self, other: "DatabaseTypeAndVersion"):
         if other is None:
             return False
         return (
-            self.database_type == other.database_type and self.version == other.version
+            self.database_type == other.database_type
+            and self.version == other.version
+            and self.needs_to_be_pulled == other.needs_to_be_pulled
         )
 
     def __hash__(self) -> int:
-        return hash((self.database_type, self.version))
+        return hash((self.database_type, self.version, self.needs_to_be_pulled))
 
     def to_docker_image_and_tag(self) -> Tuple[str, str]:
         """
         returns the docker image and tag for the database.
         e.g. (docker.io/library/mariadb, 10.5.8)
         """
+        if not self.needs_to_be_pulled:
+            return (self.database_type.value, self.version)
+
         if self.database_type == DatabaseType.MARIADB:
             return ("docker.io/library/mariadb", self.version)
         elif self.database_type == DatabaseType.MYSQL:
@@ -71,16 +85,8 @@ class DatabaseTypeAndVersion:
         elif self.database_type == DatabaseType.TIDB:
             # https://hub.docker.com/r/pingcap/tidb/tags
             return ("docker.io/pingcap/tidb", f"v{self.version}")
-        elif self.database_type == DatabaseType.MARIADB_DEBUG:
-            return ("mariadb-debug", self.version)
-        else:
-            raise ValueError(f"Unsupported database type: {self.database_type}")
 
-    def needs_to_be_pulled(self) -> bool:
-        """
-        Returns whether the database image needs to be pulled.
-        """
-        return self.database_type != DatabaseType.MARIADB_DEBUG
+        raise ValueError(f"Unsupported database type: {self.database_type}")
 
 
 class DatabaseConnection:

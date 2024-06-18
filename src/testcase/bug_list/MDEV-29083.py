@@ -9,7 +9,7 @@ ORIGINAL_ISOLATION_LEVEL = IsolationLevel.READ_COMMITTED
 BUG_ID = "MDEV-29083"
 LINK = "https://jira.mariadb.org/browse/MDEV-29083"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
-    db_config.DatabaseType.MARIADB, "10.8.3"
+    db_config.DatabaseType.MARIADB, "10.8.3", False
 )
 
 

@@ -103,14 +103,13 @@ class PodmanConnection:
         image_name, tag = db_and_version.to_docker_image_and_tag()
 
         # Pull the image if necessary.
-        if db_and_version.needs_to_be_pulled():
+        if db_and_version.needs_to_be_pulled:
             logging.info(f"Pulling the database server for {db_and_version}.")
             self.podman_client.images.pull(repository=image_name, tag=tag)
             logging.info(f"Image {image_name}:{tag} pulled.")
 
         # Create the container
         host_port = helpers.get_free_port()
-        image_name, tag = db_and_version.to_docker_image_and_tag()
         container_port = db_and_version.database_type.used_port()
 
         # Environment variables for the container
@@ -198,8 +197,9 @@ class PodmanConnection:
             # Can't re-use container. Try to stop it.
             try:
                 container.stop(timeout=0)
+                container.remove(v=True)
             except Exception as e:
-                container.remove()
+                container.remove(v=True)
             del self.containers[container_id]
             del self.log_characters_to_ignore[container_id]
 

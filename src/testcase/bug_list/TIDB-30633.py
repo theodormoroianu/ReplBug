@@ -6,7 +6,9 @@ from testcase.helpers import *
 ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "TIDB-30633"
 LINK = "https://github.com/pingcap/tidb/issues/30633"
-DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "5.4.0")
+DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
+    db_config.DatabaseType.TIDB, "v5.4.0", False
+)
 
 description = """Looses connection to the server."""
 

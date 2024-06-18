@@ -1,6 +1,6 @@
 import cmd
 
-import interactor.database_interactor as database_interactor
+# import interactor.database_interactor as database_interactor
 import interactor.testcase_interactor as testcase_interactor
 import context
 
@@ -39,15 +39,15 @@ class MainInteractor(cmd.Cmd):
         except:
             pass
 
-    def do_database(self, arg):
-        """Allows the user to download and interact with a database."""
-        try:
-            database_interactor.DatabaseInteractor.get_instance().process_external_arg(
-                arg
-            )
-        except KeyboardInterrupt as e:
-            print("")
-            pass
+    # def do_database(self, arg):
+    #     """Allows the user to download and interact with a database."""
+    #     try:
+    #         database_interactor.DatabaseInteractor.get_instance().process_external_arg(
+    #             arg
+    #         )
+    #     except KeyboardInterrupt as e:
+    #         print("")
+    #         pass
 
     def do_testcase(self, arg):
         """Runs the testcases."""

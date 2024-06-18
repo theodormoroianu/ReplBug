@@ -6,7 +6,9 @@ from testcase.helpers import *
 ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "TIDB-29947"
 LINK = "https://github.com/pingcap/tidb/issues/29947"
-DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "5.2.1")
+DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
+    db_config.DatabaseType.TIDB, "v5.4.0", False
+)
 
 
 def get_description(isolation_level: IsolationLevel):

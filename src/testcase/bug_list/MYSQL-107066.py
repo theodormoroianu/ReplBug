@@ -7,7 +7,7 @@ ORIGINAL_ISOLATION_LEVEL = IsolationLevel.REPEATABLE_READ
 BUG_ID = "MYSQL-107066"
 LINK = "https://bugs.mysql.com/bug.php?id=107066"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
-    db_config.DatabaseType.MYSQL, "8.0.23"
+    db_config.DatabaseType.MYSQL, "8.0.23", True
 )
 
 
