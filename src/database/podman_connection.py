@@ -118,12 +118,22 @@ class PodmanConnection:
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
         }
 
-        container = self.podman_client.containers.create(
-            image=f"{image_name}:{tag}",
-            ports={f"{container_port}/tcp": host_port},
-            environment=environment,
-            auto_remove=False,
-        )
+        try:
+            container = self.podman_client.containers.create(
+                image=f"{image_name}:{tag}",
+                ports={f"{container_port}/tcp": host_port},
+                environment=environment,
+                auto_remove=False,
+            )
+        except Exception as e:
+            print(
+                "Error creating the container. If it is a local image, make sure it is built."
+            )
+            logging.info(
+                "Unable to create the container. Maybe the image is not built?"
+            )
+            raise e
+
         container.start()
         logging.info(f"Container {container.id} started on port {host_port}")
 

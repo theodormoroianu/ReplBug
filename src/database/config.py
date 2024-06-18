@@ -39,36 +39,29 @@ class DatabaseTypeAndVersion:
     Encodes the database type and version
     """
 
-    def __init__(
-        self, database_type: DatabaseType, version: str, needs_to_be_pulled=True
-    ):
+    def __init__(self, database_type: DatabaseType, version: str):
         """
         Creates a new DatabaseTypeAndVersion object.
 
         :param database_type: The type of the database.
         :param version: The version of the database.
-        :param needs_to_be_pulled: Whether the image needs to be pulled or it is built locally.
         """
         self.database_type = database_type
         self.version = version
-        self.needs_to_be_pulled = needs_to_be_pulled
+        self.needs_to_be_pulled = self.database_type == DatabaseType.MYSQL
 
     def __str__(self):
-        return f"{self.database_type.value}-{self.version}" + (
-            "" if self.needs_to_be_pulled else "-local"
-        )
+        return f"{self.database_type.value}-{self.version}"
 
     def __eq__(self, other: "DatabaseTypeAndVersion"):
         if other is None:
             return False
         return (
-            self.database_type == other.database_type
-            and self.version == other.version
-            and self.needs_to_be_pulled == other.needs_to_be_pulled
+            self.database_type == other.database_type and self.version == other.version
         )
 
     def __hash__(self) -> int:
-        return hash((self.database_type, self.version, self.needs_to_be_pulled))
+        return hash((self.database_type, self.version))
 
     def to_docker_image_and_tag(self) -> Tuple[str, str]:
         """
@@ -78,13 +71,8 @@ class DatabaseTypeAndVersion:
         if not self.needs_to_be_pulled:
             return (self.database_type.value, self.version)
 
-        if self.database_type == DatabaseType.MARIADB:
-            return ("docker.io/library/mariadb", self.version)
-        elif self.database_type == DatabaseType.MYSQL:
+        if self.database_type == DatabaseType.MYSQL:
             return ("docker.io/library/mysql", self.version)
-        elif self.database_type == DatabaseType.TIDB:
-            # https://hub.docker.com/r/pingcap/tidb/tags
-            return ("docker.io/pingcap/tidb", f"v{self.version}")
 
         raise ValueError(f"Unsupported database type: {self.database_type}")
 
@@ -100,29 +88,21 @@ class DatabaseConnection:
         host: Optional[str] = None,
         port: Optional[int] = None,
         user: Optional[str] = None,
-        password: Optional[str] = None,
-        socket: Optional[str] = None,
     ):
         self.database_type_and_version = database_type_and_version
         self.host = host
         self.port = port
         self.user = user
-        self.password = password
-        self.socket = socket
 
     def to_connection(self, autocommit=None) -> mysql.connector.MySQLConnection:
         """
         Returns a MySQL connection object.
         """
         args = dict()
-        if self.socket:
-            args["unix_socket"] = self.socket
         if self.host:
             args["host"] = self.host
         if self.user:
             args["user"] = self.user
-        if self.password:
-            args["password"] = self.password
         if self.port:
             args["port"] = self.port
         if autocommit is not None:

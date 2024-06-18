@@ -8,7 +8,7 @@ Tested isolation level:   SERIALIZABLE
 
 
 ## Details
- * Database: mariadb-debug-10.10.1
+ * Database: mariadb-10.8.3
  * Number of scenarios: 1
  * Initial setup script: /home/theodor/Projects/MasterThesis/data/sql/MDEV-29585_mysql_bk.sql
 

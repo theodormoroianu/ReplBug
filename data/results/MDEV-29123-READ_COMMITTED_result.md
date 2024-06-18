@@ -8,7 +8,7 @@ Tested isolation level:   IsolationLevel.READ_COMMITTED
 
 
 ## Details
- * Database: mariadb-debug-10.8.3
+ * Database: mariadb-10.8.3
  * Number of scenarios: 2
  * Initial setup script: /home/theodor/Projects/MasterThesis/data/sql/MDEV-29123_mysql_bk.sql
 

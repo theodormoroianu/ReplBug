@@ -8,7 +8,7 @@ Tested isolation level:   IsolationLevel.READ_COMMITTED
 
 
 ## Details
- * Database: mariadb-debug-10.8.3
+ * Database: mariadb-10.8.3
  * Number of scenarios: 1
  * Initial setup script: /home/theodor/Projects/MasterThesis/data/sql/MDEV-29120_mysql_bk.sql
 
@@ -53,7 +53,7 @@ Tested isolation level:   IsolationLevel.READ_COMMITTED
 
  * Container logs:
    > mysqld: /server/server/storage/innobase/row/row0sel.cc:4614: dberr_t row_search_mvcc(byte*, page_cur_mode_t, row_prebuilt_t*, ulint, ulint): Assertion `prebuilt->sql_stat_start || prebuilt->table->no_rollback()' failed.
-   > 240618 11:51:20 [ERROR] mysqld got signal 6 ;
+   > 240618 16:05:17 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -70,49 +70,49 @@ Tested isolation level:   IsolationLevel.READ_COMMITTED
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468121 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x7f70bc000dc8
+   > Thread pointer: 0x7f92c0000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f7130168c78 thread_stack 0x49000
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x562bfc29908f]
-   > sql/signal_handler.cc:226(handle_fatal_signal)[0x562bfb99365d]
-   > ??:0(__sigaction)[0x7f7130b76520]
-   > ??:0(pthread_kill)[0x7f7130bca9fc]
-   > ??:0(raise)[0x7f7130b76476]
-   > ??:0(abort)[0x7f7130b5c7f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f7130b5c71b]
-   > ??:0(__assert_fail)[0x7f7130b6de96]
-   > row/row0sel.cc:4618(row_search_mvcc(unsigned char*, page_cur_mode_t, row_prebuilt_t*, unsigned long, unsigned long))[0x562bfbfcdeac]
-   > /usr/local/mysql/bin/mysqld(+0x11c9411)[0x562bfbdb1411]
-   > handler/ha_innodb.cc:8990(ha_innobase::index_read(unsigned char*, unsigned char const*, unsigned int, ha_rkey_function))[0x562bfbdb24c6]
-   > handler/ha_innodb.cc:9359(ha_innobase::index_first(unsigned char*))[0x562bfbdb26be]
-   > handler/ha_innodb.cc:9452(ha_innobase::rnd_next(unsigned char*))[0x562bfb99f481]
-   > sql/handler.cc:3414(handler::ha_rnd_next(unsigned char*))[0x562bfb47cf42]
-   > sql/records.cc:519(rr_sequential(READ_RECORD*))[0x562bfb4672bd]
-   > /usr/local/mysql/bin/mysqld(_Z21join_init_read_recordP13st_join_table+0x31b)[0x562bfb66367f]
-   > /usr/local/mysql/bin/mysqld(_Z10sub_selectP4JOINP13st_join_tableb+0x2ce)[0x562bfb660f8f]
-   > /usr/local/mysql/bin/mysqld(+0xa78434)[0x562bfb660434]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN10exec_innerEv+0xf13)[0x562bfb632ae9]
-   > sql/records.h:81(READ_RECORD::read_record())[0x562bfb631b23]
-   > sql/sql_select.cc:22157(join_init_read_record(st_join_table*))[0x562bfbab6efd]
-   > sql/sql_select.cc:21160(sub_select(JOIN*, st_join_table*, bool))[0x562bfbaa9354]
-   > sql/sql_select.cc:20708(do_select(JOIN*, Procedure*))[0x562bfbaacfc7]
-   > sql/sql_select.cc:4759(JOIN::exec_inner())[0x562bfb559fe9]
-   > sql/sql_select.cc:4538(JOIN::exec())[0x562bfb553da1]
-   > sql/item_subselect.cc:4141(subselect_single_select_engine::exec())[0x562bfb556232]
-   > sql/item_subselect.cc:854(Item_subselect::exec())[0x562bfb5c1bec]
-   > sql/opt_range.h:1905(SQL_SELECT::skip_record(THD*))[0x562bfb5cc86e]
-   > sql/sql_delete.cc:221(record_should_be_deleted(THD*, TABLE*, SQL_SELECT*, Explain_delete*, bool))[0x562bfb5b875d]
-   > sql/sql_delete.cc:805(mysql_delete(THD*, TABLE_LIST*, Item*, SQL_I_List<st_order>*, unsigned long long, unsigned long long, select_result*))[0x562bfb5b70cf]
-   > sql/sql_parse.cc:4804(mysql_execute_command(THD*, bool))[0x562bfb7997d3]
-   > sql/sql_parse.cc:8027(mysql_parse(THD*, char*, unsigned int, Parser_state*))[0x562bfb799460]
-   > sql/sql_parse.cc:1896(dispatch_command(enum_server_command, THD*, char*, unsigned int, bool))[0x562bfbcc6e81]
-   > ??:0(pthread_condattr_setpshared)[0x7f7130bc8ac3]
-   > ??:0(__xmknodat)[0x7f7130c5a850]
+   > stack_bottom = 0x7f93294b3c78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5616680ba08f]
+   > sql/signal_handler.cc:226(handle_fatal_signal)[0x5616677b465d]
+   > ??:0(__sigaction)[0x7f9329aaf520]
+   > ??:0(pthread_kill)[0x7f9329b039fc]
+   > ??:0(raise)[0x7f9329aaf476]
+   > ??:0(abort)[0x7f9329a957f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f9329a9571b]
+   > ??:0(__assert_fail)[0x7f9329aa6e96]
+   > row/row0sel.cc:4618(row_search_mvcc(unsigned char*, page_cur_mode_t, row_prebuilt_t*, unsigned long, unsigned long))[0x561667deeeac]
+   > handler/ha_innodb.cc:8990(ha_innobase::index_read(unsigned char*, unsigned char const*, unsigned int, ha_rkey_function))[0x561667bd2411]
+   > handler/ha_innodb.cc:9359(ha_innobase::index_first(unsigned char*))[0x561667bd34c6]
+   > handler/ha_innodb.cc:9452(ha_innobase::rnd_next(unsigned char*))[0x561667bd36be]
+   > sql/handler.cc:3414(handler::ha_rnd_next(unsigned char*))[0x5616677c0481]
+   > sql/records.cc:519(rr_sequential(READ_RECORD*))[0x56166729df42]
+   > /usr/local/mysql/bin/mysqld(_ZN11READ_RECORD11read_recordEv+0x21)[0x5616672882bd]
+   > /usr/local/mysql/bin/mysqld(_Z21join_init_read_recordP13st_join_table+0x31b)[0x56166748467f]
+   > sql/records.h:81(READ_RECORD::read_record())[0x561667481f8f]
+   > sql/sql_select.cc:22157(join_init_read_record(st_join_table*))[0x561667481434]
+   > sql/sql_select.cc:21160(sub_select(JOIN*, st_join_table*, bool))[0x561667453ae9]
+   > sql/sql_select.cc:20708(do_select(JOIN*, Procedure*))[0x561667452b23]
+   > sql/sql_select.cc:4759(JOIN::exec_inner())[0x5616678d7efd]
+   > sql/sql_select.cc:4538(JOIN::exec())[0x5616678ca354]
+   > sql/item_subselect.cc:4141(subselect_single_select_engine::exec())[0x5616678cdfc7]
+   > sql/item_subselect.cc:854(Item_subselect::exec())[0x56166737afe9]
+   > sql/item_subselect.cc:1832(Item_exists_subselect::val_int())[0x561667374da1]
+   > sql/opt_range.h:1905(SQL_SELECT::skip_record(THD*))[0x561667377232]
+   > sql/sql_delete.cc:221(record_should_be_deleted(THD*, TABLE*, SQL_SELECT*, Explain_delete*, bool))[0x5616673e2bec]
+   > sql/sql_delete.cc:805(mysql_delete(THD*, TABLE_LIST*, Item*, SQL_I_List<st_order>*, unsigned long long, unsigned long long, select_result*))[0x5616673ed86e]
+   > sql/sql_parse.cc:4804(mysql_execute_command(THD*, bool))[0x5616673d975d]
+   > sql/sql_parse.cc:8027(mysql_parse(THD*, char*, unsigned int, Parser_state*))[0x5616673d80cf]
+   > sql/sql_parse.cc:1896(dispatch_command(enum_server_command, THD*, char*, unsigned int, bool))[0x5616675ba7d3]
+   > sql/sql_parse.cc:1407(do_command(THD*, bool))[0x5616675ba460]
+   > sql/sql_connect.cc:1418(do_handle_one_connection(CONNECT*, bool))[0x561667ae7e81]
+   > ??:0(pthread_condattr_setpshared)[0x7f9329b01ac3]
+   > ??:0(__xmknodat)[0x7f9329b93850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x7f70bc013cd0): delete from t_qrsdpb where exists ( select ref_0.c_bkmkf as c2 from t_zefkic as ref_0 where t_qrsdpb.c_hhsy0b not in ( select ref_3.wkey as c0 from (t_yynypc as ref_2 left outer join t_zefkic as ref_3 on (ref_2.wkey = ref_3.wkey )) where ref_3.pkey >= ref_2.wkey))
+   > Query (0x7f92c0013cd0): delete from t_qrsdpb where exists ( select ref_0.c_bkmkf as c2 from t_zefkic as ref_0 where t_qrsdpb.c_hhsy0b not in ( select ref_3.wkey as c0 from (t_yynypc as ref_2 left outer join t_zefkic as ref_3 on (ref_2.wkey = ref_3.wkey )) where ref_3.pkey >= ref_2.wkey))
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off

@@ -7,7 +7,7 @@ ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "MDEV-29243"
 LINK = "https://jira.mariadb.org/browse/MDEV-29243"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
-    db_config.DatabaseType.MARIADB, "10.8.3", False
+    db_config.DatabaseType.MARIADB, "10.8.3"
 )
 
 expected_bug_description = "The bug causes a crash of the MariaDB server"
