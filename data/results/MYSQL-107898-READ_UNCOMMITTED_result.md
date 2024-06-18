@@ -3,8 +3,8 @@
 ## Description
 
 Link:                     https://bugs.mysql.com/bug.php?id=107898
-Original isolation level: IsolationLevel.READ_COMMITTED
-Tested isolation level:   IsolationLevel.READ_UNCOMMITTED
+Original isolation level: READ COMMITTED
+Tested isolation level:   READ UNCOMMITTED
 
 
 ## Details

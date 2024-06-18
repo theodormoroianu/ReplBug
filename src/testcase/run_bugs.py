@@ -17,7 +17,8 @@ def run_bugs(patterns: list[str]):
     print(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
     logging.info(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
 
-    for bug_name in bugs_to_run:
+    for idx, bug_name in enumerate(bugs_to_run):
+        print(f"[{idx + 1}/{len(bugs_to_run)}] ", end="", flush=True)
         bugs_to_run[bug_name].run()
 
     if not bugs_to_run:

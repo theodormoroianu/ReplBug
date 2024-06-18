@@ -72,18 +72,6 @@ class Bug:
         )
         file.parent.mkdir(parents=True, exist_ok=True)
 
-        print("Saving results...")
-        # if file.exists():
-        #     print("Result file already exists:")
-        #     content = open(file).readlines()
-        #     content = [" > " + i for i in content]
-        #     print("".join(content))
-        #     print("Do you want to overwrite it? (y/n)")
-        #     answer = input("> ")
-        #     if answer.lower() != "y":
-        #         return
-
-        # print("Please enter the result of the bug (CRL+C to stop):")
         result = [
             f"# Bug ID {self.bug_id}",
             "",
@@ -121,7 +109,7 @@ class Bug:
 
         with open(file, "w") as f:
             f.write("\n".join(result))
-        print(f"Result saved in {file}.")
+        print(f"\n          Result saved in {file}.")
         logging.info(f"Result for {self.bug_id} saved in {file}.")
 
     def run(self):
@@ -129,27 +117,23 @@ class Bug:
         Runs the buggy scenarios
         """
         logging.info(f"Running bug {self.bug_id} on {self.db_and_type}")
-        print(f"Running bug {self.bug_id} on {self.db_and_type}")
+        print(f"Running bug {self.bug_id} on {self.db_and_type}: ", end="", flush=True)
 
         pre_run_instruction = []
         if self.setup_sql_script:
             data = open(self.setup_sql_script).read()
             pre_run_instruction = [testcase_runner.Instruction(None, data)]
-        print(f"Pre-run instructions: {'Yes' if pre_run_instruction else 'No'}")
 
         for nr, scenario_content in enumerate(self.scenarios):
-            print(f"Running scenario #{nr}...")
+            print(f" Scenario #{nr}...", end="", flush=True)
             runner = testcase_runner.TestcaseRunner(
                 name=f"{self.bug_id} - Scenario {nr}",
                 instructions=parse_instructions(scenario_content),
                 db_and_type=self.db_and_type,
                 pre_run_instructions=pre_run_instruction,
             )
-            # try:
             runner.run()
-            # except Exception as e:
-            #     print(f"Error running scenario {nr}: {e}")
-            #     logging.error(f"Error running scenario {nr}: {e}")
             self.testcase_runners.append(runner)
+            print(" Done    ", end="", flush=True)
 
         self._save_result_from_user()

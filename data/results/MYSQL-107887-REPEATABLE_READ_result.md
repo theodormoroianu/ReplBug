@@ -3,8 +3,8 @@
 ## Description
 
 Link:                     https://bugs.mysql.com/bug.php?id=107887
-Original isolation level: IsolationLevel.READ_COMMITTED
-Tested isolation level:   IsolationLevel.REPEATABLE_READ
+Original isolation level: READ COMMITTED
+Tested isolation level:   REPEATABLE READ
 
 
 ## Details

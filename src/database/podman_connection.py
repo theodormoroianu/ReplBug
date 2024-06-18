@@ -177,7 +177,16 @@ class PodmanConnection:
         logging.debug(f"Stopping container {container_id} of type {db_and_version}...")
         try:
             # Try to re-use container
-            db_connection.to_connection().ping()
+            # Make a few SQL queries to check if the DB is still alive
+            conn = db_connection.to_connection()
+            conn.ping()
+            cursor = conn.cursor()
+            cursor.execute("drop database if exists testdb;")
+            cursor.execute("create database testdb;")
+            cursor.execute("create table testdb.testtable (a int);")
+            cursor.execute("insert into testdb.testtable values (1);")
+            cursor.execute("drop table testdb.testtable;")
+
             self.unused_containers[db_and_version].append((container, db_connection))
             self.log_characters_to_ignore[container_id] += len(
                 self.get_logs(container_id)

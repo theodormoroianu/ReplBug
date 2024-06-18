@@ -30,9 +30,11 @@ Tested isolation level:   {isolation_level.value}
 # Iterate through all modules in the current package directory
 for loader, module_name, is_pkg in pkgutil.iter_modules([os.path.dirname(__file__)]):
     module = importlib.import_module(f"{_package_name}.{module_name}")
-    for isolation_level in helpers.IsolationLevel:
-        bug_id = getattr(module, "BUG_ID")
-        db_and_version = getattr(module, "DB_AND_VERSION")
+    bug_id = getattr(module, "BUG_ID")
+    db_and_version = getattr(module, "DB_AND_VERSION")
+
+    # Iterate through all isolation levels for the current database and version
+    for isolation_level in helpers.isolation_levels_for_db_and_version(db_and_version):
         if "get_description" in dir(module):
             description = getattr(module, "get_description")(isolation_level)
         else:

@@ -3,8 +3,8 @@
 ## Description
 
 Link:                     https://bugs.mysql.com/bug.php?id=108528
-Original isolation level: IsolationLevel.REPEATABLE_READ
-Tested isolation level:   IsolationLevel.SERIALIZABLE
+Original isolation level: REPEATABLE READ
+Tested isolation level:   SERIALIZABLE
 
 
 ## Details

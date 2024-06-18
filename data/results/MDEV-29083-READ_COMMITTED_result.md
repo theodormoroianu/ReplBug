@@ -62,7 +62,7 @@ Tested isolation level:   IsolationLevel.READ_COMMITTED
  * Instruction #1:
      - SQL:  insert into t_7sdcgd values (91, 167000, case when exists ( select * from (t_eu...
      - TID: 0
-     - Output: Error: 1242 (21000): Subquery returns more than 1 row
+     - Output: ERROR: 1242 (21000): Subquery returns more than 1 row
  * Instruction #2:
      - SQL:  select * from t_7sdcgd where wkey = 91;
      - TID: 0

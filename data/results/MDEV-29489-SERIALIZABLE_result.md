@@ -41,23 +41,23 @@ Tested isolation level:   SERIALIZABLE
  * Instruction #6:
      - SQL:  delete from t_ywo4_b where t_ywo4_b.c_hlsgr not in ( select ref_0.pkey as c0 fr...
      - TID: 0
-     - Output: Error: 2013 (HY000): Lost connection to MySQL server during query
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
  * Instruction #7:
      - SQL:  delete from t_yfrkzd where (t_yfrkzd.c_aob5e not in ( select ref_1.c_k4lijb as ...
      - TID: 1
-     - Output: Error: 2013 (HY000): Lost connection to MySQL server during query
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
  * Instruction #8:
      - SQL:  ROLLBACK;
      - TID: 1
-     - Output: Error: MySQL Connection not available.
+     - Output: Skipped due to previous error.
  * Instruction #9:
      - SQL:  ROLLBACK;
      - TID: 0
-     - Output: Error: MySQL Connection not available.
+     - Output: Skipped due to previous error.
 
  * Container logs:
    > mysqld: /server/server/storage/innobase/lock/lock0lock.cc:6025: bool lock_trx_has_expl_x_lock(const trx_t&, const dict_table_t&, page_id_t, ulint): Assertion `lock_table_has(&trx, &table, LOCK_IX)' failed.
-   > 240616 12:20:05 [ERROR] mysqld got signal 6 ;
+   > 240618 11:55:01 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -78,34 +78,34 @@ Tested isolation level:   SERIALIZABLE
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f53d8bfeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f53f72b7c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5638a1835c8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5638a03c6b8d]
-   > ??:0(__sigaction)[0x7f53f6650520]
-   > ??:0(pthread_kill)[0x7f53f66a49fc]
-   > ??:0(raise)[0x7f53f6650476]
-   > ??:0(abort)[0x7f53f66367f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f53f663671b]
-   > ??:0(__assert_fail)[0x7f53f6647e96]
-   > lock/lock0lock.cc:6026(lock_trx_has_expl_x_lock(trx_t const&, dict_table_t const&, page_id_t, unsigned long))[0x5638a0f929d1]
-   > row/row0upd.cc:2662(row_upd_clust_step(upd_node_t*, que_thr_t*))[0x5638a125de5b]
-   > row/row0upd.cc:2791(row_upd(upd_node_t*, que_thr_t*))[0x5638a125ede0]
-   > row/row0upd.cc:2933(row_upd_step(que_thr_t*))[0x5638a125fd47]
-   > row/row0mysql.cc:1691(row_update_for_mysql(row_prebuilt_t*))[0x5638a11b7a6e]
-   > /usr/local/mysql/bin/mysqld(+0x2f488db)[0x5638a0dd68db]
-   > handler/ha_innodb.cc:8706(ha_innobase::delete_row(unsigned char const*))[0x5638a040ca5e]
-   > sql/handler.cc:7716(handler::ha_delete_row(unsigned char const*))[0x56389f9de74c]
-   > sql/sql_delete.cc:281(TABLE::delete_row())[0x56389f9d3466]
-   > sql/sql_delete.cc:842(mysql_delete(THD*, TABLE_LIST*, Item*, SQL_I_List<st_order>*, unsigned long long, unsigned long long, select_result*))[0x56389fad3394]
-   > sql/sql_parse.cc:4805(mysql_execute_command(THD*, bool))[0x56389fae9a28]
-   > sql/sql_parse.cc:8035(mysql_parse(THD*, char*, unsigned int, Parser_state*))[0x56389fabf4af]
-   > sql/sql_parse.cc:1896(dispatch_command(enum_server_command, THD*, char*, unsigned int, bool))[0x56389fabc1c2]
-   > sql/sql_parse.cc:1407(do_command(THD*, bool))[0x56389ff7f90e]
-   > sql/sql_connect.cc:1418(do_handle_one_connection(CONNECT*, bool))[0x56389ff7f1b8]
-   > sql/sql_connect.cc:1314(handle_one_connection)[0x5638a0bcc51a]
-   > ??:0(pthread_condattr_setpshared)[0x7f53f66a2ac3]
-   > ??:0(__xmknodat)[0x7f53f6734850]
+   > stack_bottom = 0x7fad8cbfeab0 thread_stack 0x100000
+   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7fadab3aac0e]
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5635bfbadc8f]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5635be73eb8d]
+   > ??:0(__sigaction)[0x7fadaa743520]
+   > ??:0(pthread_kill)[0x7fadaa7979fc]
+   > ??:0(raise)[0x7fadaa743476]
+   > ??:0(abort)[0x7fadaa7297f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fadaa72971b]
+   > ??:0(__assert_fail)[0x7fadaa73ae96]
+   > lock/lock0lock.cc:6026(lock_trx_has_expl_x_lock(trx_t const&, dict_table_t const&, page_id_t, unsigned long))[0x5635bf30a9d1]
+   > row/row0upd.cc:2662(row_upd_clust_step(upd_node_t*, que_thr_t*))[0x5635bf5d5e5b]
+   > row/row0upd.cc:2791(row_upd(upd_node_t*, que_thr_t*))[0x5635bf5d6de0]
+   > row/row0upd.cc:2933(row_upd_step(que_thr_t*))[0x5635bf5d7d47]
+   > row/row0mysql.cc:1691(row_update_for_mysql(row_prebuilt_t*))[0x5635bf52fa6e]
+   > /usr/local/mysql/bin/mysqld(+0x2f488db)[0x5635bf14e8db]
+   > handler/ha_innodb.cc:8706(ha_innobase::delete_row(unsigned char const*))[0x5635be784a5e]
+   > sql/handler.cc:7716(handler::ha_delete_row(unsigned char const*))[0x5635bdd5674c]
+   > sql/sql_delete.cc:281(TABLE::delete_row())[0x5635bdd4b466]
+   > sql/sql_delete.cc:842(mysql_delete(THD*, TABLE_LIST*, Item*, SQL_I_List<st_order>*, unsigned long long, unsigned long long, select_result*))[0x5635bde4b394]
+   > sql/sql_parse.cc:4805(mysql_execute_command(THD*, bool))[0x5635bde61a28]
+   > sql/sql_parse.cc:8035(mysql_parse(THD*, char*, unsigned int, Parser_state*))[0x5635bde374af]
+   > sql/sql_parse.cc:1896(dispatch_command(enum_server_command, THD*, char*, unsigned int, bool))[0x5635bde341c2]
+   > sql/sql_parse.cc:1407(do_command(THD*, bool))[0x5635be2f790e]
+   > sql/sql_connect.cc:1418(do_handle_one_connection(CONNECT*, bool))[0x5635be2f71b8]
+   > sql/sql_connect.cc:1314(handle_one_connection)[0x5635bef4451a]
+   > ??:0(pthread_condattr_setpshared)[0x7fadaa795ac3]
+   > ??:0(__xmknodat)[0x7fadaa827850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
    > Query (0x6290000872a8): delete from t_ywo4_b where t_ywo4_b.c_hlsgr not in ( select ref_0.pkey as c0 from (t_yfrkzd as ref_0 inner join (select ref_1.wkey as c0 from t_yfrkzd as ref_1 ) as subq_0 on (ref_0.wkey = subq_0.c0 )))
