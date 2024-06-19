@@ -10,7 +10,7 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.MARIADB, "10.8.3"
 )
 
-expected_bug_description = "The bug causes a crash of the MariaDB server"
+DESCRIPTION = "The bug causes a crash of the MariaDB server"
 
 
 def get_scenarios(isolation_level: IsolationLevel):

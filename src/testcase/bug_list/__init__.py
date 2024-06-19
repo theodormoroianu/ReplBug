@@ -1,7 +1,7 @@
 import importlib
 import pkgutil
 import os
-from typing import Dict
+from typing import Dict, Optional
 import re
 
 import testcase.helpers as helpers
@@ -19,12 +19,15 @@ def default_get_description(
     link: str,
     original_isl: helpers.IsolationLevel,
     isolation_level: helpers.IsolationLevel,
+    bug_description: Optional[str] = None,
 ):
     return f"""
 Link:                     {link}
 Original isolation level: {original_isl.value}
 Tested isolation level:   {isolation_level.value}
-"""
+""" + (
+        f"Description:              {bug_description}\n" if bug_description else ""
+    )
 
 
 # Iterate through all modules in the current package directory
@@ -32,6 +35,19 @@ for loader, module_name, is_pkg in pkgutil.iter_modules([os.path.dirname(__file_
     module = importlib.import_module(f"{_package_name}.{module_name}")
     bug_id = getattr(module, "BUG_ID")
     db_and_version = getattr(module, "DB_AND_VERSION")
+
+    # Get the SQL setup script. It can be in the file of in a file.
+    sql_setup_script = None
+    if "SETUP_SQL_SCRIPT" in dir(module):
+        sql_setup_script = getattr(module, "SETUP_SQL_SCRIPT")
+    else:
+        sql_setup_script_path = (
+            context.Context.get_context().data_folder_path
+            / "sql"
+            / f"{bug_id}_mysql_bk.sql"
+        )
+        if sql_setup_script_path.exists():
+            sql_setup_script = open(sql_setup_script_path, "r").read()
 
     # Iterate through all isolation levels for the current database and version
     for isolation_level in helpers.isolation_levels_for_db_and_version(db_and_version):
@@ -42,14 +58,14 @@ for loader, module_name, is_pkg in pkgutil.iter_modules([os.path.dirname(__file_
                 getattr(module, "LINK"),
                 getattr(module, "ORIGINAL_ISOLATION_LEVEL"),
                 isolation_level,
+                (
+                    getattr(module, "DESCRIPTION")
+                    if "DESCRIPTION" in dir(module)
+                    else None
+                ),
             )
         scenarios = getattr(module, "get_scenarios")(isolation_level)
 
-        sql_setup_script = (
-            context.Context.get_context().data_folder_path
-            / "sql"
-            / f"{bug_id}_mysql_bk.sql"
-        )
         bug_runner = bug.Bug(
             bug_id=f"{bug_id}-{isolation_level.name}",
             description=description,

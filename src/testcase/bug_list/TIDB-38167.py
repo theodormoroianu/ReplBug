@@ -10,7 +10,7 @@ BUG_ID = "TIDB-38167"
 LINK = "https://github.com/pingcap/tidb/issues/38167"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.3.0")
 
-description = """The database crashes."""
+DESCRIPTION = """The database crashes."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):

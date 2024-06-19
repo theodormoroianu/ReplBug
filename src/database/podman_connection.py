@@ -126,14 +126,15 @@ class PodmanConnection:
                 auto_remove=False,
             )
         except Exception as e:
-            print(
-                "Error creating the container. If it is a local image, make sure it is built."
-            )
             logging.info(
                 "Unable to create the container. Maybe the image is not built?"
             )
-            raise e
-
+            # Log the error and raise a new one
+            logging.error(e)
+            raise Exception(
+                f"Unable to create the container. Maybe the image {image_name}:{tag} is not built or pulled?"
+                + f"\nTry running $ podman pull {image_name}:{tag}"
+            )
         container.start()
         logging.info(f"Container {container.id} started on port {host_port}")
 

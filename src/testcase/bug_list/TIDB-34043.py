@@ -10,7 +10,7 @@ BUG_ID = "TIDB-34043"
 LINK = "https://github.com/pingcap/tidb/issues/34043"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.1.0")
 
-description = """Looses connection to the server."""
+DESCRIPTION = """Looses connection to the server."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):

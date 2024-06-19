@@ -8,7 +8,7 @@ BUG_ID = "TIDB-30412"
 LINK = "https://github.com/pingcap/tidb/issues/30412"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v5.4.0")
 
-description = """In the second case, the insert fails, even though it should not."""
+DESCRIPTION = """In the second case, the insert fails, even though it should not."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):

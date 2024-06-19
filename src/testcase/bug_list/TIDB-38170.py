@@ -10,7 +10,7 @@ BUG_ID = "TIDB-38170"
 LINK = "https://github.com/pingcap/tidb/issues/38170"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.3.0")
 
-description = """It doesn't always output the same number of items."""
+DESCRIPTION = """It doesn't always output the same number of items."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):

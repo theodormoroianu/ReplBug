@@ -52,7 +52,7 @@ class Bug:
         description: str,
         db_and_type: db_config.DatabaseTypeAndVersion,
         scenarios: list[str],
-        setup_sql_script: Optional[pathlib.Path] = None,
+        setup_sql_script: Optional[str] = None,
     ):
         self.bug_id = bug_id
         self.description = description
@@ -81,7 +81,7 @@ class Bug:
             "## Details",
             f" * Database: {self.db_and_type}",
             f" * Number of scenarios: {len(self.scenarios)}",
-            f" * Initial setup script: {self.setup_sql_script}",
+            f" * Initial setup script: {"Yes" if self.setup_sql_script else "No"}",
             "",
             "## Results",
         ]
@@ -121,8 +121,9 @@ class Bug:
 
         pre_run_instruction = []
         if self.setup_sql_script:
-            data = open(self.setup_sql_script).read()
-            pre_run_instruction = [testcase_runner.Instruction(None, data)]
+            pre_run_instruction = [
+                testcase_runner.Instruction(None, self.setup_sql_script)
+            ]
 
         for nr, scenario_content in enumerate(self.scenarios):
             print(f" Scenario #{nr}...", end="", flush=True)

@@ -10,7 +10,7 @@ BUG_ID = "TIDB-38209"
 LINK = "https://github.com/pingcap/tidb/issues/38209"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.3.0")
 
-description = """Error on the first scenario"""
+DESCRIPTION = """Error on the first scenario"""
 
 
 def get_scenarios(isolation_level: IsolationLevel):
