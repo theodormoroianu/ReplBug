@@ -1,0 +1,17 @@
+ID,DBMS,Bug ID,Link,Priority,Status,Transaction Related,Consequence,Isolation Level,,Isolation Level
+1,MySQL,104833,http://bugs.mysql.com/104833,S2 (Serious),Duplicate,Yes,Incorrect database state,"RU, RC",,Read Uncommitted (RU)
+2,MySQL,106629,http://bugs.mysql.com/106629,-,False Positive,Yes,Incorrect database state,"RU, RC",,Read Committed (RC)
+3,MySQL,106655,http://bugs.mysql.com/106655,-,Duplicate,Yes,Incorrect database state,SER,,Repeatable Read (RR)
+4,MySQL,107125,http://bugs.mysql.com/107125,-,False Positive,No,Missing expected error,ALL,,Serializable (SER)
+5,MariaDB,26643,https://jira.mariadb.org/browse/MDEV-26643,Critical,Duplicate,Yes,Incorrect database state,"RU, RC",,
+6,MariaDB,27922,https://jira.mariadb.org/browse/MDEV-27922,Critical,Verified,Yes,Incorrect database state,"RR, SER",,
+7,MariaDB,27992,https://jira.mariadb.org/browse/MDEV-27992,Critical,Fixed,Yes,Incorrect database state,ALL,,
+8,MariaDB,28027,https://jira.mariadb.org/browse/MDEV-28027,Major,Verified,No,Incorrect query result,ALL,,
+9,MariaDB,28040,https://jira.mariadb.org/browse/MDEV-28040,-,Unconfirmed,Yes,Unexpected blocking,ALL,,
+10,MariaDB,28140,https://jira.mariadb.org/browse/MDEV-28140,Major,Verified,No,Missing expected error,ALL,,
+11,MariaDB,28142,https://jira.mariadb.org/browse/MDEV-28142,-,Unconfirmed,No,Missing expected error,ALL,,
+12,TiDB,28092,https://github.com/pingcap/tidb/issues/28092,Moderate,Duplicate,Yes,Reporting unexpected error,"RC, RR",,
+13,TiDB,28095,https://github.com/pingcap/tidb/issues/28095,Minor,Duplicate,Yes,Missing expected error,"RC, RR",,
+14,TiDB,31405,https://github.com/pingcap/tidb/issues/31405,Moderate,Verified,No,Missing expected error,"RC, RR",,
+15,TiDB,33315,https://github.com/pingcap/tidb/issues/33315,Critical,Duplicate,Yes,Incorrect query result,RR,,
+16,TiDB,34177,https://github.com/pingcap/tidb/issues/34177,Moderate,Verified,No,Reporting unexpected error,"RC, RR",,

@@ -1,65 +1,54 @@
 # Master Thesis
 
-This repository contains the source code of a Python application, able to deploy arbitrary versions of the _MySQL_, _MariaDB_ and _TiDB_ DBMSs.
+## Introduction
 
-## Bugs
+This repository contains the source code of a Python application, able to deploy arbitrary versions of the _MySQL_, _MariaDB_ and _TiDB_ DBMSs in order to replicate bugs mentioned in the following papers:
 
-### TxCheck
+* OSDI 2023: _Detecting Transactional Bugs in Database Engines via Graph-Based Oracle Construction_
 
- * Need to add some way to handle bugs that don't occur every time.
-    - https://jira.mariadb.org/browse/MDEV-29398
-    - https://jira.mariadb.org/browse/MDEV-29400
-    - https://jira.mariadb.org/browse/MDEV-29494
+  - This paper presents _TxCheck_, a tool for automatically generating multiple equivalent testcases and running them on database systems for detecting mismatches.
+  - The paper can be found [here](./papers/OSDI2023%20Detecting%20Transactional%20Bugs%20in%20Database%20Engines%20via%20Graph-Based%20Oracle%20Construction.pdf).
+  - The bugs found by _TxCheck_ are listed [here](https://github.com/JZuming/TxCheck/tree/main/docs).
+  - The repository of _TxCheck_ can be found [here](https://github.com/JZuming/TxCheck/).
+* ASE 2022: _Differentially Testing Database Transactions for Fun and Profit_
 
- * Not sure if we should consider those
-    - https://github.com/pingcap/tidb/issues/30413
-    
+  - This paper presents _DT2_, a tool for automatically running testcases on different database systems and comparing the results.
+  - The paper can be found [here](./papers/ASE2022%20Differentially%20Testing%20Database%20Transactions%20for%20Fun%20and%20Profit.pdf).
+  - The bugs found by _DT2_ are listed [here](./papers/ASE2022_DT2_bug_list.csv).
+  - The repository of _DT2_ can be found [here](https://github.com/tcse-iscas/DT2).
+
+## Bugs Not Added Yet
+
+### OSDI 2023 - TxCheck
+
+* Need to add some way to handle bugs that don't occur every time.
+
+  - https://jira.mariadb.org/browse/MDEV-29398
+  - https://jira.mariadb.org/browse/MDEV-29400
+  - https://jira.mariadb.org/browse/MDEV-29494
+* Not sure if we should consider those
+
+  - https://github.com/pingcap/tidb/issues/30413
+
+### ASE 2022
+
+* Some bugs are false positive, not considering them.
 
 ## Installation
 
 To install the _Python_ dependencies, run the following command: `pip3 install -r requirements.txt`.
 
-We do not offer an exact list of the required system packages, as it depends on the operating system. You do **not** need to install the DBMSs manually, as the application will take care of that. Moreover, no other instance of the DBMSs should be running on the system.
+The system needs to have `podman` installed in order to run the databases in containers.
 
 ## Usage
 
- * Configure the `.env` file with the desired settings.
- * Start the application by running the following command: `./src/main.py`. Use the `help` command in the CLI to get a list of all available commands.
+* Configure the `.env` file with the desired settings.
+* Start the application by running the following command: `./src/main.py`. Use the `help` command in the CLI to get a list of all available commands.
 
 ## Running the Databases in Docker
 
-The application uses _Podman_ to manage versions of _MySQL_, _MariaDB_ and _TiDB_ DBMSs. The docker images are pulled from their respective official repositories. The application uses the following images:
+The application uses _Podman_ to manage versions of _MySQL_, _MariaDB_ and _TiDB_ DBMSs. The docker images are pulled from their respective official repositories or built locally by running `(cd dockerfiles && ./build)`. The application uses the following images:
 
- * `mysql:{version}`
- * `mariadb:{version}`
- * `pingcap/tidb:v{version}`
-
-## Running the Databases manually
-
-The application can also run the DBMSs without using _Podman_. The application will download the DBMSs from the official websites and extract them to the `{CACHE_FOLDER_PATH}/databases/` directory (by default `.cache/databases/`). The application will then start the DBMSs using the extracted binaries.
-All downloaded assets are placed in the `{CACHE_FOLDER_PATH}` directory (from `.env`). The application downloads the DBMSs from the official websites, and the URLs are hardcoded in the source code. The application downloads the following DBMSs:
-
-### MySQL
-
-The application downloads the _MySQL_ DBMS from the official website's archives. The URLs where the binaries are downloaded from are:
-
- * `https://dev.mysql.com/get/Downloads/MySQL-{version}/mysql-{version}-linux-glibc2.12-x86_64.tar.xz`, or
- * `https://dev.mysql.com/get/Downloads/MySQL-{version}/mysql-{version}-linux-glibc2.12-x86_64.tar.gz`.
-
-### MariaDB
-
- * `https://mirror.mva-n.net/mariadb/mariadb-{version}/bintar-linux-systemd-x86_64/mariadb-{version}-linux-systemd-x86_64.tar.gz`, or
- * `https://archive.mariadb.org/mariadb-{version}/bintar-linux-systemd-x86_64/mariadb-{version}-linux-systemd-x86_64.tar.gz`.
-
-### TiDB
-
-We use the `tiup` tool to download and install the _TiDB_ DBMS.
-
-The tools are downloaded from [here](https://docs.pingcap.com/tidb/stable/quick-start-with-tidb#simulate-production-deployment-on-a-single-machine).
-
-## Logging
-
-The application logs most of the actions in the `{CACHE_FOLDER_PATH}/logs/` directory (by default `.cache/logs/`). A new log file is created for each run of the application.
-
-
-
+* `mysql:{version}`
+* `mariadb:{version}`
+* `pingcap/tidb:v{version}`
