@@ -32,7 +32,10 @@ This repository contains the source code of a Python application, able to deploy
 
 ### ASE 2022
 
-* Some bugs are false positive, not considering them.
+ * Some bugs are false positive, not considering them.
+ * Some bugs are marked as intentional. Not considering them either.
+    - https://jira.mariadb.org/browse/MDEV-27922
+
 
 ## Installation
 
