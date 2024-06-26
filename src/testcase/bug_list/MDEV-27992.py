@@ -3,7 +3,7 @@ import testcase.bug as bug
 import database.config as db_config
 from testcase.helpers import *
 
-# https://github.com/JZuming/TxCheck/blob/main/docs/mariadb_bugs.md
+# From DT2
 
 ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "MDEV-27992"

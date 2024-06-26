@@ -76,6 +76,15 @@ class DatabaseTypeAndVersion:
 
         raise ValueError(f"Unsupported database type: {self.database_type}")
 
+    def to_remote_docker_image_name(self) -> str:
+        """
+        Returns the remote docker image name.
+        """
+        if self.database_type == DatabaseType.TIDB:
+            return ("docker.io/pingcap/tidb", self.version)
+        else:
+            return (f"docker.io/library/{self.database_type.value}", self.version)
+
 
 class DatabaseConnection:
     """
