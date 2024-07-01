@@ -5,6 +5,7 @@
 Link:                     https://jira.mariadb.org/browse/MDEV-28140
 Original isolation level: REPEATABLE READ
 Tested isolation level:   SERIALIZABLE
+Description:              The second and third scenarios (SELECT and DELETE) should fail like the first one (UPDATE) does.
 
 
 ## Details
@@ -23,14 +24,10 @@ Tested isolation level:   SERIALIZABLE
      - TID: 0
      - Output: None
  * Instruction #2:
-     - SQL:  SELECT * FROM t;
-     - TID: 0
-     - Output: [(b'', None), (b'', 'abc')]
- * Instruction #3:
      - SQL:  UPDATE t SET c2 = 'test' WHERE c1;
      - TID: 0
      - Output: ERROR: 1292 (22007): Truncated incorrect DOUBLE value: ''
- * Instruction #4:
+ * Instruction #3:
      - SQL:  COMMIT;
      - TID: 0
      - Output: Skipped due to previous error.
@@ -48,14 +45,10 @@ Tested isolation level:   SERIALIZABLE
      - TID: 0
      - Output: None
  * Instruction #2:
-     - SQL:  SELECT * FROM t;
-     - TID: 0
-     - Output: [(b'', None), (b'', 'abc')]
- * Instruction #3:
      - SQL:  SELECT * FROM t WHERE c1;
      - TID: 0
      - Output: []
- * Instruction #4:
+ * Instruction #3:
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
@@ -73,14 +66,10 @@ Tested isolation level:   SERIALIZABLE
      - TID: 0
      - Output: None
  * Instruction #2:
-     - SQL:  SELECT * FROM t;
-     - TID: 0
-     - Output: [(b'', None), (b'', 'abc')]
- * Instruction #3:
      - SQL:  DELETE FROM t WHERE c1;
      - TID: 0
      - Output: None
- * Instruction #4:
+ * Instruction #3:
      - SQL:  COMMIT;
      - TID: 0
      - Output: None
