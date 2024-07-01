@@ -2,3 +2,4 @@ requests
 tarfile
 mysql.connector
 podman
+progressbar2

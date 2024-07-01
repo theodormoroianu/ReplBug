@@ -1,12 +1,21 @@
+"""
+This module exposes the "Bug" class, which is responsible for running a bug on a database.
+It handles multiple scenarios, where different SQL instructions are being ran, and saves the
+result in a file.
+
+It relies on the "TestcaseRunner" class to run the scenarios.
+"""
+
 import database.config as db_config
 import pathlib
 from typing import Optional
 import logging
 from context import Context
+from testcase.helpers import Instruction
 import testcase.testcase_runner as testcase_runner
 
 
-def parse_instructions(instructions: str) -> list[testcase_runner.Instruction]:
+def _parse_instructions(instructions: str) -> list[Instruction]:
     """
     Parses a string containing instructions running on multiple connections.
 
@@ -18,27 +27,47 @@ def parse_instructions(instructions: str) -> list[testcase_runner.Instruction]:
     conn_0> insert into a values (1);
     """
     result = []
-    last, conn_last = "", -1
+    instruction_str, conn_last = "", -1
+    nr_instr = 0
 
     for line in instructions.split("\n"):
         line = line.strip()
         if line == "":
             continue
         if line.startswith("conn_"):
-            if last != "":
-                result.append(testcase_runner.Instruction(conn_last, last))
-                last = ""
+            if instruction_str != "":
+                result.append(testcase_runner.Instruction(conn_last, nr_instr, instruction_str))
+                instruction_str = ""
+                nr_instr += 1
 
             prefix, command = line.split(">", 1)
-            last = command
+            instruction_str = command
             conn_last = int(prefix.split("_")[1])
         else:
-            last += " " + line
+            instruction_str += " " + line
 
-    if last != "":
-        result.append(testcase_runner.Instruction(conn_last, last))
+    if instruction_str != "":
+        result.append(testcase_runner.Instruction(conn_last, nr_instr, instruction_str))
 
     return result
+
+def _compute_execution_order(instructions: list[Instruction]) -> list[Optional[int]]:
+    """
+    Computes the execution order of the instructions. It relies on the time the instruction
+    was executed.
+    """
+    execution_times = sorted([
+        (i.executed_time, idx)
+        for idx, i in enumerate(instructions)
+        if i.executed_time is not None
+    ])
+
+    answer = [None for _ in instructions]
+
+    for idx, (_, i) in enumerate(execution_times):
+        answer[i] = idx
+
+    return answer
 
 
 class Bug:
@@ -87,14 +116,16 @@ class Bug:
         ]
         for nr, runner in enumerate(self.testcase_runners):
             result.append(f"### Scenario {nr}")
-            for nr_instr, instr in enumerate(runner.instructions):
+            execution_order = _compute_execution_order(runner.runned_instructions)
+            for nr_instr, instr in enumerate(runner.runned_instructions):
                 result.append(f" * Instruction #{nr_instr}:")
                 sql = instr.instruction.replace("\n", " ").replace("  ", " ")
                 if len(sql) > 80:
                     sql = sql[:80] + "..."
-                result.append(f"     - SQL: {sql}")
-                result.append(f"     - TID: {instr.transaction_id}")
+                result.append(f"     - Instruction: {sql}")
+                result.append(f"     - Transaction: conn_{instr.transaction_id}")
                 result.append(f"     - Output: {instr.output}")
+                result.append(f"     - Executed order: {execution_order[nr_instr] if execution_order[nr_instr] is not None else 'Not executed'}")
             result.append("")
             result.append(" * Container logs:")
             container_logs = [
@@ -122,14 +153,14 @@ class Bug:
         pre_run_instruction = []
         if self.setup_sql_script:
             pre_run_instruction = [
-                testcase_runner.Instruction(None, self.setup_sql_script)
+                testcase_runner.Instruction(None, None, self.setup_sql_script)
             ]
 
         for nr, scenario_content in enumerate(self.scenarios):
             print(f" Scenario #{nr}...", end="", flush=True)
             runner = testcase_runner.TestcaseRunner(
                 name=f"{self.bug_id} - Scenario {nr}",
-                instructions=parse_instructions(scenario_content),
+                instructions=_parse_instructions(scenario_content),
                 db_and_type=self.db_and_type,
                 pre_run_instructions=pre_run_instruction,
             )

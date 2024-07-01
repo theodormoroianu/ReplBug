@@ -1,9 +1,9 @@
 from typing import Dict
-import testcase.bug
-import testcase.bug_list
-import re
-import testcase.bug as bug
+import progressbar
 import logging
+
+import testcase.bug_list
+import testcase.bug as bug
 
 
 def run_bugs(patterns: list[str]):
@@ -17,8 +17,10 @@ def run_bugs(patterns: list[str]):
     print(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
     logging.info(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
 
-    for idx, bug_name in enumerate(bugs_to_run):
-        print(f"[{idx + 1}/{len(bugs_to_run)}] ", end="", flush=True)
+    progressbar.streams.wrap_stderr()
+    progressbar.streams.wrap_stdout()
+
+    for idx, bug_name in progressbar.progressbar(list(enumerate(bugs_to_run))):
         bugs_to_run[bug_name].run()
 
     if not bugs_to_run:

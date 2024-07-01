@@ -1,4 +1,17 @@
-from typing import Callable, List, Dict, Tuple, Union
+"""
+This module exposes a class able to run a single testcase of a bug.
+
+Basically, this class receives:
+ - A list of instructions to initialize the database.
+ - A list of instructions to run concurrently, for each instruction the transaction
+   id being provided.
+
+After the "run" method is called, the object will contain in the "runned_instructions"
+attribute the result of the instructions.
+"""
+
+import copy
+from typing import Callable, List, Dict, Optional, Tuple, Union
 import logging
 import mysql.connector
 import mysql.connector.cursor
@@ -8,101 +21,12 @@ import time
 
 import database.config as db_config
 import database.provide_db_container as db_provider
-
-# Timeout for a transaction to wait for a lock
-LOCK_WAIT_TIMEOUT = 3
-# Time between concurent operations
-OPERATIONS_GAP = 0.3
-# Timeout for receiving the output of the instructions
-OUTPUT_TIMEOUT = 10
-
-
-class Instruction:
-    """
-    Represents a single instruction to be run in a testcase
-    """
-
-    def __init__(
-        self,
-        transaction_id: Union[int, None],
-        instruction: str,
-        validator: Callable[[str], bool] = None,
-    ):
-        self.transaction_id = transaction_id
-        self.instruction = instruction
-        self.validator = validator
-        self.output = None
-
-    def __repr__(self):
-        return f"Instruction(transaction_id={self.transaction_id}, instruction={self.instruction})"
-
-
-class TransactionProcess(multiprocessing.Process):
-    def __init__(
-        self,
-        conn: db_config.DatabaseConnection,
-        instructions_to_run_queue: Queue[Tuple[int, str]],
-        instruction_output_queue: Queue[Tuple[int, str]],
-    ):
-        """
-        Initialize the transaction process, which will run the instructions.
-
-        :param conn: The connection to the database.
-        :param instructions_to_run_queue: The queue with the instructions to run: (instruction nr, instruction).\
-            the instruction nr is the order of the instruction in ALL OF THE INSTRUCTIONS for that testcase.
-        :param instruction_output_queue: The queue where the output of the instructions will be put: (instruction nr, output).
-        """
-        super().__init__()
-        self.conn = conn
-        self.instructions_to_run_queue = instructions_to_run_queue
-        self.instruction_output_queue = instruction_output_queue
-
-    def run(self):
-        connection = self.conn.to_connection(autocommit=True)
-
-        # Pick database and set timeout
-        connection.cursor().execute("use testdb;")
-
-        # set timeout of 3 seconds for lock wait
-        connection.cursor().execute(
-            f"SET SESSION innodb_lock_wait_timeout = {LOCK_WAIT_TIMEOUT};"
-        )
-
-        # Flag to indicate if an error was encountered by one of the operations in this thread
-        self.encountered_error = False
-
-        # Run instructions as they come
-        while True:
-            instruction_tuple = self.instructions_to_run_queue.get()
-            if instruction_tuple is None:
-                # Quit the process
-                break
-            instruction_nr, instruction_str = instruction_tuple
-            if self.encountered_error:
-                # Skip the instruction if an error was encountered
-                output = "Skipped due to previous error."
-            else:
-                try:
-                    cursor = connection.cursor()
-                    cursor.execute(instruction_str)
-                    output = None
-                    if cursor.with_rows:
-                        output = cursor.fetchall()
-                except mysql.connector.errors.OperationalError as e:
-                    self.encountered_error = True
-                    output = f"ERROR: {e}"
-                except mysql.connector.errors.DatabaseError as e:
-                    self.encountered_error = True
-                    output = f"ERROR: {e}"
-                except Exception as e:
-                    self.encountered_error = True
-                    output = f"ERROR: {e}"
-
-            # Send the result
-            self.instruction_output_queue.put((instruction_nr, output))
-
-        self.instruction_output_queue.put(None)
-        connection.close()
+from testcase.helpers import (
+    MYSQL_CONNECTION_GAP_BETWEEN_INSTRUCTIONS_S,
+    MYSQL_CONNECTION_TRANSACTION_WAIT_TIMEOUT_S,
+    Instruction,
+)
+from testcase.transaction_runner import TransactionProcess
 
 
 class TestcaseRunner:
@@ -118,7 +42,12 @@ class TestcaseRunner:
         pre_run_instructions: List[Instruction] = None,
     ):
         self.name = name
-        self.instructions = instructions
+        # Instructions we have to run on separate InstructionProcess processes.
+        self.instructions_to_run = instructions
+        # The result of the instructions. If None, the instruction is not run yet.
+        self.runned_instructions: List[Optional[Instruction]] = [
+            None for _ in instructions
+        ]
         self.db_and_type = db_and_type
         self.pre_run_instructions = pre_run_instructions
         self.db_server_logs = None
@@ -153,8 +82,9 @@ class TestcaseRunner:
                                 print(f"Output for pre-run instruction: {output}")
                 except mysql.connector.errors.DatabaseError as e:
                     logging.error(f"Error running pre-run instructions: {e}")
-                    for instr in self.instructions:
+                    for instr in self.instructions_to_run:
                         instr.output = "Skipped due to error in pre-run instructions."
+                    self.runned_instructions = self.instructions_to_run
                     return
             conn.close()
             time.sleep(1)
@@ -163,14 +93,15 @@ class TestcaseRunner:
             transaction_id_to_process: Dict[int, TransactionProcess] = {}
             # Queues for the instructions to run and the output of the instructions
             transaction_id_to_instructions_queue: Dict[
-                int, multiprocessing.Queue[Tuple[int, str]]
+                int, multiprocessing.Queue[Instruction]
             ] = {}
             transaction_id_to_output_queue: Dict[
-                int, multiprocessing.Queue[Tuple[int, str]]
+                int, multiprocessing.Queue[Instruction]
             ] = {}
 
             logging.info("Running instructions...")
-            for instruction_idx, instruction in enumerate(self.instructions):
+            for instruction_idx, instruction in enumerate(self.instructions_to_run):
+                assert instruction.instruction_nr == instruction_idx
                 assert instruction.transaction_id is not None
                 logging.info(f"Running instruction: {instruction.instruction}")
 
@@ -194,12 +125,13 @@ class TestcaseRunner:
                     )
 
                 # Add the instruction to the corresponding process
+                instruction.dispatched_time = time.time()
                 transaction_id_to_instructions_queue[instruction.transaction_id].put(
-                    (instruction_idx, instruction.instruction)
+                    copy.deepcopy(instruction)
                 )
 
                 # Sleep for the gap between operations
-                time.sleep(OPERATIONS_GAP)
+                time.sleep(MYSQL_CONNECTION_GAP_BETWEEN_INSTRUCTIONS_S)
 
             # Now that we sent all the instructions, we:
             # - send None to the instruction queues to signal the end of the instructions
@@ -211,26 +143,22 @@ class TestcaseRunner:
             ) in transaction_id_to_instructions_queue.items():
                 instructions_q.put(None)
 
-            # First mark all instructions as timeout, and then overwrite the ones that have output
-            for instruction in self.instructions:
-                instruction.output = "ERROR: Timeout for this transaction."
-
             # Wait for the output of the instructions
             output_queues_to_process = list(transaction_id_to_output_queue.values())
 
-            for _ in range(OUTPUT_TIMEOUT):
+            for _ in range(MYSQL_CONNECTION_TRANSACTION_WAIT_TIMEOUT_S):
                 non_empty_queues = []
                 for output_q in output_queues_to_process:
                     # Get as many outputs from the queue as possible
                     while True:
                         try:
-                            output = output_q.get(block=False)
+                            runned_instruction = output_q.get(block=False)
                             # gracefully finish the process
-                            if output is None:
+                            if runned_instruction is None:
                                 break
-                            # if we got an output, mark the instruction as successful
-                            instruction_idx, output = output
-                            self.instructions[instruction_idx].output = output
+                            self.runned_instructions[
+                                runned_instruction.instruction_nr
+                            ] = runned_instruction
                         except:
                             non_empty_queues.append(output_q)
                             break
@@ -240,6 +168,15 @@ class TestcaseRunner:
                     break
                 output_queues_to_process = non_empty_queues
                 time.sleep(1)
+
+            for instruction_nr in range(len(self.instructions_to_run)):
+                if self.runned_instructions[instruction_nr] is None:
+                    self.runned_instructions[instruction_nr] = copy.deepcopy(
+                        self.instructions_to_run[instruction_nr]
+                    )
+                    self.runned_instructions[instruction_nr].output = (
+                        "ERROR: Timeout for this transaction."
+                    )
 
             # kill all the processes
             for _, process in transaction_id_to_process.items():

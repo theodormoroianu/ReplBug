@@ -16,63 +16,75 @@ Description:              The second and third scenarios (SELECT and DELETE) sho
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  BEGIN;
-     - TID: 0
+     - Instruction:  BEGIN;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  UPDATE t SET c2 = 'test' WHERE c1;
-     - TID: 0
+     - Instruction:  UPDATE t SET c2 = 'test' WHERE c1;
+     - Transaction: conn_0
      - Output: ERROR: 1292 (22007): Truncated incorrect DOUBLE value: ''
+     - Executed order: Not executed
  * Instruction #3:
-     - SQL:  COMMIT;
-     - TID: 0
-     - Output: Skipped due to previous error.
+     - Instruction:  COMMIT;
+     - Transaction: conn_0
+     - Output: None
+     - Executed order: 2
 
  * Container logs:
    No logs available.
 
 ### Scenario 1
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  BEGIN;
-     - TID: 0
+     - Instruction:  BEGIN;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  SELECT * FROM t WHERE c1;
-     - TID: 0
+     - Instruction:  SELECT * FROM t WHERE c1;
+     - Transaction: conn_0
      - Output: []
+     - Executed order: 2
  * Instruction #3:
-     - SQL:  COMMIT;
-     - TID: 0
+     - Instruction:  COMMIT;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 3
 
  * Container logs:
    No logs available.
 
 ### Scenario 2
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  BEGIN;
-     - TID: 0
+     - Instruction:  BEGIN;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  DELETE FROM t WHERE c1;
-     - TID: 0
+     - Instruction:  DELETE FROM t WHERE c1;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 2
  * Instruction #3:
-     - SQL:  COMMIT;
-     - TID: 0
+     - Instruction:  COMMIT;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 3
 
  * Container logs:
    No logs available.
