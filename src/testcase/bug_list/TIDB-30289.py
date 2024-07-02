@@ -8,6 +8,8 @@ BUG_ID = "TIDB-30289"
 LINK = "https://github.com/pingcap/tidb/issues/30289"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v5.4.0")
 
+DESCRIPTION = "The server crashes in the second test"
+
 
 def get_scenarios(isolation_level: IsolationLevel):
     return [

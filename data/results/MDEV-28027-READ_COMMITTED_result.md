@@ -16,21 +16,25 @@ Description:              Mismatch between MySQL and MariaDB: in Mariadb, RAND('
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  BEGIN;
-     - TID: 0
+     - Instruction:  BEGIN;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  SELECT * FROM t WHERE RAND('t');
-     - TID: 0
+     - Instruction:  SELECT * FROM t WHERE RAND('t');
+     - Transaction: conn_0
      - Output: [(2,), (1,)]
+     - Executed order: 2
  * Instruction #3:
-     - SQL:  COMMIT;
-     - TID: 0
+     - Instruction:  COMMIT;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 3
 
  * Container logs:
    No logs available.

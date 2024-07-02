@@ -10,7 +10,7 @@ BUG_ID = "TIDB-36928"
 LINK = "https://github.com/pingcap/tidb/issues/36928"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.1.0")
 
-DESCRIPTION = """The two tests give a different result."""
+DESCRIPTION = """The two tests give a different result, second tests throws "Truncated incorrect DOUBLE value"."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):

@@ -16,41 +16,50 @@ Description:              The delete from conn_1 should block, wait for conn_0 t
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  BEGIN;
-     - TID: 0
+     - Instruction:  BEGIN;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  BEGIN;
-     - TID: 1
+     - Instruction:  BEGIN;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 2
  * Instruction #3:
-     - SQL:  UPDATE t SET c1 = 5, c2 = 5;
-     - TID: 0
+     - Instruction:  UPDATE t SET c1 = 5, c2 = 5;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 3
  * Instruction #4:
-     - SQL:  DELETE FROM t;
-     - TID: 1
+     - Instruction:  DELETE FROM t;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 5
  * Instruction #5:
-     - SQL:  UPDATE t SET c1 = 3;
-     - TID: 0
+     - Instruction:  UPDATE t SET c1 = 3;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 4
  * Instruction #6:
-     - SQL:  COMMIT;
-     - TID: 0
+     - Instruction:  COMMIT;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 6
  * Instruction #7:
-     - SQL:  SELECT * FROM t FOR UPDATE;
-     - TID: 1
+     - Instruction:  SELECT * FROM t FOR UPDATE;
+     - Transaction: conn_1
      - Output: [(3, 5)]
+     - Executed order: 7
  * Instruction #8:
-     - SQL:  ROLLBACK;
-     - TID: 1
+     - Instruction:  ROLLBACK;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 8
 
  * Container logs:
    No logs available.

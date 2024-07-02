@@ -10,15 +10,12 @@ BUG_ID = "TIDB-38150"
 LINK = "https://github.com/pingcap/tidb/issues/38150"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.3.0")
 
-DESCRIPTION = """The first select should return the same result as the second select, but it does not."""
+DESCRIPTION = """The first select should return the same number of rows as the second select, but it does not."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):
-    return [
-        f"""
-        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
-        conn_0> START TRANSACTION;
-        conn_0> select
+    op = """
+    conn_0> select
             t_cp0sl.wkey as c0,
             t_cp0sl.pkey as c1,
             t_cp0sl.c_1_kgbc as c2,
@@ -67,6 +64,13 @@ def get_scenarios(isolation_level: IsolationLevel):
         from
         t_cp0sl
         where wkey = 59;
+    """
+    return [
+        op,
+        f"""
+        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+        conn_0> START TRANSACTION;
+        {op}
         conn_0> COMMIT;
         """,
     ]

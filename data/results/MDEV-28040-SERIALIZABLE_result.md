@@ -5,7 +5,7 @@
 Link:                     https://jira.mariadb.org/browse/MDEV-28140
 Original isolation level: REPEATABLE READ
 Tested isolation level:   SERIALIZABLE
-Description:              The second and third scenarios (SELECT and DELETE) should fail like the first one (UPDATE) does.
+Description:              The locks are not released in a timely manner. This does not seem to be a bug though.
 
 
 ## Details

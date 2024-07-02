@@ -5,55 +5,65 @@
 Link:                     https://jira.mariadb.org/browse/MDEV-29118
 Original isolation level: REPEATABLE READ
 Tested isolation level:   READ UNCOMMITTED
+Description:              This makes MariaDB crash.
 
 
 ## Details
  * Database: mariadb-10.8.3
  * Number of scenarios: 1
- * Initial setup script: /home/theodor/Projects/MasterThesis/data/sql/MDEV-29118_mysql_bk.sql
+ * Initial setup script: Yes
 
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-     - TID: 1
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  START TRANSACTION;
-     - TID: 0
+     - Instruction:  START TRANSACTION;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 2
  * Instruction #3:
-     - SQL:  delete from t_davsbd;
-     - TID: 0
+     - Instruction:  delete from t_davsbd;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 3
  * Instruction #4:
-     - SQL:  START TRANSACTION;
-     - TID: 1
+     - Instruction:  START TRANSACTION;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 4
  * Instruction #5:
-     - SQL:  insert into t_iqij_c (wkey, pkey, c_svp9sc, c_anyvkb) values (115, 222000, ASCI...
-     - TID: 1
+     - Instruction:  insert into t_iqij_c (wkey, pkey, c_svp9sc, c_anyvkb) values (115, 222000, ASCI...
+     - Transaction: conn_1
      - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
+     - Executed order: Not executed
  * Instruction #6:
-     - SQL:  update t_j4mbqd set wkey = 190;
-     - TID: 0
+     - Instruction:  update t_j4mbqd set wkey = 190;
+     - Transaction: conn_0
      - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
+     - Executed order: Not executed
  * Instruction #7:
-     - SQL:  ROLLBACK;
-     - TID: 0
-     - Output: Skipped due to previous error.
+     - Instruction:  ROLLBACK;
+     - Transaction: conn_0
+     - Output: ERROR: MySQL Connection not available.
+     - Executed order: Not executed
  * Instruction #8:
-     - SQL:  ROLLBACK;
-     - TID: 1
-     - Output: Skipped due to previous error.
+     - Instruction:  ROLLBACK;
+     - Transaction: conn_1
+     - Output: ERROR: MySQL Connection not available.
+     - Executed order: Not executed
 
  * Container logs:
    > mysqld: /server/server/storage/innobase/lock/lock0lock.cc:4972: dberr_t lock_rec_insert_check_and_lock(const rec_t*, buf_block_t*, dict_index_t*, que_thr_t*, mtr_t*, bool*): Assertion `lock_table_has(trx, index->table, LOCK_IX)' failed.
-   > 240618 16:04:57 [ERROR] mysqld got signal 6 ;
+   > 240701 15:04:52 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -70,45 +80,45 @@ Tested isolation level:   READ UNCOMMITTED
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468121 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x7fb960000dc8
+   > Thread pointer: 0x7f59e4000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7fb9dc168c78 thread_stack 0x49000
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55c81d45708f]
-   > sql/signal_handler.cc:226(handle_fatal_signal)[0x55c81cb5165d]
-   > ??:0(__sigaction)[0x7fb9df352520]
-   > ??:0(pthread_kill)[0x7fb9df3a69fc]
-   > ??:0(raise)[0x7fb9df352476]
-   > ??:0(abort)[0x7fb9df3387f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fb9df33871b]
-   > ??:0(__assert_fail)[0x7fb9df349e96]
-   > lock/lock0lock.cc:4974(lock_rec_insert_check_and_lock(unsigned char const*, buf_block_t*, dict_index_t*, que_thr_t*, mtr_t*, bool*))[0x55c81d03372a]
-   > btr/btr0cur.cc:3268(btr_cur_ins_lock_and_undo(unsigned long, btr_cur_t*, dtuple_t*, que_thr_t*, mtr_t*, bool*))[0x55c81d249f9f]
-   > btr/btr0cur.cc:3513(btr_cur_optimistic_insert(unsigned long, btr_cur_t*, unsigned short**, mem_block_info_t**, dtuple_t*, unsigned char**, big_rec_t**, unsigned long, que_thr_t*, mtr_t*))[0x55c81d24ae67]
-   > row/row0ins.cc:2754(row_ins_clust_index_entry_low(unsigned long, unsigned long, dict_index_t*, unsigned long, dtuple_t*, unsigned long, que_thr_t*))[0x55c81d121004]
-   > row/row0ins.cc:3156(row_ins_clust_index_entry(dict_index_t*, dtuple_t*, que_thr_t*, unsigned long))[0x55c81d122694]
-   > row/row0ins.cc:3293(row_ins_index_entry(dict_index_t*, dtuple_t*, que_thr_t*))[0x55c81d122cf3]
-   > row/row0ins.cc:3461(row_ins_index_entry_step(ins_node_t*, que_thr_t*))[0x55c81d123649]
-   > row/row0ins.cc:3608(row_ins(ins_node_t*, que_thr_t*))[0x55c81d123bc2]
-   > row/row0ins.cc:3754(row_ins_step(que_thr_t*))[0x55c81d1245a2]
-   > row/row0mysql.cc:1320(row_insert_for_mysql(unsigned char const*, row_prebuilt_t*, ins_mode_t))[0x55c81d1496b2]
-   > handler/ha_innodb.cc:7842(ha_innobase::write_row(unsigned char const*))[0x55c81cf6c5b3]
-   > sql/handler.cc:7549(handler::ha_write_row(unsigned char const*))[0x55c81cb6bd63]
-   > sql/sql_insert.cc:2161(write_record(THD*, TABLE*, st_copy_info*, select_result*))[0x55c81c72b3e2]
-   > sql/sql_insert.cc:1132(mysql_insert(THD*, TABLE_LIST*, List<Item>&, List<List<Item> >&, List<Item>&, List<Item>&, enum_duplicates, bool, select_result*))[0x55c81c727f05]
-   > sql/sql_parse.cc:4562(mysql_execute_command(THD*, bool))[0x55c81c77eb67]
-   > sql/sql_parse.cc:8027(mysql_parse(THD*, char*, unsigned int, Parser_state*))[0x55c81c78a86e]
-   > sql/sql_parse.cc:1896(dispatch_command(enum_server_command, THD*, char*, unsigned int, bool))[0x55c81c77675d]
-   > sql/sql_parse.cc:1407(do_command(THD*, bool))[0x55c81c7750cf]
-   > sql/sql_connect.cc:1418(do_handle_one_connection(CONNECT*, bool))[0x55c81c9577d3]
-   > sql/sql_connect.cc:1314(handle_one_connection)[0x55c81c957460]
-   > perfschema/pfs.cc:2203(pfs_spawn_thread)[0x55c81ce84e81]
-   > ??:0(pthread_condattr_setpshared)[0x7fb9df3a4ac3]
-   > ??:0(__xmknodat)[0x7fb9df436850]
+   > stack_bottom = 0x7f5a5a101c78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55e46cf6108f]
+   > sql/signal_handler.cc:226(handle_fatal_signal)[0x55e46c65b65d]
+   > ??:0(__sigaction)[0x7f5a5c68e520]
+   > ??:0(pthread_kill)[0x7f5a5c6e29fc]
+   > ??:0(raise)[0x7f5a5c68e476]
+   > ??:0(abort)[0x7f5a5c6747f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f5a5c67471b]
+   > ??:0(__assert_fail)[0x7f5a5c685e96]
+   > lock/lock0lock.cc:4974(lock_rec_insert_check_and_lock(unsigned char const*, buf_block_t*, dict_index_t*, que_thr_t*, mtr_t*, bool*))[0x55e46cb3d72a]
+   > btr/btr0cur.cc:3268(btr_cur_ins_lock_and_undo(unsigned long, btr_cur_t*, dtuple_t*, que_thr_t*, mtr_t*, bool*))[0x55e46cd53f9f]
+   > btr/btr0cur.cc:3513(btr_cur_optimistic_insert(unsigned long, btr_cur_t*, unsigned short**, mem_block_info_t**, dtuple_t*, unsigned char**, big_rec_t**, unsigned long, que_thr_t*, mtr_t*))[0x55e46cd54e67]
+   > row/row0ins.cc:2754(row_ins_clust_index_entry_low(unsigned long, unsigned long, dict_index_t*, unsigned long, dtuple_t*, unsigned long, que_thr_t*))[0x55e46cc2b004]
+   > row/row0ins.cc:3156(row_ins_clust_index_entry(dict_index_t*, dtuple_t*, que_thr_t*, unsigned long))[0x55e46cc2c694]
+   > row/row0ins.cc:3293(row_ins_index_entry(dict_index_t*, dtuple_t*, que_thr_t*))[0x55e46cc2ccf3]
+   > row/row0ins.cc:3461(row_ins_index_entry_step(ins_node_t*, que_thr_t*))[0x55e46cc2d649]
+   > row/row0ins.cc:3608(row_ins(ins_node_t*, que_thr_t*))[0x55e46cc2dbc2]
+   > row/row0ins.cc:3754(row_ins_step(que_thr_t*))[0x55e46cc2e5a2]
+   > row/row0mysql.cc:1320(row_insert_for_mysql(unsigned char const*, row_prebuilt_t*, ins_mode_t))[0x55e46cc536b2]
+   > /usr/local/mysql/bin/mysqld(+0x11c65b3)[0x55e46ca765b3]
+   > handler/ha_innodb.cc:7842(ha_innobase::write_row(unsigned char const*))[0x55e46c675d63]
+   > sql/handler.cc:7549(handler::ha_write_row(unsigned char const*))[0x55e46c2353e2]
+   > sql/sql_insert.cc:2161(write_record(THD*, TABLE*, st_copy_info*, select_result*))[0x55e46c231f05]
+   > sql/sql_insert.cc:1132(mysql_insert(THD*, TABLE_LIST*, List<Item>&, List<List<Item> >&, List<Item>&, List<Item>&, enum_duplicates, bool, select_result*))[0x55e46c288b67]
+   > sql/sql_parse.cc:4562(mysql_execute_command(THD*, bool))[0x55e46c29486e]
+   > sql/sql_parse.cc:8027(mysql_parse(THD*, char*, unsigned int, Parser_state*))[0x55e46c28075d]
+   > sql/sql_parse.cc:1896(dispatch_command(enum_server_command, THD*, char*, unsigned int, bool))[0x55e46c27f0cf]
+   > sql/sql_parse.cc:1407(do_command(THD*, bool))[0x55e46c4617d3]
+   > sql/sql_connect.cc:1418(do_handle_one_connection(CONNECT*, bool))[0x55e46c461460]
+   > sql/sql_connect.cc:1314(handle_one_connection)[0x55e46c98ee81]
+   > ??:0(pthread_condattr_setpshared)[0x7f5a5c6e0ac3]
+   > ??:0(__xmknodat)[0x7f5a5c772850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x7fb960013cd0): insert into t_iqij_c (wkey, pkey, c_svp9sc, c_anyvkb) values (115, 222000, ASCII('w_3pab'), null), (115, 223000, CHAR_LENGTH( case when ((select wkey from t_j4mbqd order by wkey limit 1 offset 34) in (select ref_0.pkey as c0 from t_davsbd as ref_0)) then 'k0hpvb' else 'sss' end), null)
+   > Query (0x7f59e4013cd0): insert into t_iqij_c (wkey, pkey, c_svp9sc, c_anyvkb) values (115, 222000, ASCII('w_3pab'), null), (115, 223000, CHAR_LENGTH( case when ((select wkey from t_j4mbqd order by wkey limit 1 offset 34) in (select ref_0.pkey as c0 from t_davsbd as ref_0)) then 'k0hpvb' else 'sss' end), null)
    > Connection ID (thread ID): 6
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -124,15 +134,15 @@ Tested isolation level:   READ UNCOMMITTED
    > Max stack size            8388608              unlimited            bytes     
    > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
-   > Max processes             61166                61166                processes 
+   > Max processes             61161                61161                processes 
    > Max open files            524288               524288               files     
    > Max locked memory         8388608              8388608              bytes     
    > Max address space         unlimited            unlimited            bytes     
    > Max file locks            unlimited            unlimited            locks     
-   > Max pending signals       61166                61166                signals   
+   > Max pending signals       61161                61161                signals   
    > Max msgqueue size         819200               819200               bytes     
    > Max nice priority         0                    0                    
    > Max realtime priority     0                    0                    
-   > Max realtime timeout      unlimited            unlimited            us        
+   > Max realtime timeout      200000               200000               us        
    > Core pattern: |/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h
    > Fatal signal 11 while backtracing

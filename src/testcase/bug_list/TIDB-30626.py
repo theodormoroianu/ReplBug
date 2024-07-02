@@ -15,6 +15,19 @@ def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""
         conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+        conn_0> insert into t_cvooz values
+        (81, case when trim('p9u_9c') <= (
+            select
+                'vnsgnd' as c0
+            from
+                (t_ljlaub as ref_3
+                cross join t_ljlaub as ref_4
+                )
+            ) then 87 else 26 end
+        , 44.67, 60, null);
+        """,
+        f"""
+        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
         conn_0> start transaction;
         conn_0> insert into t_cvooz values
         (81, case when trim('p9u_9c') <= (

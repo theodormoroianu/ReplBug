@@ -16,37 +16,45 @@ Description:              The first row should be 20, but is 1 (not updated)
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - SQL:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-     - TID: 0
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 0
  * Instruction #1:
-     - SQL:  begin;
-     - TID: 0
+     - Instruction:  begin;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 1
  * Instruction #2:
-     - SQL:  update t set a = 10 where 1;
-     - TID: 0
+     - Instruction:  update t set a = 10 where 1;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 2
  * Instruction #3:
-     - SQL:  begin;
-     - TID: 1
+     - Instruction:  begin;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 3
  * Instruction #4:
-     - SQL:  update t set b = 20 where a;
-     - TID: 1
+     - Instruction:  update t set b = 20 where a;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 4
  * Instruction #5:
-     - SQL:  commit;
-     - TID: 0
+     - Instruction:  commit;
+     - Transaction: conn_0
      - Output: None
+     - Executed order: 5
  * Instruction #6:
-     - SQL:  commit;
-     - TID: 1
+     - Instruction:  commit;
+     - Transaction: conn_1
      - Output: None
+     - Executed order: 6
  * Instruction #7:
-     - SQL:  select * from t;
-     - TID: 2
+     - Instruction:  select * from t;
+     - Transaction: conn_2
      - Output: [(10, 20), (10, 20), (10, 20), (10, 20), (10, 20)]
+     - Executed order: 7
 
  * Container logs:
    No logs available.

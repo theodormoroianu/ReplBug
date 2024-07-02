@@ -10,7 +10,7 @@ BUG_ID = "TIDB-34222"
 LINK = "https://github.com/pingcap/tidb/issues/34222"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.1.0")
 
-DESCRIPTION = """Looses connection to the server."""
+DESCRIPTION = """Second scenario fails with "BIGING UNSIGNED value out of range" """
 
 
 def get_scenarios(isolation_level: IsolationLevel):

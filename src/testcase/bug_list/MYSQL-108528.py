@@ -22,8 +22,10 @@ def get_scenarios(isolation_level: IsolationLevel):
     conn_0> START TRANSACTION;
     conn_0> select * from t_g6ckkb;
     conn_1> COMMIT;
-    conn_0> select * from t_rpjlsd where t_rpjlsd.c_pfd8ab <= (select min(wkey) from t_g6ckkb); 
-    conn_0> update t_rpjlsd set wkey = 63 where t_rpjlsd.c_pfd8ab <= (select min(wkey) from t_g6ckkb);
+    conn_0> select * from t_rpjlsd where
+        t_rpjlsd.c_pfd8ab <= (select min(wkey) from t_g6ckkb); 
+    conn_0> update t_rpjlsd set wkey = 63 where
+        t_rpjlsd.c_pfd8ab <= (select min(wkey) from t_g6ckkb);
     conn_0> select * from t_rpjlsd where wkey = 63;
     conn_0> COMMIT;
     """

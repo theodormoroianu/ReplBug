@@ -8,6 +8,8 @@ BUG_ID = "TIDB-30397"
 LINK = "https://github.com/pingcap/tidb/issues/30397"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v5.4.0")
 
+DESCRIPTION = "The two resulting tables are different."
+
 
 def get_scenarios(isolation_level: IsolationLevel):
     return [

@@ -92,4 +92,5 @@ def get_scenarios(isolation_level: IsolationLevel):
         """,
         ]
         * 5
+        + [instruction] * 5
     )

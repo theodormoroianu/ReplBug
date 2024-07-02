@@ -27,6 +27,7 @@ def get_scenarios(isolation_level: IsolationLevel):
                             from
                             t_smmcv as ref_13
                         ) then 101 else 57 end;
+        conn_0> COMMIT;
         """,
         f"""
         conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};

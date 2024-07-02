@@ -17,6 +17,9 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
 )
 
 
+DESCRIPTION = "The two returned tables should be equal."
+
+
 def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""
@@ -25,10 +28,8 @@ def get_scenarios(isolation_level: IsolationLevel):
 
     conn_0> START TRANSACTION;
     conn_1> START TRANSACTION; 
-
-    delete from t_8fhx8c;
-
-    ROLLBACK;
+    conn_1> delete from t_8fhx8c;
+    conn_1> ROLLBACK;
 
     conn_0> select *
     from

@@ -13,6 +13,9 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
 )
 
 
+DESCRIPTION = "The two scenarios should produce the same result."
+
+
 def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""

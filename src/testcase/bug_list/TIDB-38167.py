@@ -14,10 +14,7 @@ DESCRIPTION = """The database crashes."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):
-    return [
-        f"""
-        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
-        conn_0> START TRANSACTION;
+    op = """
         conn_0> update t_emmxx set
             wkey = 308
             where 1 <= (case when t_emmxx.c_oh0c3 is not NULL then 28 else case when exists (
@@ -45,6 +42,13 @@ def get_scenarios(isolation_level: IsolationLevel):
                 );
 
         conn_0> select 1;
+    """
+    return [
+        op,
+        f"""
+        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+        conn_0> START TRANSACTION;
+        {op}
         conn_0> COMMIT;
         """,
     ]

@@ -9,10 +9,14 @@ LINK = "https://github.com/pingcap/tidb/issues/30326"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v5.4.0")
 
 
+DESCRIPTION = "The server crashes."
+
+
 def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""
         conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+        conn_0> begin;
         conn_0> WITH
             cte_0 AS (select
                 1 as c1,

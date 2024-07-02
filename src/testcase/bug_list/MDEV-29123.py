@@ -12,13 +12,7 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.MARIADB, "10.8.3"
 )
 
-
-def get_description(isolation_level: IsolationLevel):
-    return f"""
-Link:                     https://jira.mariadb.org/browse/MDEV-29123
-Original isolation level: REPETABLE READ
-Tested isolation level:   {isolation_level}
-"""
+DESCRIPTION = "The two resulting tables are different."
 
 
 def get_scenarios(isolation_level: IsolationLevel):

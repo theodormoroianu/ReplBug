@@ -9,8 +9,10 @@ ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "MDEV-29489"
 LINK = "https://jira.mariadb.org/browse/MDEV-29489"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
-    db_config.DatabaseType.MARIADB, "10.8.3"
+    db_config.DatabaseType.MARIADB, "10.10.1"
 )
+
+DESCRIPTION = "MariaDB crashes."
 
 
 def get_scenarios(isolation_level: IsolationLevel):

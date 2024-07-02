@@ -12,6 +12,8 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.MARIADB, "10.8.3"
 )
 
+DESCRIPTION = "This makes MariaDB crash."
+
 
 def get_scenarios(isolation_level: IsolationLevel):
     return [

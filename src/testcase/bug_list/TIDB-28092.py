@@ -15,20 +15,20 @@ create table t(a blob not null, b text);
 insert ignore into t values (null, null), (null, 'abc');
 """
 
-DESCRIPTION = "Should not throw an error."
+DESCRIPTION = "Should not throw an error. This is actually not transaction-related (see comments on the issue)."
 
 
 def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""
         conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
-        conn_0> start transaction;
+        conn_0> begin;
         conn_0> update t set b = 'test' where a;
         conn_0> rollback;
         """,
         f"""
         conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};        
-        conn_0> start transaction;
+        conn_0> begin;
         conn_0> update t set b = 'def';
         conn_0> update t set b = 'test' where a;
         conn_0> rollback;

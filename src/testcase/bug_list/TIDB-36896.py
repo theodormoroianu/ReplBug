@@ -10,15 +10,12 @@ BUG_ID = "TIDB-36896"
 LINK = "https://github.com/pingcap/tidb/issues/36896"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v6.1.0")
 
-DESCRIPTION = """Looses connection to the server."""
+DESCRIPTION = """Causes a stack overflow and crashes the server."""
 
 
 def get_scenarios(isolation_level: IsolationLevel):
-    return [
-        f"""
-        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
-        conn_0> START TRANSACTION;
-        conn_0> WITH cte_0 AS (select  
+    op = """
+    conn_0> WITH cte_0 AS (select  
                 ref_0.wkey as c0, 
                 ref_0.pkey as c1, 
                 ref_0.c_rrbxh as c2, 
@@ -87,6 +84,13 @@ def get_scenarios(isolation_level: IsolationLevel):
                         ref_3.c_hzkgf) else 33 end
                         <= 31
                 order by c0 asc);
+    """
+    return [
+        op,
+        f"""
+        conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+        conn_0> START TRANSACTION;
+        {op}
         conn_0> commit;
         """,
     ]

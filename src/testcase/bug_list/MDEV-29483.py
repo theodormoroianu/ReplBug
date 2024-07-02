@@ -9,14 +9,18 @@ ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "MDEV-29483"
 LINK = "https://jira.mariadb.org/browse/MDEV-29483"
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
-    db_config.DatabaseType.MARIADB, "10.8.3"
+    db_config.DatabaseType.MARIADB, "10.10.1"
 )
+
+
+DESCRIPTION = "MariaDB crashes."
 
 
 def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""
     conn_0> SET GLOBAL TRANSACTION ISOLATION LEVEL {isolation_level.value};
+    conn_0> START TRANSACTION;
     conn_0> select  
         coalesce(subq_0.c0,
             LAST_VALUE(
@@ -37,5 +41,6 @@ def get_scenarios(isolation_level: IsolationLevel):
                 cross join t_di9mld as ref_3
                 )
             );
+    conn_0> ROLLBACK;
     """,
     ]

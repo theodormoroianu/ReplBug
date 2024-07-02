@@ -17,6 +17,9 @@ Tested isolation level:   {isolation_level}
 """
 
 
+DESCRIPTION = "The two cases should give the same result"
+
+
 def get_scenarios(isolation_level: IsolationLevel):
     return [
         f"""
