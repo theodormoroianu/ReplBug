@@ -11,12 +11,11 @@ attribute the result of the instructions.
 """
 
 import copy
-from typing import Callable, List, Dict, Optional, Tuple, Union
+from typing import List, Dict, Optional
 import logging
 import mysql.connector
 import mysql.connector.cursor
 import multiprocessing
-from queue import Queue
 import time
 
 import database.config as db_config

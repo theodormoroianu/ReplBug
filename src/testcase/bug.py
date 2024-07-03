@@ -82,13 +82,25 @@ class Bug:
         db_and_type: db_config.DatabaseTypeAndVersion,
         scenarios: list[str],
         setup_sql_script: Optional[str] = None,
+        is_valid: bool = True,
     ):
+        """
+        Creates a new bug.
+
+        :param bug_id: The ID of the bug (e.g. "TIDB-1234").
+        :param description: The description of the bug (basic info on the bug).
+        :param db_and_type: The database and the version on which the bug should be replicable.
+        :param scenarios: A list of scenarios used for detecting the bug.
+        :param setup_sql_script: The SQL script used for setting up the environment.
+        :param is_valid: If the bug is valid or not (if we are able to replicate it or not).
+        """
         self.bug_id = bug_id
         self.description = description
         self.db_and_type = db_and_type
         self.scenarios = scenarios
         self.setup_sql_script = setup_sql_script
         self.testcase_runners: list[testcase_runner.TestcaseRunner] = []
+        self.is_valid = is_valid
 
     def _save_result_from_user(self):
         """
@@ -96,7 +108,7 @@ class Bug:
         """
         file = (
             Context.get_context().data_folder_path
-            / "results"
+            / ("results" if self.is_valid else "invalid_results")
             / f"{self.bug_id}_result.md"
         )
         file.parent.mkdir(parents=True, exist_ok=True)
