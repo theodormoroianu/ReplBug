@@ -12,11 +12,20 @@ class DatabaseProvider:
     """
 
     def __init__(
-        self, database_type_and_version: DatabaseTypeAndVersion, reconfigure_db=False
+        self,
+        database_type_and_version: DatabaseTypeAndVersion,
+        kill_server_after_testcase: bool = False,
     ):
+        """
+        Creates a new database provider.
+
+        :param database_type_and_version: The database type and version to provide.
+        :param kill_server_after_testcase: If the server should be stopped after running the test.
+        """
         self.container_id = None
         self.db_connection = None
         self.db_type_and_version = database_type_and_version
+        self.kill_server_after_testcase = kill_server_after_testcase
 
     def __enter__(self):
         """
@@ -41,6 +50,8 @@ class DatabaseProvider:
         Stops the database.
         """
         podman_connection = PodmanConnection.get_instance()
-        podman_connection.stop_container(self.container_id)
+        podman_connection.stop_container(
+            self.container_id, not self.kill_server_after_testcase
+        )
         self.container_id = None
         self.db_connection = None

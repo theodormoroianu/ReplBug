@@ -180,13 +180,23 @@ class PodmanConnection:
         logs_dump = logs.decode() if type(logs) == bytes else b"".join(logs).decode()
         return logs_dump[self.log_characters_to_ignore[container_id] :]
 
-    def stop_container(self, container_id: str) -> str:
+    def stop_container(self, container_id: str, try_reuse: bool = True):
         """
         Stops the container with the given id.
+        If `try_reuse` is True, the container is tested to check if it can be re-used.
+
+        :param container_id: The id of the container to stop.
+        :param try_reuse: If the container should be tested for re-use.
         """
         container, db_and_version, db_connection = self.containers[container_id]
-        logging.debug(f"Stopping container {container_id} of type {db_and_version}...")
+        logging.debug(
+            f"Stopping container {container_id} of type {db_and_version} (try-reuse = {try_reuse})..."
+        )
         try:
+            # If we can't reuse it, throw an exception.
+            if not try_reuse:
+                raise Exception("Container can't be re-used (imposed by testcase).")
+
             # Try to re-use container
             # Make a few SQL queries to check if the DB is still alive
             conn = db_connection.to_connection()

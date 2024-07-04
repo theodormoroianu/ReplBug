@@ -39,7 +39,17 @@ class TestcaseRunner:
         instructions: List[Instruction],
         db_and_type: db_config.DatabaseTypeAndVersion,
         pre_run_instructions: List[Instruction] = None,
+        kill_server_after_testcase: bool = False,
     ):
+        """
+        Creates a new testcase runner.
+
+        :param name: The name of the testcase (mostly bug ID + isolation level).
+        :param instructions: The instructions to run concurrently.
+        :param db_and_type: The database and the version on which the bug should be replicable.
+        :param pre_run_instructions: The instructions to run before the main instructions (initialization).
+        :param kill_server_after_testcase: If the server should be stopped after running the test.
+        """
         self.name = name
         # Instructions we have to run on separate InstructionProcess processes.
         self.instructions_to_run = instructions
@@ -50,14 +60,19 @@ class TestcaseRunner:
         self.db_and_type = db_and_type
         self.pre_run_instructions = pre_run_instructions
         self.db_server_logs = None
+        self.kill_server_after_testcase = kill_server_after_testcase
 
     def run(self):
         """
         Spins a container with the required DB, runs the concurent transactions and
         extracts the result.
         """
-        logging.info(f"Running testcase {self.name} on {self.db_and_type}")
-        with db_provider.DatabaseProvider(self.db_and_type) as provider:
+        logging.info(
+            f"Running testcase {self.name} on {self.db_and_type}, kill server after: {self.kill_server_after_testcase}"
+        )
+        with db_provider.DatabaseProvider(
+            self.db_and_type, self.kill_server_after_testcase
+        ) as provider:
             # Reset the environment before running the testcase, in case
             # it is not the first run.
             conn = provider.db_connection.to_connection(autocommit=True)

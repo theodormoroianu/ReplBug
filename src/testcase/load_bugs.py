@@ -50,6 +50,11 @@ def load_bugs_from_module(
         bug_id = getattr(module, "BUG_ID")
         db_and_version = getattr(module, "DB_AND_VERSION")
 
+        # Check if we need to restart the server after each request.
+        kill_server_after_testcase = False
+        if "KILL_SERVER_AFTER_TESTCASE" in dir(module):
+            kill_server_after_testcase = getattr(module, "KILL_SERVER_AFTER_TESTCASE")
+
         # Get the SQL setup script. It can be in the file of in a file.
         sql_setup_script = None
         if "SETUP_SQL_SCRIPT" in dir(module):
@@ -89,6 +94,7 @@ def load_bugs_from_module(
                 scenarios=scenarios,
                 setup_sql_script=sql_setup_script,
                 is_valid=is_valid,
+                kill_server_after_testcase=kill_server_after_testcase,
             )
             bugs[f"{bug_id}-{isolation_level.name}"] = bug_runner
     return bugs

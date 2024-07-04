@@ -83,6 +83,7 @@ class Bug:
         scenarios: list[str],
         setup_sql_script: Optional[str] = None,
         is_valid: bool = True,
+        kill_server_after_testcase: bool = False,
     ):
         """
         Creates a new bug.
@@ -93,6 +94,7 @@ class Bug:
         :param scenarios: A list of scenarios used for detecting the bug.
         :param setup_sql_script: The SQL script used for setting up the environment.
         :param is_valid: If the bug is valid or not (if we are able to replicate it or not).
+        :param kill_server_after_testcase: If the server should be stopped after running each testcase (e.g. invalid ends up in an state).
         """
         self.bug_id = bug_id
         self.description = description
@@ -101,6 +103,7 @@ class Bug:
         self.setup_sql_script = setup_sql_script
         self.testcase_runners: list[testcase_runner.TestcaseRunner] = []
         self.is_valid = is_valid
+        self.kill_server_after_testcase = kill_server_after_testcase
 
     def _save_result_from_user(self):
         """
@@ -176,6 +179,7 @@ class Bug:
                 instructions=_parse_instructions(scenario_content),
                 db_and_type=self.db_and_type,
                 pre_run_instructions=pre_run_instruction,
+                kill_server_after_testcase=self.kill_server_after_testcase,
             )
             runner.run()
             self.testcase_runners.append(runner)
