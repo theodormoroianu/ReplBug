@@ -10,3 +10,4 @@ docker build --tag tidb:v6.1.0 --file tidb-v6.1.0.Dockerfile .
 docker build --tag tidb:v6.3.0 --file tidb-v6.3.0.Dockerfile .
 docker build --tag tidb:v5.2.1 --file tidb-v5.2.1.Dockerfile .
 docker build --tag tidb:v5.3.0 --file tidb-v5.3.0.Dockerfile .
+docker build --tag tidb:v6.0.0 --file tidb-v6.0.0.Dockerfile .

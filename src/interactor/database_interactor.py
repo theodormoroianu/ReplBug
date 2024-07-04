@@ -72,7 +72,7 @@ class DatabaseInteractor(cmd.Cmd):
         print("Available commands:")
         print("  spawn        : Spawns multiple shells connected to a database server.")
         print(
-            "  start          : Starts a database server and waits for the user to connect to it."
+            "  start        : Starts a database server and waits for the user to connect to it."
         )
 
     def help_help(self):

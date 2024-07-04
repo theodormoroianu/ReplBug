@@ -78,6 +78,10 @@ class Instruction:
         self.previous_instruction_failed = False
         # The number of the instruction in the testcase (all transactions)
         self.instruction_nr = instruction_nr
+        # The number of affected rows
+        self.nr_affected_rows = None
+        # The number of warnings
+        self.nr_warnings = None
 
     def __repr__(self):
         return f"Instruction(transaction_id={self.transaction_id}, instruction={self.instruction})"

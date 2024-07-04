@@ -71,6 +71,8 @@ class TransactionProcess(multiprocessing.Process):
                 output = f"ERROR: {e}"
 
             instruction.output = output
+            instruction.nr_warnings = cursor.warning_count
+            instruction.nr_affected_rows = cursor.rowcount
 
             # Send the result
             self.instruction_output_queue.put(instruction)

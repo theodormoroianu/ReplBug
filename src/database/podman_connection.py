@@ -2,7 +2,7 @@ import subprocess
 import logging
 import time
 import podman.client as client
-from typing import Dict, Iterator, List, Tuple
+from typing import Dict, List, Tuple
 from podman.domain.containers import Container
 from collections import defaultdict
 import atexit
@@ -132,32 +132,9 @@ class PodmanConnection:
             # Log the error and raise a new one
             logging.error(e)
             print(
-                f"Unable to create the container. Do you want to pull {image_name}:{tag} from docker.io?"
+                f"Unable to create the container. Image {image_name}:{tag} is not present."
             )
-            response = input("y/n: ")
-            if response == "y":
-                try:
-                    remote_image_name, version = (
-                        db_and_version.to_remote_docker_image_name()
-                    )
-                    self.podman_client.images.pull(
-                        repository=remote_image_name, tag=version
-                    )
-                    container = self.podman_client.containers.create(
-                        image=f"{image_name}:{tag}",
-                        ports={f"{container_port}/tcp": host_port},
-                        environment=environment,
-                        auto_remove=False,
-                    )
-                except Exception as e:
-                    logging.error(e)
-                    raise Exception(
-                        "Unable to create the container. The image is not built."
-                    )
-            else:
-                raise Exception(
-                    "Unable to create the container. The image is not built."
-                )
+            raise e
 
         container.start()
         logging.info(f"Container {container.id} started on port {host_port}")
