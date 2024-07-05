@@ -1,12 +1,8 @@
-import subprocess
-import logging
-import time
+import subprocess, logging, time, atexit, os
 import podman.client as client
 from typing import Dict, List, Tuple
-from podman.domain.containers import Container
 from collections import defaultdict
-import atexit
-import os
+from podman.domain.containers import Container
 
 from .config import DatabaseTypeAndVersion, DatabaseConnection
 from . import helpers
@@ -59,7 +55,7 @@ class PodmanConnection:
                 if not self.podman_client.ping():
                     raise Exception()
                 break
-            except Exception as e:
+            except Exception:
                 time.sleep(0.1)
                 logging.info("Waiting for the podman daemon to start...")
         else:
@@ -177,7 +173,9 @@ class PodmanConnection:
         """
         container, _, _ = self.containers[container_id]
         logs = container.logs(stdout=True, stderr=True)
-        logs_dump = logs.decode() if type(logs) == bytes else b"".join(logs).decode()
+        logs_dump = (
+            logs.decode() if isinstance(type(logs), bytes) else b"".join(logs).decode()
+        )
         return logs_dump[self.log_characters_to_ignore[container_id] :]
 
     def stop_container(self, container_id: str, try_reuse: bool = True):

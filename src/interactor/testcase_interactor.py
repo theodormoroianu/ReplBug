@@ -1,9 +1,7 @@
-import logging
 import cmd
-import time
 
-import context
-import interactor.helpers as helpers
+import testcase.run_bugs as run_bugs
+import testcase.bug_list as bug_list
 
 
 class TestcaseInteractor(cmd.Cmd):
@@ -21,14 +19,10 @@ class TestcaseInteractor(cmd.Cmd):
 
     def do_test(self, arg):
         """Runs the "test" function."""
-        import testcase.run_bugs as run_bugs
-
         run_bugs.test()
 
-    def do_run(self, arg):
+    def do_run(self, arg: str):
         """Runs the bugs."""
-        import testcase.run_bugs as run_bugs
-
         run_bugs.run_bugs(arg.split() or [".*"])
 
     def do_bug(self, arg):
@@ -38,17 +32,17 @@ class TestcaseInteractor(cmd.Cmd):
     def do_help(self, arg):
         """Shows help menu."""
         print("Available commands:")
-        print("test - Runs the test function.")
-        print("run - Runs the bugs.")
-        print("list - List the available bugs.")
+        print("  test    : Runs the test function.")
+        print("  run     : Runs the bugs.")
+        print("  list    : List the available bugs.")
+        print("  help    : Shows this help menu.")
+        print("  exit    : exit to the main menu.")
 
     def help_help(self):
         print("Shows help menu.")
 
-    def do_list(self, arg):
+    def do_list(self, arg: str):
         """Lists the available bugs."""
-        import testcase.bug_list as bug_list
-
         regexes = arg.split() or [".*"]
         bugs = bug_list.get_bugs(regexes)
         if not bugs:
@@ -78,7 +72,7 @@ class TestcaseInteractor(cmd.Cmd):
             return "quit"
         return super().precmd(line)
 
-    def default(self, line: str) -> None:
+    def default(self, line: str):
         args = line.split()
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
             return True

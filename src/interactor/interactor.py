@@ -1,4 +1,4 @@
-import cmd
+import cmd, readline
 
 import interactor.database_interactor as database_interactor
 import interactor.testcase_interactor as testcase_interactor
@@ -23,10 +23,8 @@ class MainInteractor(cmd.Cmd):
     def preloop(self):
         # Load commmand history
         try:
-            import readline
-
             readline.read_history_file(HISTORY_FILE)
-        except:
+        except Exception:
             pass
 
     def postloop(self):
@@ -36,7 +34,7 @@ class MainInteractor(cmd.Cmd):
 
             readline.set_history_length(100)
             readline.write_history_file(HISTORY_FILE)
-        except:
+        except Exception:
             pass
 
     def do_database(self, arg):
@@ -45,9 +43,8 @@ class MainInteractor(cmd.Cmd):
             database_interactor.DatabaseInteractor.get_instance().process_external_arg(
                 arg
             )
-        except KeyboardInterrupt as e:
+        except KeyboardInterrupt:
             print("")
-            pass
 
     def do_testcase(self, arg):
         """Runs the testcases."""
@@ -55,9 +52,8 @@ class MainInteractor(cmd.Cmd):
             testcase_interactor.TestcaseInteractor.get_instance().process_external_arg(
                 arg
             )
-        except KeyboardInterrupt as e:
+        except KeyboardInterrupt:
             print("")
-            pass
 
     def do_test(self, arg):
         return self.do_testcase(arg)
@@ -67,8 +63,8 @@ class MainInteractor(cmd.Cmd):
         print("Available commands:")
         print("  database  : Allows the user to download and interact with a database.")
         print("  testcase  : Allows the user run one or more testcases.")
-        print("  help      : Shows this help menu")
-        print("  quit      : Quits the program")
+        print("  help      : Shows this help menu.")
+        print("  quit      : Quits the program.")
 
     def help_help(self):
         print("Shows help menu.")
@@ -79,7 +75,7 @@ class MainInteractor(cmd.Cmd):
             return "quit"
         return super().precmd(line)
 
-    def default(self, line: str) -> None:
+    def default(self, line: str):
         args = line.split()
 
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
@@ -88,9 +84,11 @@ class MainInteractor(cmd.Cmd):
         if len(args) > 0 and args[0] == "db":
             self.do_database(" ".join(args[1:]))
             return
+
         if len(args) > 0 and (args[0] == "tc" or args[0] == "test"):
             self.do_testcase(" ".join(args[1:]))
             return
+
         return super().default(line)
 
     def process_external_arg(self, args: str):

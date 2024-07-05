@@ -1,6 +1,7 @@
 import logging, subprocess
+from typing import List
 
-from .config import DatabaseTypeAndVersion, DatabaseType, DatabaseConnection
+from .config import DatabaseTypeAndVersion, DatabaseConnection
 from .provide_db_container import DatabaseProvider
 import context
 
@@ -28,7 +29,7 @@ def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
         conn.cursor().execute("drop database if exists testdb;")
         conn.cursor().execute("create database testdb;")
 
-        processes = []
+        processes: List[subprocess.Popen] = []
         for _ in range(nr_instances):
 
             # open a terminal window with a mysql session

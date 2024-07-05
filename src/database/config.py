@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import Optional, Tuple
-import pathlib
 import mysql.connector
 
 
@@ -76,7 +75,7 @@ class DatabaseTypeAndVersion:
 
         raise ValueError(f"Unsupported database type: {self.database_type}")
 
-    def to_remote_docker_image_name(self) -> str:
+    def to_remote_docker_image_name(self) -> Tuple[str, str]:
         """
         Returns the remote docker image name.
         """

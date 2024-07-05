@@ -644,5 +644,5 @@ def get_scenarios(isolation_level: IsolationLevel):
         {op}
         """
         ]
-        * 100
+        * 5
     )

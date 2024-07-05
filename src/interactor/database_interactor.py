@@ -1,11 +1,7 @@
-import logging
-import cmd
-import time
+import logging, cmd, os, subprocess
 
-import database.config as db_config
 import database.open_mysql_windows as db_open_sessions
 import database.provide_db_container as db_provider
-import context
 import interactor.helpers as helpers
 
 
@@ -21,6 +17,21 @@ class DatabaseInteractor(cmd.Cmd):
 
     def __init__(self):
         super().__init__()
+
+    def do_build(self, _arg):
+        """
+        Builds the custom docker files required for testing some of the bugs.
+        """
+        print("Building the custom docker files... ")
+        logging.info("Building the custom docker files... ")
+        project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        docker_files_path = os.path.join(project_root_path, "dockerfiles")
+        subprocess.run(
+            ["sh", "build.sh"],
+            cwd=docker_files_path,
+        )
+        print("DONE")
+
 
     def do_spawn(self, arg: str):
         """
@@ -77,13 +88,23 @@ class DatabaseInteractor(cmd.Cmd):
         print("Usage: spawn <NR SHELLS> <DB TYPE> <VERSION>")
         print("Example: spawn 4 mysql 8.0.34")
 
+    def help_build(self):
+        print("Builds the custom docker files required for testing some of the bugs.")
+        print("Usage: build")
+        print("Example: build")
+
     def do_help(self, arg):
         """Shows help menu."""
         print("Available commands:")
-        print("  spawn        : Spawns multiple shells connected to a database server.")
+        print("  spawn    : Spawns multiple shells connected to a database server.")
         print(
-            "  start        : Starts a database server and waits for the user to connect to it."
+            "  start    : Starts a database server and waits for the user to connect to it."
         )
+        print(
+            "  build    : Builds the custom docker files required for testing some of the bugs."
+        )
+        print("  help     : Shows this help menu.")
+        print("  exit     : Exit to the main menu.")
 
     def help_help(self):
         print("Shows help menu.")
