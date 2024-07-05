@@ -30,7 +30,7 @@ class DatabaseInteractor(cmd.Cmd):
             nr_shells = int(arg.split()[0])
             arg = " ".join(arg.split()[1:])
             db_and_version = helpers.parse_db_type_and_version(arg)
-        except Exception as e:
+        except Exception:
             self.help_spawn()
             return
         db_open_sessions.open_multiple_sessions(db_and_version, nr_instances=nr_shells)
@@ -41,21 +41,31 @@ class DatabaseInteractor(cmd.Cmd):
         """
         try:
             db_and_version = helpers.parse_db_type_and_version(arg)
-        except Exception as e:
+        except Exception:
             self.help_start()
             return
 
-        print("Starting database...")
+        print("Starting the database server... ", end="", flush=True)
         with db_provider.DatabaseProvider(db_and_version) as provider:
+            print("DONE")
             connection = provider.db_connection
+            
+            # Create a test database.
+            conn = connection.to_connection()
+            conn.cursor().execute("drop database if exists testdb;")
+            conn.cursor().execute("create database testdb;")
+
             print(f"Host:          {connection.host}")
             print(f"Port:          {connection.port}")
             print(f"User:          {connection.user}")
-            print(f"Connect with:  {db_open_sessions.mysql_cli_command(connection)}")
+            print(f"Connect with:  {db_open_sessions.mysql_cli_command(connection, "testdb")}")
+            print("\nPress Enter to stop the database server...")
             try:
                 input()
             except KeyboardInterrupt:
                 pass
+            print("Stopping the database server... ", end="", flush=True)
+        print("DONE")
 
     def help_start(self):
         print("Starts a database server and waits for the user to connect to it.")
@@ -94,7 +104,7 @@ class DatabaseInteractor(cmd.Cmd):
             return "quit"
         return super().precmd(line)
 
-    def default(self, line: str) -> None:
+    def default(self, line: str):
         args = line.split()
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
             return True
