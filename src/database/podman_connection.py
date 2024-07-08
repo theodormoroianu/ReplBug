@@ -120,6 +120,7 @@ class PodmanConnection:
                 ports={f"{container_port}/tcp": host_port},
                 environment=environment,
                 auto_remove=False,
+                network_mode="bridge",
             )
         except Exception as e:
             logging.info(
