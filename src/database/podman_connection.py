@@ -53,7 +53,7 @@ class PodmanConnection:
         while time.time() - time_before < 5:
             try:
                 if not self.podman_client.ping():
-                    raise Exception()
+                    raise ConnectionError()
                 break
             except Exception:
                 time.sleep(0.1)
@@ -62,7 +62,7 @@ class PodmanConnection:
             logging.error("Connection to the podman daemon failed.")
             print("Error connecting to the podman daemon.")
             print("Please make sure that podman is installed.")
-            raise Exception("Error connecting to the podman daemon.")
+            raise ConnectionError("Error connecting to the podman daemon.")
 
         # Mapping from containerID to container object
         self.containers: Dict[
@@ -159,7 +159,7 @@ class PodmanConnection:
                 f"Command: docker run -p {host_port}:{container_port} {image_name}:{tag}"
             )
             input("Press Enter to continue...")
-            raise Exception("Error connecting to the database server.")
+            raise ConnectionError("Error connecting to the database server.")
         logging.info("Database server started.")
 
         # Mark the log lines to ignore
@@ -194,7 +194,7 @@ class PodmanConnection:
         try:
             # If we can't reuse it, throw an exception.
             if not try_reuse:
-                raise Exception("Container can't be re-used (imposed by testcase).")
+                raise ValueError("Container can't be re-used (imposed by testcase).")
 
             # Try to re-use container
             # Make a few SQL queries to check if the DB is still alive

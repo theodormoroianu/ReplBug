@@ -39,7 +39,3 @@ def run_bugs(patterns: list[str]):
 
     if not bugs_to_run:
         print("No bugs found for the provided patterns.")
-
-
-def test():
-    pass
