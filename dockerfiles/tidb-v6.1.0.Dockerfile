@@ -8,7 +8,7 @@ RUN mkdir -p /go/src/github.com/pingcap
 WORKDIR /go/src/github.com/pingcap
 
 # Clone the TiDB repository
-run git clone --depth 1 --branch v6.1.0-alpha --single-branch https://github.com/pingcap/tidb.git \
+RUN git clone --depth 1 --branch v6.1.0-alpha --single-branch https://github.com/pingcap/tidb.git \
     && cd tidb \
     && make -j \
     && mv bin/tidb-server /usr/local/bin/tidb-server \
