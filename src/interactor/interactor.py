@@ -158,7 +158,7 @@ class MainInteractor(cmd.Cmd):
         print("  test     : Tests specific bugs, by running them against a specificed database server.")
         print("  list     : Lists the available bugs.")
         print("  help     : Shows this help menu.")
-        print("  exit     : Exit to the main menu.")
+        print("  exit     : Exit the tool.")
 
     def help_help(self):
         print("Shows help menu.")

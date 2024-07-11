@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 if not load_dotenv():
     print(
-        f"WARNING: Could not load the `.env` file. Make sure to have one in the root of the project."
+        "WARNING: Could not load the `.env` file. Make sure to have one in the root of the project."
     )
 
 
@@ -17,7 +17,7 @@ class Context:
     Provides the necessary context for the application.
     """
 
-    context = None
+    instance = None
 
     def __init__(self):
         # Read cache folder location.
@@ -27,11 +27,6 @@ class Context:
         ), "The `CACHE_FOLDER_PATH` environment variable is not set."
         if not self.cache_folder.exists():
             self.cache_folder.mkdir(parents=True)
-
-        # Read the database server stop flag.
-        self.stop_database_server_at_startup = (
-            os.getenv("STOP_DATABASE_SERVER_AT_STARTUP").lower() == "true"
-        )
 
         # Read the logging level.
         match os.getenv("LOGGING_LEVEL"):
@@ -50,14 +45,11 @@ class Context:
         # Read the data path
         self.data_folder_path = pathlib.Path(os.getenv("DATA_FOLDER_PATH"))
 
-        # Read the path to dockerfiles
-        self.dockerfiles_path = pathlib.Path(os.getenv("DOCKERFILES_FOLDER_PATH"))
-
     @staticmethod
     def get_context():
         """
         Returns the context of the application.
         """
-        if Context.context is None:
-            Context.context = Context()
-        return Context.context
+        if Context.instance is None:
+            Context.instance = Context()
+        return Context.instance
