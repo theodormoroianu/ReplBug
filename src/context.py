@@ -2,8 +2,7 @@
 This module provides the necessary context for the application.
 """
 
-import pathlib
-import os
+import pathlib, os
 from dotenv import load_dotenv
 
 if not load_dotenv():

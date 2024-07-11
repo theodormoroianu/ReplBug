@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, os, logging, datetime, sys
+import os, logging, datetime, sys
 
 import context
 import interactor.interactor as interactor

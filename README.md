@@ -34,12 +34,12 @@ The system needs to have `podman` installed in order to run the databases in con
 ## Usage
 
 * Configure the `.env` file with the desired settings.
-* Build the custom docker containers by running the following command: `./src/main.py db build`.
+* Build the custom docker containers by running the following command: `./src/main.py build`.
 * Start the application by running the following command: `./src/main.py`. Use the `help` command in the CLI to get a list of all available commands.
 
 ## Running the Databases in Podman
 
-The application uses _Podman_ to manage versions of _MySQL_, _MariaDB_ and _TiDB_ DBMSs. The docker images are pulled from their respective official repositories or built locally. You can build them either by running `./src/main.py db build` or `(cd dockerfiles && ./build)`.
+The application uses _Podman_ to manage versions of _MySQL_, _MariaDB_ and _TiDB_ DBMSs. The docker images are pulled from their respective official repositories or built locally. You can build them either by running `./src/main.py build` or `(cd dockerfiles && ./build)`.
 
 The application uses the following images:
 
@@ -47,6 +47,7 @@ The application uses the following images:
 * `mariadb:{version}`
 * `pingcap/tidb:v{version}`
 
+Additionally, a custom image of TiDB + TiKV + PD is used for running TiDB in a cluster. This allows us to test the distributed / TiKV transactions.
 
 ## Results
 
