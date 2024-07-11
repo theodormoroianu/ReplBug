@@ -1,7 +1,12 @@
-import cmd, readline
+import os
+import cmd, readline, logging
+import subprocess
 
-import interactor.database_interactor as database_interactor
-import interactor.testcase_interactor as testcase_interactor
+import database.open_mysql_windows as db_open_sessions
+import database.provide_db_container as db_provider
+import interactor.helpers as helpers
+import testcase.run_bugs as run_bugs
+import testcase.bug_list as bug_list
 import context
 
 HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history"
@@ -37,41 +42,133 @@ class MainInteractor(cmd.Cmd):
         except Exception:
             pass
 
-    def do_database(self, arg):
-        """Allows the user to download and interact with a database."""
+    
+    def do_build(self, _arg):
+        """
+        Builds the custom docker files required for testing some of the bugs.
+        """
+        print("Building the custom docker files... ")
+        logging.info("Building the custom docker files... ")
+        project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        docker_files_path = os.path.join(project_root_path, "dockerfiles")
+        subprocess.run(
+            ["sh", "build.sh"],
+            cwd=docker_files_path,
+        )
+        print("DONE")
+
+    def help_build(self):
+        print("Builds the custom docker images required for testing some of the bugs.")
+        print("Usage: build")
+
+
+    def do_shell(self, arg: str):
+        """
+        Spawns multiple shells connected to a database server.
+        """
         try:
-            database_interactor.DatabaseInteractor.get_instance().process_external_arg(
-                arg
-            )
-        except KeyboardInterrupt:
-            print("")
+            nr_shells = int(arg.split()[0])
+            arg = " ".join(arg.split()[1:])
+            db_and_version = helpers.parse_db_type_and_version(arg)
+        except Exception:
+            self.help_shell()
+            return
+        db_open_sessions.open_multiple_sessions(db_and_version, nr_instances=nr_shells)
 
-    def do_testcase(self, arg):
-        """Runs the testcases."""
+    def help_shell(self):
+        print("Spawns multiple shells connected to a database server.")
+        print("Usage:    shell <NR SHELLS> <DB TYPE> <VERSION>")
+        print("Example:  shell 4 mysql 8.0.34")
+
+
+    def do_server(self, arg: str):
+        """
+        Starts a database server and waits for the user to connect to it.
+        """
         try:
-            testcase_interactor.TestcaseInteractor.get_instance().process_external_arg(
-                arg
-            )
-        except KeyboardInterrupt:
-            print("")
+            db_and_version = helpers.parse_db_type_and_version(arg)
+        except Exception:
+            self.help_server()
+            return
 
-    def do_test(self, arg):
-        return self.do_testcase(arg)
+        print("Starting the database server... ", end="", flush=True)
+        with db_provider.DatabaseProvider(db_and_version) as provider:
+            print("DONE")
+            connection = provider.db_connection
+            
+            # Create a test database.
+            conn = connection.to_connection()
+            conn.cursor().execute("drop database if exists testdb;")
+            conn.cursor().execute("create database testdb;")
 
-    def do_help(self, arg):
+            print(f"Host:          {connection.host}")
+            print(f"Port:          {connection.port}")
+            print(f"User:          {connection.user}")
+            print(f"Connect with:  {db_open_sessions.mysql_cli_command(connection, "testdb")}")
+            print("\nPress Enter to stop the database server...")
+            try:
+                input()
+            except KeyboardInterrupt:
+                pass
+            print("Stopping the database server...  ", end="", flush=True)
+        print("DONE")
+
+    def help_server(self):
+        print("Starts a database server and waits for the user to connect to it.")
+        print("Usage:    server <DB TYPE> <VERSION>")
+        print("Example:  server mysql 8.0.34")
+
+
+    def do_test(self, arg: str):
+        """Runs the bugs."""
+        run_bugs.run_bugs(arg.split() or [".*"])
+
+    def help_test(self):
+        print("Runs the bugs.")
+        print("If a regex is provided, only the bugs that match the regex will be run.")
+        print("Usage:    test [<REGEX>]")
+        print("Example:  test TIDB.* ")
+
+
+    def do_list(self, arg: str):
+        """Lists the available bugs."""
+        regexes = arg.split() or [".*"]
+        bugs = bug_list.get_bugs(regexes)
+        if not bugs:
+            print("No bugs found for the provided patterns.")
+            return
+
+        print("Available bugs:")
+        for bug in bugs:
+            print(f" * {bug}")
+
+    def help_list(self):
+        print("Lists the available bugs.")
+        print("If a regex is provided, only the bugs that match the regex will be listed.")
+        print("Usage:    list [<REGEX>]")
+        print("Example:  list TIDB.* ")
+
+
+    def do_help(self, _arg):
         """Shows help menu."""
         print("Available commands:")
-        print("  database  : Allows the user to download and interact with a database.")
-        print("  testcase  : Allows the user run one or more testcases.")
-        print("  help      : Shows this help menu.")
-        print("  quit      : Quits the program.")
+        print("  shell    : Spawns multiple shells connected to a database server.")
+        print("  server   : Starts a database server and waits for the user to connect to it.")
+        print("  build    : Builds the custom docker files required for testing some of the bugs.")
+        print("  test     : Tests specific bugs, by running them against a specificed database server.")
+        print("  list     : Lists the available bugs.")
+        print("  help     : Shows this help menu.")
+        print("  exit     : Exit to the main menu.")
 
     def help_help(self):
         print("Shows help menu.")
 
+
     def precmd(self, line: str) -> str:
+        """
+        Correctly handle exit and EOF.
+        """
         if line == "EOF":
-            print("")
             return "quit"
         return super().precmd(line)
 
@@ -80,15 +177,7 @@ class MainInteractor(cmd.Cmd):
 
         if len(args) > 0 and args[0] in ["q", "quit", "exit"]:
             return True
-
-        if len(args) > 0 and args[0] == "db":
-            self.do_database(" ".join(args[1:]))
-            return
-
-        if len(args) > 0 and (args[0] == "tc" or args[0] == "test"):
-            self.do_testcase(" ".join(args[1:]))
-            return
-
+        
         return super().default(line)
 
     def process_external_arg(self, args: str):
