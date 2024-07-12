@@ -15,3 +15,4 @@ docker build --tag tidb:v6.3.0 --file tidb-v6.3.0.Dockerfile .
 
 # TiDB with TiKV
 docker build --tag tidb:v6.4.0.tikv --file tidb-v6.4.0.tikv.Dockerfile .
+docker build --tag tidb:v4.0.8.tikv --file tidb-v4.0.8.tikv.Dockerfile .
