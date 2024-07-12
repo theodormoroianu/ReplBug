@@ -10,7 +10,7 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.TIDB, "v4.0.8.tikv"
 )
 
-DESCRIPTION = """Gets warnings when running in a transaction."""
+DESCRIPTION = """SELECT returns different values if using NO_INDEX_MERGE"""
 
 SETUP_SQL_SCRIPT = """
 create table t (id int primary key, value int, a int not null, b int not null,
