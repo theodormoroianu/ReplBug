@@ -1,6 +1,4 @@
-import os
-import cmd, readline, logging
-import subprocess
+import cmd, readline, logging, pathlib
 
 import database.open_mysql_windows as db_open_sessions
 import database.provide_db_container as db_provider
@@ -8,6 +6,7 @@ import interactor.helpers as helpers
 import testcase.run_bugs as run_bugs
 import testcase.bug_list as bug_list
 import context
+import database.build as db_build
 
 HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history"
 
@@ -43,23 +42,31 @@ class MainInteractor(cmd.Cmd):
             pass
 
     
-    def do_build(self, _arg):
+    def do_build(self, arg: str):
         """
         Builds the custom docker files required for testing some of the bugs.
         """
-        print("Building the custom docker files... ")
-        logging.info("Building the custom docker files... ")
-        project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        docker_files_path = os.path.join(project_root_path, "dockerfiles")
-        subprocess.run(
-            ["sh", "build.sh"],
-            cwd=docker_files_path,
-        )
-        print("DONE")
+        if arg == "help" or arg == "--help":
+            self.help_build()
+            return
+        if arg:
+            try:
+                db_build.build_image(pathlib.Path(arg))
+            except Exception as e:
+                print("Error: ", e)
+                logging.error(e)
+        else:
+            try:
+                db_build.build_all_images()
+            except Exception as e:
+                print("Error: ", e)
+                logging.error(e)
 
     def help_build(self):
         print("Builds the custom docker images required for testing some of the bugs.")
-        print("Usage: build")
+        print("If a dockerfile is provided, it should follow naming conventions.")
+        print("Usage:   build [dockerfile]")
+        print("Example: build dockerfiles/tidb-v4.0.0.tikb.Dockerfile")
 
 
     def do_shell(self, arg: str):

@@ -19,13 +19,13 @@ class Context:
     instance = None
 
     def __init__(self):
-        # Read cache folder location.
-        self.cache_folder: pathlib.Path = pathlib.Path(os.getenv("CACHE_FOLDER_PATH"))
-        assert (
-            self.cache_folder is not None
-        ), "The `CACHE_FOLDER_PATH` environment variable is not set."
+        # The root of the project.
+        self.project_root = pathlib.Path(__file__).parent.parent
+
+        # Folder where stuff like logs is stored.
+        self.cache_folder: pathlib.Path = self.project_root / ".cache"
         if not self.cache_folder.exists():
-            self.cache_folder.mkdir(parents=True)
+            self.cache_folder.mkdir()
 
         # Read the logging level.
         match os.getenv("LOGGING_LEVEL"):
@@ -40,9 +40,16 @@ class Context:
 
         # Read the path to the terminal console.
         self.open_terminal_command = os.getenv("TERMINAL_WINDOW_COMMAND")
+        if self.open_terminal_command is None:
+            print(
+                "WARNING: The `TERMINAL_WINDOW_COMMAND` is not set in the `.env` file."
+            )
 
         # Read the data path
-        self.data_folder_path = pathlib.Path(os.getenv("DATA_FOLDER_PATH"))
+        self.data_folder_path = self.project_root / "data"
+
+        # The location of the "dockerfiles" directory.
+        self.dockerfiles_dir = self.project_root / "dockerfiles"
 
     @staticmethod
     def get_context():
