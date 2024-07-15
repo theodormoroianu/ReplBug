@@ -134,7 +134,7 @@ class Bug:
             execution_order = _compute_execution_order(runner.runned_instructions)
             for nr_instr, instr in enumerate(runner.runned_instructions):
                 result.append(f" * Instruction #{nr_instr}:")
-                sql = instr.instruction.replace("\n", " ").replace("  ", " ")
+                sql = instr.sql_instruction_content.replace("\n", " ").replace("  ", " ")
                 if len(sql) > 80:
                     sql = sql[:80] + "..."
                 result.append(f"     - Instruction: {sql}")

@@ -68,7 +68,7 @@ class Instruction:
         :param instruction: The SQL command to run, as a string.
         """
         self.transaction_id = transaction_id
-        self.instruction = instruction
+        self.sql_instruction_content = instruction
         self.output = None
         # When the instruction was sent to the process for execution
         self.dispatched_time = None
@@ -84,4 +84,4 @@ class Instruction:
         self.nr_warnings = None
 
     def __repr__(self):
-        return f"Instruction(transaction_id={self.transaction_id}, instruction={self.instruction})"
+        return f"Instruction(transaction_id={self.transaction_id}, instruction={self.sql_instruction_content})"

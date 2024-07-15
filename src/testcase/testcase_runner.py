@@ -88,7 +88,9 @@ class TestcaseRunner:
                             instruction.transaction_id == None
                         ), "Should be a pre-run instruction."
                         cursor = conn.cursor()
-                        it = cursor.execute(instruction.instruction, multi=True)
+                        it = cursor.execute(
+                            instruction.sql_instruction_content, multi=True
+                        )
                         for cur in it or []:
                             if cur.with_rows:
                                 output = cur.fetchall()
@@ -117,7 +119,9 @@ class TestcaseRunner:
             for instruction_idx, instruction in enumerate(self.instructions_to_run):
                 assert instruction.instruction_nr == instruction_idx
                 assert instruction.transaction_id is not None
-                logging.info(f"Running instruction: {instruction.instruction}")
+                logging.info(
+                    f"Running instruction: {instruction.sql_instruction_content}"
+                )
 
                 # If it's the first instruction from this transaction, start a new process
                 # for it.

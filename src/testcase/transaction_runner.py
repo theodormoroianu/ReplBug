@@ -55,7 +55,7 @@ class TransactionProcess(multiprocessing.Process):
 
             try:
                 cursor = connection.cursor()
-                cursor.execute(instruction.instruction)
+                cursor.execute(instruction.sql_instruction_content)
                 instruction.executed_time = time.time()
                 output = None
                 if cursor.with_rows:
