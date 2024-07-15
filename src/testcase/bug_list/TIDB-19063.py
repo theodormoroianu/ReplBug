@@ -6,6 +6,7 @@ from testcase.helpers import DEFAULT_ISOLATION_LEVEL, IsolationLevel
 ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "TIDB-19063"
 LINK = "https://github.com/pingcap/tidb/issues/19063"
+# Commit bdc59e6ec83e759eba50da390228a0f642838e7a
 DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.TIDB, "bdc59e6e.tikv"
 )
