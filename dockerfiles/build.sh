@@ -1,18 +1,26 @@
-# Docker Images
+#! /bin/sh
 
-# MariaDB
-docker build --tag mariadb:10.8.3 --file mariadb-10.8.3.Dockerfile .
-docker build --tag mariadb:10.8.4 --file mariadb-10.8.4.Dockerfile .
-docker build --tag mariadb:10.10.1 --file mariadb-10.10.1.Dockerfile .
+# Builds an image passed as argument.
+build_image() {
+    echo "Building image $1 with versions $2"
+    image_name=$1
+    shift
+    for version in "$@"; do
+        docker build --tag ${image_name}:${version} --file ${image_name}-${version}.Dockerfile .
+  done
+}
 
-# TiDB
-docker build --tag tidb:v5.2.1 --file tidb-v5.2.1.Dockerfile .
-docker build --tag tidb:v5.3.0 --file tidb-v5.3.0.Dockerfile .
-docker build --tag tidb:v5.4.0 --file tidb-v5.4.0.Dockerfile .
-docker build --tag tidb:v6.0.0 --file tidb-v6.0.0.Dockerfile .
-docker build --tag tidb:v6.1.0 --file tidb-v6.1.0.Dockerfile .
-docker build --tag tidb:v6.3.0 --file tidb-v6.3.0.Dockerfile .
 
-# TiDB with TiKV
-docker build --tag tidb:v6.4.0.tikv --file tidb-v6.4.0.tikv.Dockerfile .
-docker build --tag tidb:v4.0.8.tikv --file tidb-v4.0.8.tikv.Dockerfile .
+# MariaDB versions
+mariadb_versions="10.8.3 10.8.4 10.10.1"
+
+# TiDB versions
+tidb_versions="v5.2.1 v5.3.0 v5.4.0 v6.0.0 v6.1.0 v6.3.0 v4.0.0-beta.2"
+
+# TiDB with TiKV versions
+tidb_tikv_versions="v6.4.0.tikv v4.0.8.tikv v4.0.0-beta.2.tikv"
+
+# Build images
+build_image "mariadb" ${mariadb_versions}
+build_image "tidb" ${tidb_versions}
+build_image "tidb" ${tidb_tikv_versions}

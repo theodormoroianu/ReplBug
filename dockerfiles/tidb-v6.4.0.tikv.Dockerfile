@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS builder
+FROM ubuntu:20.04
 
 # Set non-interative mode
 ENV DEBIAN_FRONTEND=noninteractive

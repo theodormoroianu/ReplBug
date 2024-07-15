@@ -164,7 +164,7 @@ class Bug:
         Runs the buggy scenarios
         """
         logging.info(f"Running bug {self.bug_id} on {self.db_and_type}")
-        print(f"Running bug {self.bug_id} on {self.db_and_type}: ", end="", flush=True)
+        print(f"\nRunning bug {self.bug_id} on {self.db_and_type}: ", end="", flush=True)
 
         pre_run_instruction = []
         if self.setup_sql_script:

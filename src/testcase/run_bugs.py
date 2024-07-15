@@ -31,8 +31,10 @@ def run_bugs(patterns: list[str]):
     print(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
     logging.info(f"Running the following bugs: {', '.join(bugs_to_run.keys())}")
 
-    progressbar.streams.wrap_stderr()
-    progressbar.streams.wrap_stdout()
+    # We might want to wrap the stdout and stderr to have a progress bar.
+    # This can be done with the following code:
+    # progressbar.streams.wrap_stderr()
+    # progressbar.streams.wrap_stdout()
 
     for idx, bug_name in progressbar.progressbar(list(enumerate(bugs_to_run))):
         bugs_to_run[bug_name].run()

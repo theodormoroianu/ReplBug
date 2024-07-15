@@ -148,14 +148,9 @@ class TestcaseRunner:
                 time.sleep(MYSQL_CONNECTION_GAP_BETWEEN_INSTRUCTIONS_S)
 
             # Now that we sent all the instructions, we:
-            # - send None to the instruction queues to signal the end of the instructions
             # - retrieve the output of the instructions
             # - mark any instruction for which we don't have output as failed with timeout
-            for (
-                _,
-                instructions_q,
-            ) in transaction_id_to_instructions_queue.items():
-                instructions_q.put(None)
+            # - send None to the instruction queues to signal the end of the instructions
 
             # Wait for the output of the instructions
             output_queues_to_process = list(transaction_id_to_output_queue.values())
@@ -173,7 +168,7 @@ class TestcaseRunner:
                             self.runned_instructions[
                                 runned_instruction.instruction_nr
                             ] = runned_instruction
-                        except:
+                        except Exception:
                             non_empty_queues.append(output_q)
                             break
 
@@ -182,6 +177,14 @@ class TestcaseRunner:
                     break
                 output_queues_to_process = non_empty_queues
                 time.sleep(1)
+
+            # Send None to terminate the processes gracefully
+            for (
+                _,
+                instructions_q,
+            ) in transaction_id_to_instructions_queue.items():
+                instructions_q.put(None)
+            time.sleep(0.1)
 
             for instruction_nr in range(len(self.instructions_to_run)):
                 if self.runned_instructions[instruction_nr] is None:
