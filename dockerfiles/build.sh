@@ -18,7 +18,7 @@ mariadb_versions="10.8.3 10.8.4 10.10.1"
 tidb_versions="v5.2.1 v5.3.0 v5.4.0 v6.0.0 v6.1.0 v6.3.0 v4.0.0-beta.2"
 
 # TiDB with TiKV versions
-tidb_tikv_versions="v6.4.0.tikv v4.0.8.tikv v4.0.0-beta.2.tikv"
+tidb_tikv_versions="v6.4.0.tikv v4.0.8.tikv v4.0.0-beta.2.tikv v4.0.4.tikv"
 
 # Build images
 build_image "mariadb" ${mariadb_versions}
