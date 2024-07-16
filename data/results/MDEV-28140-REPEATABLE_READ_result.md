@@ -20,21 +20,25 @@ Description:              The second and third scenarios (SELECT and DELETE) sho
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
+     - Affected rows / Warnings: 0 / 0
  * Instruction #1:
      - Instruction:  BEGIN;
      - Transaction: conn_0
      - Output: None
      - Executed order: 1
+     - Affected rows / Warnings: 0 / 0
  * Instruction #2:
      - Instruction:  UPDATE t SET c2 = 'test' WHERE c1;
      - Transaction: conn_0
      - Output: ERROR: 1292 (22007): Truncated incorrect DOUBLE value: ''
      - Executed order: Not executed
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
      - Output: None
      - Executed order: 2
+     - Affected rows / Warnings: 0 / 0
 
  * Container logs:
    No logs available.
@@ -45,21 +49,25 @@ Description:              The second and third scenarios (SELECT and DELETE) sho
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
+     - Affected rows / Warnings: 0 / 0
  * Instruction #1:
      - Instruction:  BEGIN;
      - Transaction: conn_0
      - Output: None
      - Executed order: 1
+     - Affected rows / Warnings: 0 / 0
  * Instruction #2:
      - Instruction:  SELECT * FROM t WHERE c1;
      - Transaction: conn_0
      - Output: []
      - Executed order: 2
+     - Affected rows / Warnings: 0 / 2
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
      - Output: None
      - Executed order: 3
+     - Affected rows / Warnings: 0 / 0
 
  * Container logs:
    No logs available.
@@ -70,21 +78,25 @@ Description:              The second and third scenarios (SELECT and DELETE) sho
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
+     - Affected rows / Warnings: 0 / 0
  * Instruction #1:
      - Instruction:  BEGIN;
      - Transaction: conn_0
      - Output: None
      - Executed order: 1
+     - Affected rows / Warnings: 0 / 0
  * Instruction #2:
      - Instruction:  DELETE FROM t WHERE c1;
      - Transaction: conn_0
      - Output: None
      - Executed order: 2
+     - Affected rows / Warnings: 0 / 2
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
      - Output: None
      - Executed order: 3
+     - Affected rows / Warnings: 0 / 0
 
  * Container logs:
    No logs available.

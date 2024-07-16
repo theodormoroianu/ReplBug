@@ -1,10 +1,10 @@
-# Bug ID MDEV-29081-REPEATABLE_READ
+# Bug ID MDEV-29081-SERIALIZABLE
 
 ## Description
 
 Link:                     https://jira.mariadb.org/browse/MDEV-29081
 Original isolation level: REPEATABLE READ
-Tested isolation level:   REPEATABLE READ
+Tested isolation level:   SERIALIZABLE
 Description:              Sometimes a different number of results are returned by SELECT.
 
 
@@ -16,7 +16,7 @@ Description:              Sometimes a different number of results are returned b
 ## Results
 ### Scenario 0
  * Instruction #0:
-     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
@@ -339,7 +339,7 @@ Description:              Sometimes a different number of results are returned b
 
 ### Scenario 1
  * Instruction #0:
-     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
@@ -662,7 +662,7 @@ Description:              Sometimes a different number of results are returned b
 
 ### Scenario 2
  * Instruction #0:
-     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
@@ -985,7 +985,7 @@ Description:              Sometimes a different number of results are returned b
 
 ### Scenario 3
  * Instruction #0:
-     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
@@ -1308,7 +1308,7 @@ Description:              Sometimes a different number of results are returned b
 
 ### Scenario 4
  * Instruction #0:
-     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+     - Instruction:  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
      - Transaction: conn_0
      - Output: None
      - Executed order: 0

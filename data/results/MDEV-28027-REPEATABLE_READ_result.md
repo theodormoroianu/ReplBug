@@ -20,21 +20,25 @@ Description:              Mismatch between MySQL and MariaDB: in Mariadb, RAND('
      - Transaction: conn_0
      - Output: None
      - Executed order: 0
+     - Affected rows / Warnings: 0 / 0
  * Instruction #1:
      - Instruction:  BEGIN;
      - Transaction: conn_0
      - Output: None
      - Executed order: 1
+     - Affected rows / Warnings: 0 / 0
  * Instruction #2:
      - Instruction:  SELECT * FROM t WHERE RAND('t');
      - Transaction: conn_0
      - Output: [(2,), (1,)]
      - Executed order: 2
+     - Affected rows / Warnings: 2 / 1
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
      - Output: None
      - Executed order: 3
+     - Affected rows / Warnings: 0 / 0
 
  * Container logs:
    No logs available.

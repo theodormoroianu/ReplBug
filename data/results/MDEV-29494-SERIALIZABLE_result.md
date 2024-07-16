@@ -30,19 +30,19 @@ Description:              The server should crash.
  * Instruction #2:
      - Instruction:  select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 ...
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: MySQL Connection not available.
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:25:44 [ERROR] mysqld got signal 6 ;
+   > 240716 17:42:53 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -59,52 +59,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7fed44000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f7e2dbfeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f7e4c40dc0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55e688b2ec8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55e6876bfb8d]
-   > ??:0(__sigaction)[0x7f7e4b7a6520]
-   > ??:0(pthread_kill)[0x7f7e4b7fa9fc]
-   > ??:0(raise)[0x7f7e4b7a6476]
-   > ??:0(abort)[0x7f7e4b78c7f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f7e4b78c71b]
-   > ??:0(__assert_fail)[0x7f7e4b79de96]
-   > /usr/local/mysql/bin/mysqld(_ZN16Item_type_holder7val_intEv+0x64)[0x55e687775ff0]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x55e686a12b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x55e68776fc58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x55e687499a5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x55e687499c5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x55e68798fb61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x55e6879662d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x55e68796bed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x55e6873a3e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x55e686eef6ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x55e686ecb14a]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN8optimizeEv+0x424)[0x55e686ec40ce]
-   > sql/item.h:1779(Item::val_int_result())[0x55e686d4a875]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55e68739dfcb]
-   > sql/item.h:7099(Item_cache::has_value())[0x55e686ed17b9]
-   > sql/item.h:7108(Item_cache::is_null())[0x55e686ecb45b]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55e686ec40ce]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55e686ee5dad]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55e686eb59c1]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55e686dd7656]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55e686dc5e57]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55e686de2a28]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55e686db84af]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55e686db51c2]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55e68727890e]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55e6872781b8]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55e687ec551a]
-   > ??:0(pthread_condattr_setpshared)[0x7f7e4b7f8ac3]
-   > ??:0(__xmknodat)[0x7f7e4b88a850]
+   > stack_bottom = 0x7fedb9901b78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55d2d94963ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55d2d8b963f7]
+   > ??:0(__sigaction)[0x7fedbbe80520]
+   > ??:0(pthread_kill)[0x7fedbbed49fc]
+   > ??:0(raise)[0x7fedbbe80476]
+   > ??:0(abort)[0x7fedbbe667f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fedbbe6671b]
+   > ??:0(__assert_fail)[0x7fedbbe77e96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x55d2d8bddbf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x55d2d8620cbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x55d2d8bdb553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x55d2d8a899e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x55d2d8a89aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x55d2d8cc3149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x55d2d8cb3486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x55d2d8cb59c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x55d2d8a18292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x55d2d882d44d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x55d2d88203f0]
+   > sql/item.h:1779(Item::val_int_result())[0x55d2d881dc09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55d2d877c2d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x55d2d8a160c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x55d2d8822774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55d2d88204f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55d2d881dc09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55d2d8829ab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55d2d88186a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55d2d87bd137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55d2d87b41c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x55d2d87c2134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55d2d87adf6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55d2d87ac8e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55d2d8994bbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55d2d8994848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x55d2d8ecbad1]
+   > ??:0(pthread_condattr_setpshared)[0x7fedbbed2ac3]
+   > ??:0(__xmknodat)[0x7fedbbf64850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7fed44014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -118,7 +117,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -150,19 +149,19 @@ Description:              The server should crash.
  * Instruction #2:
      - Instruction:  select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 ...
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: MySQL Connection not available.
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:25:57 [ERROR] mysqld got signal 6 ;
+   > 240716 17:43:04 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -179,52 +178,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7f75fc000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f13499feab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f13680e1c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55f13b36ec8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55f139effb8d]
-   > ??:0(__sigaction)[0x7f136747a520]
-   > ??:0(pthread_kill)[0x7f13674ce9fc]
-   > ??:0(raise)[0x7f136747a476]
-   > ??:0(abort)[0x7f13674607f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f136746071b]
-   > ??:0(__assert_fail)[0x7f1367471e96]
-   > /usr/local/mysql/bin/mysqld(_ZN16Item_type_holder7val_intEv+0x64)[0x55f139fb5ff0]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x55f139252b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x55f139fafc58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x55f139cd9a5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x55f139cd9c5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x55f13a1cfb61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x55f13a1a62d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x55f13a1abed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x55f139be3e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x55f13972f6ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x55f13970b14a]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN8optimizeEv+0x424)[0x55f1397040ce]
-   > /usr/local/mysql/bin/mysqld(_ZN13st_select_lex31optimize_unflattened_subqueriesEb+0x5a9)[0x55f13958a875]
-   > sql/item.h:1779(Item::val_int_result())[0x55f139bddfcb]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55f1397117b9]
-   > sql/item.h:7099(Item_cache::has_value())[0x55f13970b45b]
-   > sql/item.h:7108(Item_cache::is_null())[0x55f1397040ce]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55f139725dad]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55f1396f59c1]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55f139617656]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55f139605e57]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55f139622a28]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55f1395f84af]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55f1395f51c2]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55f139ab890e]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55f139ab81b8]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55f13a70551a]
-   > ??:0(pthread_condattr_setpshared)[0x7f13674ccac3]
-   > ??:0(__xmknodat)[0x7f136755e850]
+   > stack_bottom = 0x7f766cfb3b78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55bfd94a63ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55bfd8ba63f7]
+   > ??:0(__sigaction)[0x7f766fd30520]
+   > ??:0(pthread_kill)[0x7f766fd849fc]
+   > ??:0(raise)[0x7f766fd30476]
+   > ??:0(abort)[0x7f766fd167f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f766fd1671b]
+   > ??:0(__assert_fail)[0x7f766fd27e96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x55bfd8bedbf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x55bfd8630cbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x55bfd8beb553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x55bfd8a999e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x55bfd8a99aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x55bfd8cd3149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x55bfd8cc3486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x55bfd8cc59c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x55bfd8a28292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x55bfd883d44d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x55bfd88303f0]
+   > sql/item.h:1779(Item::val_int_result())[0x55bfd882dc09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55bfd878c2d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x55bfd8a260c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x55bfd8832774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55bfd88304f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55bfd882dc09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55bfd8839ab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55bfd88286a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55bfd87cd137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55bfd87c41c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x55bfd87d2134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55bfd87bdf6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55bfd87bc8e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55bfd89a4bbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55bfd89a4848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x55bfd8edbad1]
+   > ??:0(pthread_condattr_setpshared)[0x7f766fd82ac3]
+   > ??:0(__xmknodat)[0x7f766fe14850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7f75fc014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -238,7 +236,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -270,19 +268,19 @@ Description:              The server should crash.
  * Instruction #2:
      - Instruction:  select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 ...
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: MySQL Connection not available.
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:26:09 [ERROR] mysqld got signal 6 ;
+   > 240716 17:43:14 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -299,52 +297,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7f8f1c000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7fb4151feab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7fb433871c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55f1da8f1c8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55f1d9482b8d]
-   > ??:0(__sigaction)[0x7fb432c0a520]
-   > ??:0(pthread_kill)[0x7fb432c5e9fc]
-   > ??:0(raise)[0x7fb432c0a476]
-   > ??:0(abort)[0x7fb432bf07f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fb432bf071b]
-   > ??:0(__assert_fail)[0x7fb432c01e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x55f1d9538ff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x55f1d87d5b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x55f1d9532c58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x55f1d925ca5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x55f1d925cc5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x55f1d9752b61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x55f1d97292d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x55f1d972eed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x55f1d9166e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x55f1d8cb26ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x55f1d8c8e14a]
-   > sql/item.h:1779(Item::val_int_result())[0x55f1d8c870ce]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55f1d8b0d875]
-   > sql/item.h:7099(Item_cache::has_value())[0x55f1d9160fcb]
-   > sql/item.h:7108(Item_cache::is_null())[0x55f1d8c947b9]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55f1d8c8e45b]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55f1d8c870ce]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55f1d8ca8dad]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55f1d8c789c1]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55f1d8b9a656]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55f1d8b88e57]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55f1d8ba5a28]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55f1d8b7b4af]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55f1d8b781c2]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55f1d903b90e]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55f1d903b1b8]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55f1d9c8851a]
-   > ??:0(pthread_condattr_setpshared)[0x7fb432c5cac3]
-   > ??:0(__xmknodat)[0x7fb432cee850]
+   > stack_bottom = 0x7f8fa37fbb78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x558512d753ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5585124753f7]
+   > ??:0(__sigaction)[0x7f8fa3df7520]
+   > ??:0(pthread_kill)[0x7f8fa3e4b9fc]
+   > ??:0(raise)[0x7f8fa3df7476]
+   > ??:0(abort)[0x7f8fa3ddd7f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f8fa3ddd71b]
+   > ??:0(__assert_fail)[0x7f8fa3deee96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x5585124bcbf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x558511effcbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x5585124ba553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x5585123689e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x558512368aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x5585125a2149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x558512592486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x5585125949c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x5585122f7292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x55851210c44d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x5585120ff3f0]
+   > sql/item.h:1779(Item::val_int_result())[0x5585120fcc09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55851205b2d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x5585122f50c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x558512101774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x5585120ff4f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x5585120fcc09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x558512108ab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x5585120f76a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55851209c137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x5585120931c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x5585120a1134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55851208cf6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55851208b8e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x558512273bbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x558512273848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x5585127aaad1]
+   > ??:0(pthread_condattr_setpshared)[0x7f8fa3e49ac3]
+   > ??:0(__xmknodat)[0x7f8fa3edb850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7f8f1c014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -358,7 +355,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -402,7 +399,7 @@ Description:              The server should crash.
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:26:22 [ERROR] mysqld got signal 6 ;
+   > 240716 17:43:24 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -419,52 +416,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7fd8bc000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7fcddfffeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7fcdfe774c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x564687c6fc8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x564686800b8d]
-   > ??:0(__sigaction)[0x7fcdfdb0d520]
-   > ??:0(pthread_kill)[0x7fcdfdb619fc]
-   > ??:0(raise)[0x7fcdfdb0d476]
-   > ??:0(abort)[0x7fcdfdaf37f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fcdfdaf371b]
-   > ??:0(__assert_fail)[0x7fcdfdb04e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x5646868b6ff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x564685b53b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x5646868b0c58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x5646865daa5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x5646865dac5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x564686ad0b61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x564686aa72d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x564686aaced9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x5646864e4e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x5646860306ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x56468600c14a]
-   > sql/item.h:1779(Item::val_int_result())[0x5646860050ce]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x564685e8b875]
-   > sql/item.h:7099(Item_cache::has_value())[0x5646864defcb]
-   > sql/item.h:7108(Item_cache::is_null())[0x5646860127b9]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x56468600c45b]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x5646860050ce]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x564686026dad]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x564685ff69c1]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x564685f18656]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x564685f06e57]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x564685f23a28]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x564685ef94af]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x564685ef61c2]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x5646863b990e]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x5646863b91b8]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x56468700651a]
-   > ??:0(pthread_condattr_setpshared)[0x7fcdfdb5fac3]
-   > ??:0(__xmknodat)[0x7fcdfdbf1850]
+   > stack_bottom = 0x7fd92d94cb78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x563f904003ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x563f8fb003f7]
+   > ??:0(__sigaction)[0x7fd92feb7520]
+   > ??:0(pthread_kill)[0x7fd92ff0b9fc]
+   > ??:0(raise)[0x7fd92feb7476]
+   > ??:0(abort)[0x7fd92fe9d7f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fd92fe9d71b]
+   > ??:0(__assert_fail)[0x7fd92feaee96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x563f8fb47bf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x563f8f58acbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x563f8fb45553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x563f8f9f39e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x563f8f9f3aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x563f8fc2d149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x563f8fc1d486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x563f8fc1f9c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x563f8f982292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x563f8f79744d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x563f8f78a3f0]
+   > sql/item.h:1779(Item::val_int_result())[0x563f8f787c09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x563f8f6e62d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x563f8f9800c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x563f8f78c774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x563f8f78a4f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x563f8f787c09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x563f8f793ab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x563f8f7826a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x563f8f727137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x563f8f71e1c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x563f8f72c134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x563f8f717f6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x563f8f7168e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x563f8f8febbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x563f8f8fe848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x563f8fe35ad1]
+   > ??:0(pthread_condattr_setpshared)[0x7fd92ff09ac3]
+   > ??:0(__xmknodat)[0x7fd92ff9b850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7fd8bc014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -478,7 +474,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -522,7 +518,7 @@ Description:              The server should crash.
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:26:34 [ERROR] mysqld got signal 6 ;
+   > 240716 17:43:35 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -539,52 +535,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7f92d4000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f69a97feab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f69c7650c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5626c9f58c8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5626c8ae9b8d]
-   > ??:0(__sigaction)[0x7f69c69e9520]
-   > ??:0(pthread_kill)[0x7f69c6a3d9fc]
-   > ??:0(raise)[0x7f69c69e9476]
-   > ??:0(abort)[0x7f69c69cf7f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f69c69cf71b]
-   > ??:0(__assert_fail)[0x7f69c69e0e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x5626c8b9fff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x5626c7e3cb72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x5626c8b99c58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x5626c88c3a5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x5626c88c3c5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x5626c8db9b61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x5626c8d902d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x5626c8d95ed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x5626c87cde02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x5626c83196ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x5626c82f514a]
-   > sql/item.h:1779(Item::val_int_result())[0x5626c82ee0ce]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x5626c8174875]
-   > sql/item.h:7099(Item_cache::has_value())[0x5626c87c7fcb]
-   > sql/item.h:7108(Item_cache::is_null())[0x5626c82fb7b9]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x5626c82f545b]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x5626c82ee0ce]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x5626c830fdad]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x5626c82df9c1]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x5626c8201656]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x5626c81efe57]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x5626c820ca28]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x5626c81e24af]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x5626c81df1c2]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x5626c86a290e]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x5626c86a21b8]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x5626c92ef51a]
-   > ??:0(pthread_condattr_setpshared)[0x7f69c6a3bac3]
-   > ??:0(__xmknodat)[0x7f69c6acd850]
+   > stack_bottom = 0x7f933f807b78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5571acdb33ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5571ac4b33f7]
+   > ??:0(__sigaction)[0x7f933fe03520]
+   > ??:0(pthread_kill)[0x7f933fe579fc]
+   > ??:0(raise)[0x7f933fe03476]
+   > ??:0(abort)[0x7f933fde97f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f933fde971b]
+   > ??:0(__assert_fail)[0x7f933fdfae96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x5571ac4fabf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x5571abf3dcbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x5571ac4f8553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x5571ac3a69e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x5571ac3a6aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x5571ac5e0149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x5571ac5d0486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x5571ac5d29c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x5571ac335292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x5571ac14a44d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x5571ac13d3f0]
+   > sql/item.h:1779(Item::val_int_result())[0x5571ac13ac09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x5571ac0992d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x5571ac3330c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x5571ac13f774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x5571ac13d4f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x5571ac13ac09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x5571ac146ab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x5571ac1356a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x5571ac0da137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x5571ac0d11c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x5571ac0df134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x5571ac0caf6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x5571ac0c98e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x5571ac2b1bbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x5571ac2b1848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x5571ac7e8ad1]
+   > ??:0(pthread_condattr_setpshared)[0x7f933fe55ac3]
+   > ??:0(__xmknodat)[0x7f933fee7850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7f92d4014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -598,7 +593,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -642,7 +637,7 @@ Description:              The server should crash.
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:26:46 [ERROR] mysqld got signal 6 ;
+   > 240716 17:43:45 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -659,52 +654,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7fa7a8000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f89219feab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f893f828c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55a0af453c8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55a0adfe4b8d]
-   > ??:0(__sigaction)[0x7f893ebc1520]
-   > ??:0(pthread_kill)[0x7f893ec159fc]
-   > ??:0(raise)[0x7f893ebc1476]
-   > ??:0(abort)[0x7f893eba77f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f893eba771b]
-   > ??:0(__assert_fail)[0x7f893ebb8e96]
-   > /usr/local/mysql/bin/mysqld(_ZN16Item_type_holder7val_intEv+0x64)[0x55a0ae09aff0]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x55a0ad337b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x55a0ae094c58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x55a0addbea5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x55a0addbec5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x55a0ae2b4b61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x55a0ae28b2d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x55a0ae290ed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x55a0adcc8e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x55a0ad8146ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x55a0ad7f014a]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN8optimizeEv+0x424)[0x55a0ad7e90ce]
-   > sql/item.h:1779(Item::val_int_result())[0x55a0ad66f875]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55a0adcc2fcb]
-   > sql/item.h:7099(Item_cache::has_value())[0x55a0ad7f67b9]
-   > sql/item.h:7108(Item_cache::is_null())[0x55a0ad7f045b]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55a0ad7e90ce]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55a0ad80adad]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55a0ad7da9c1]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55a0ad6fc656]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55a0ad6eae57]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55a0ad707a28]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55a0ad6dd4af]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55a0ad6da1c2]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55a0adb9d90e]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55a0adb9d1b8]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55a0ae7ea51a]
-   > ??:0(pthread_condattr_setpshared)[0x7f893ec13ac3]
-   > ??:0(__xmknodat)[0x7f893eca5850]
+   > stack_bottom = 0x7fa81f5cab78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x556dbdbda3ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x556dbd2da3f7]
+   > ??:0(__sigaction)[0x7fa81fbc6520]
+   > ??:0(pthread_kill)[0x7fa81fc1a9fc]
+   > ??:0(raise)[0x7fa81fbc6476]
+   > ??:0(abort)[0x7fa81fbac7f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7fa81fbac71b]
+   > ??:0(__assert_fail)[0x7fa81fbbde96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x556dbd321bf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x556dbcd64cbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x556dbd31f553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x556dbd1cd9e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x556dbd1cdaaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x556dbd407149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x556dbd3f7486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x556dbd3f99c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x556dbd15c292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x556dbcf7144d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x556dbcf643f0]
+   > sql/item.h:1779(Item::val_int_result())[0x556dbcf61c09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x556dbcec02d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x556dbd15a0c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x556dbcf66774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x556dbcf644f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x556dbcf61c09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x556dbcf6dab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x556dbcf5c6a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x556dbcf01137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x556dbcef81c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x556dbcf06134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x556dbcef1f6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x556dbcef08e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x556dbd0d8bbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x556dbd0d8848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x556dbd60fad1]
+   > ??:0(pthread_condattr_setpshared)[0x7fa81fc18ac3]
+   > ??:0(__xmknodat)[0x7fa81fcaa850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7fa7a8014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -718,7 +712,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -750,19 +744,19 @@ Description:              The server should crash.
  * Instruction #2:
      - Instruction:  select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 ...
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: MySQL Connection not available.
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:26:58 [ERROR] mysqld got signal 6 ;
+   > 240716 17:43:55 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -779,52 +773,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7ff0d8000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f3105bfeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f3124411c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5640e0eeec8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5640dfa7fb8d]
-   > ??:0(__sigaction)[0x7f31237aa520]
-   > ??:0(pthread_kill)[0x7f31237fe9fc]
-   > ??:0(raise)[0x7f31237aa476]
-   > ??:0(abort)[0x7f31237907f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f312379071b]
-   > ??:0(__assert_fail)[0x7f31237a1e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x5640dfb35ff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x5640dedd2b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x5640dfb2fc58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x5640df859a5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x5640df859c5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x5640dfd4fb61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x5640dfd262d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x5640dfd2bed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x5640df763e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x5640df2af6ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x5640df28b14a]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN8optimizeEv+0x424)[0x5640df2840ce]
-   > /usr/local/mysql/bin/mysqld(_ZN13st_select_lex31optimize_unflattened_subqueriesEb+0x5a9)[0x5640df10a875]
-   > sql/item.h:1779(Item::val_int_result())[0x5640df75dfcb]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x5640df2917b9]
-   > sql/item.h:7099(Item_cache::has_value())[0x5640df28b45b]
-   > sql/item.h:7108(Item_cache::is_null())[0x5640df2840ce]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x5640df2a5dad]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x5640df2759c1]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x5640df197656]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x5640df185e57]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x5640df1a2a28]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x5640df1784af]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x5640df1751c2]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x5640df63890e]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x5640df6381b8]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x5640e028551a]
-   > ??:0(pthread_condattr_setpshared)[0x7f31237fcac3]
-   > ??:0(__xmknodat)[0x7f312388e850]
+   > stack_bottom = 0x7ff150867b78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5604669dc3ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5604660dc3f7]
+   > ??:0(__sigaction)[0x7ff150e63520]
+   > ??:0(pthread_kill)[0x7ff150eb79fc]
+   > ??:0(raise)[0x7ff150e63476]
+   > ??:0(abort)[0x7ff150e497f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7ff150e4971b]
+   > ??:0(__assert_fail)[0x7ff150e5ae96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x560466123bf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x560465b66cbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x560466121553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x560465fcf9e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x560465fcfaaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x560466209149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x5604661f9486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x5604661fb9c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x560465f5e292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x560465d7344d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x560465d663f0]
+   > sql/item.h:1779(Item::val_int_result())[0x560465d63c09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x560465cc22d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x560465f5c0c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x560465d68774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x560465d664f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x560465d63c09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x560465d6fab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x560465d5e6a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x560465d03137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x560465cfa1c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x560465d08134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x560465cf3f6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x560465cf28e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x560465edabbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x560465eda848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x560466411ad1]
+   > ??:0(pthread_condattr_setpshared)[0x7ff150eb5ac3]
+   > ??:0(__xmknodat)[0x7ff150f47850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7ff0d8014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -838,7 +831,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -870,19 +863,19 @@ Description:              The server should crash.
  * Instruction #2:
      - Instruction:  select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 ...
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: MySQL Connection not available.
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:27:11 [ERROR] mysqld got signal 6 ;
+   > 240716 17:44:06 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -899,52 +892,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7f669c000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f0e83ffeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f0ea27f4c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x564a57c91c8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x564a56822b8d]
-   > ??:0(__sigaction)[0x7f0ea1b8d520]
-   > ??:0(pthread_kill)[0x7f0ea1be19fc]
-   > ??:0(raise)[0x7f0ea1b8d476]
-   > ??:0(abort)[0x7f0ea1b737f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f0ea1b7371b]
-   > ??:0(__assert_fail)[0x7f0ea1b84e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x564a568d8ff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x564a55b75b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x564a568d2c58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x564a565fca5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x564a565fcc5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x564a56af2b61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x564a56ac92d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x564a56aceed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x564a56506e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x564a560526ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x564a5602e14a]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN8optimizeEv+0x424)[0x564a560270ce]
-   > sql/item.h:1779(Item::val_int_result())[0x564a55ead875]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x564a56500fcb]
-   > sql/item.h:7099(Item_cache::has_value())[0x564a560347b9]
-   > sql/item.h:7108(Item_cache::is_null())[0x564a5602e45b]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x564a560270ce]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x564a56048dad]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x564a560189c1]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x564a55f3a656]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x564a55f28e57]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x564a55f45a28]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x564a55f1b4af]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x564a55f181c2]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x564a563db90e]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x564a563db1b8]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x564a5702851a]
-   > ??:0(pthread_condattr_setpshared)[0x7f0ea1bdfac3]
-   > ??:0(__xmknodat)[0x7f0ea1c71850]
+   > stack_bottom = 0x7f670d768b78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x5569ad6143ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x5569acd143f7]
+   > ??:0(__sigaction)[0x7f67104cc520]
+   > ??:0(pthread_kill)[0x7f67105209fc]
+   > ??:0(raise)[0x7f67104cc476]
+   > ??:0(abort)[0x7f67104b27f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f67104b271b]
+   > ??:0(__assert_fail)[0x7f67104c3e96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x5569acd5bbf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x5569ac79ecbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x5569acd59553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x5569acc079e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x5569acc07aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x5569ace41149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x5569ace31486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x5569ace339c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x5569acb96292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x5569ac9ab44d]
+   > sql/item.h:1779(Item::val_int_result())[0x5569ac99e3f0]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x5569ac99bc09]
+   > sql/item.h:7099(Item_cache::has_value())[0x5569ac8fa2d9]
+   > sql/item.h:7108(Item_cache::is_null())[0x5569acb940c4]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x5569ac9a0774]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x5569ac99e4f3]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x5569ac99bc09]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x5569ac9a7ab2]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x5569ac9966a3]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x5569ac93b137]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x5569ac9321c1]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x5569ac940134]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x5569ac92bf6e]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x5569ac92a8e0]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x5569acb12bbb]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x5569acb12848]
+   > sql/sql_select.cc:5056(mysql_select(THD*, TABLE_LIST*, List<Item>&, Item*, unsigned int, st_order*, st_order*, Item*, st_order*, unsigned long long, select_result*, st_select_lex_unit*, st_select_lex*))[0x5569ad049ad1]
+   > ??:0(pthread_condattr_setpshared)[0x7f671051eac3]
+   > ??:0(__xmknodat)[0x7f67105b0850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7f669c014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -958,7 +950,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -1002,7 +994,7 @@ Description:              The server should crash.
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:27:24 [ERROR] mysqld got signal 6 ;
+   > 240716 17:44:16 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -1019,52 +1011,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7f4dc8000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f13c4ffeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f13e36c1c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55d329773c8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55d328304b8d]
-   > ??:0(__sigaction)[0x7f13e2a5a520]
-   > ??:0(pthread_kill)[0x7f13e2aae9fc]
-   > ??:0(raise)[0x7f13e2a5a476]
-   > ??:0(abort)[0x7f13e2a407f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f13e2a4071b]
-   > ??:0(__assert_fail)[0x7f13e2a51e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x55d3283baff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x55d327657b72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x55d3283b4c58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x55d3280dea5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x55d3280dec5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x55d3285d4b61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x55d3285ab2d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x55d3285b0ed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x55d327fe8e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x55d327b346ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x55d327b1014a]
-   > sql/item.h:1779(Item::val_int_result())[0x55d327b090ce]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55d32798f875]
-   > sql/item.h:7099(Item_cache::has_value())[0x55d327fe2fcb]
-   > sql/item.h:7108(Item_cache::is_null())[0x55d327b167b9]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55d327b1045b]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55d327b090ce]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55d327b2adad]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55d327afa9c1]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55d327a1c656]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55d327a0ae57]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55d327a27a28]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55d3279fd4af]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55d3279fa1c2]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55d327ebd90e]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55d327ebd1b8]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x55d328b0a51a]
-   > ??:0(pthread_condattr_setpshared)[0x7f13e2aacac3]
-   > ??:0(__xmknodat)[0x7f13e2b3e850]
+   > stack_bottom = 0x7f4e4108bb78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x55a719df03ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x55a7194f03f7]
+   > ??:0(__sigaction)[0x7f4e41687520]
+   > ??:0(pthread_kill)[0x7f4e416db9fc]
+   > ??:0(raise)[0x7f4e41687476]
+   > ??:0(abort)[0x7f4e4166d7f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f4e4166d71b]
+   > ??:0(__assert_fail)[0x7f4e4167ee96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x55a719537bf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x55a718f7acbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x55a719535553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x55a7193e39e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x55a7193e3aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x55a71961d149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x55a71960d486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x55a71960f9c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x55a719372292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x55a71918744d]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x20a4)[0x55a71917a3f0]
+   > sql/item.h:1779(Item::val_int_result())[0x55a719177c09]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x55a7190d62d9]
+   > sql/item.h:7099(Item_cache::has_value())[0x55a7193700c4]
+   > sql/item.h:7108(Item_cache::is_null())[0x55a71917c774]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x55a71917a4f3]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x55a719177c09]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x55a719183ab2]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x55a7191726a3]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x55a719117137]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x55a71910e1c1]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x55a71911c134]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x55a719107f6e]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x55a7191068e0]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x55a7192eebbb]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x55a7192ee848]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x55a719825ad1]
+   > ??:0(pthread_condattr_setpshared)[0x7f4e416d9ac3]
+   > ??:0(__xmknodat)[0x7f4e4176b850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7f4dc8014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -1078,7 +1069,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
@@ -1110,19 +1101,19 @@ Description:              The server should crash.
  * Instruction #2:
      - Instruction:  select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 ...
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: 2013 (HY000): Lost connection to MySQL server during query
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
  * Instruction #3:
      - Instruction:  COMMIT;
      - Transaction: conn_0
-     - Output: ERROR: Timeout for this transaction.
+     - Output: ERROR: MySQL Connection not available.
      - Executed order: Not executed
-     - Affected rows / Warnings: None / None
+     - Affected rows / Warnings: -1 / 0
 
  * Container logs:
    > mysqld: /server/server/sql/item.cc:10699: virtual longlong Item_type_holder::val_int(): Assertion `0' failed.
-   > 240704 13:27:36 [ERROR] mysqld got signal 6 ;
+   > 240716 17:44:26 [ERROR] mysqld got signal 6 ;
    > This could be because you hit a bug. It is also possible that this binary
    > or one of the libraries it was linked against is corrupt, improperly built,
    > or misconfigured. This error can also be caused by malfunctioning hardware.
@@ -1139,52 +1130,51 @@ Description:              The server should crash.
    > It is possible that mysqld could use up to 
    > key_buffer_size + (read_buffer_size + sort_buffer_size)*max_threads = 468134 K  bytes of memory
    > Hope that's ok; if not, decrease some variables in the equation.
-   > Thread pointer: 0x62b00011f288
+   > Thread pointer: 0x7f6584000dc8
    > Attempting backtrace. You can use the following information to find out
    > where mysqld died. If you see no messages after this, something went
    > terribly wrong...
-   > stack_bottom = 0x7f4e97ffeab0 thread_stack 0x100000
-   > /lib/x86_64-linux-gnu/libasan.so.6(+0x45c0e)[0x7f4eb5e20c0e]
-   > mysys/stacktrace.c:212(my_print_stacktrace)[0x564d98b1bc8f]
-   > sql/signal_handler.cc:236(handle_fatal_signal)[0x564d976acb8d]
-   > ??:0(__sigaction)[0x7f4eb51b9520]
-   > ??:0(pthread_kill)[0x7f4eb520d9fc]
-   > ??:0(raise)[0x7f4eb51b9476]
-   > ??:0(abort)[0x7f4eb519f7f3]
-   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f4eb519f71b]
-   > ??:0(__assert_fail)[0x7f4eb51b0e96]
-   > sql/item.cc:10700(Item_type_holder::val_int())[0x564d97762ff0]
-   > /usr/local/mysql/bin/mysqld(+0x188bb72)[0x564d969ffb72]
-   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x112)[0x564d9775cc58]
-   > /usr/local/mysql/bin/mysqld(+0x2312a5c)[0x564d97486a5c]
-   > /usr/local/mysql/bin/mysqld(+0x2312c5c)[0x564d97486c5c]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x13d)[0x564d9797cb61]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0xd4f)[0x564d979532d1]
-   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x3ab)[0x564d97958ed9]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0x2b0)[0x564d97390e02]
-   > /usr/local/mysql/bin/mysqld(+0x1d686ad)[0x564d96edc6ad]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN14optimize_innerEv+0x596e)[0x564d96eb814a]
-   > /usr/local/mysql/bin/mysqld(_ZN4JOIN8optimizeEv+0x424)[0x564d96eb10ce]
-   > sql/item.h:1779(Item::val_int_result())[0x564d96d37875]
-   > sql/item.cc:10125(Item_cache_int::cache_value())[0x564d9738afcb]
-   > sql/item.h:7099(Item_cache::has_value())[0x564d96ebe7b9]
-   > sql/item.h:7108(Item_cache::is_null())[0x564d96eb845b]
-   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x564d96eb10ce]
-   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x564d96ed2dad]
-   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x564d96ea29c1]
-   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x564d96dc4656]
-   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x564d96db2e57]
-   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x564d96dcfa28]
-   > sql/sql_select.cc:1863(JOIN::optimize())[0x564d96da54af]
-   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x564d96da21c2]
-   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x564d9726590e]
-   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x564d972651b8]
-   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x564d97eb251a]
-   > ??:0(pthread_condattr_setpshared)[0x7f4eb520bac3]
-   > ??:0(__xmknodat)[0x7f4eb529d850]
+   > stack_bottom = 0x7f65e4182b78 thread_stack 0x49000
+   > mysys/stacktrace.c:212(my_print_stacktrace)[0x558d180953ce]
+   > sql/signal_handler.cc:236(handle_fatal_signal)[0x558d177953f7]
+   > ??:0(__sigaction)[0x7f65e4f6f520]
+   > ??:0(pthread_kill)[0x7f65e4fc39fc]
+   > ??:0(raise)[0x7f65e4f6f476]
+   > ??:0(abort)[0x7f65e4f557f3]
+   > /lib/x86_64-linux-gnu/libc.so.6(+0x2871b)[0x7f65e4f5571b]
+   > ??:0(__assert_fail)[0x7f65e4f66e96]
+   > sql/item.cc:10700(Item_type_holder::val_int())[0x558d177dcbf3]
+   > /usr/local/mysql/bin/mysqld(+0x861cbf)[0x558d1721fcbf]
+   > /usr/local/mysql/bin/mysqld(_ZN14Item_cache_int11cache_valueEv+0x51)[0x558d177da553]
+   > /usr/local/mysql/bin/mysqld(+0xcca9e2)[0x558d176889e2]
+   > /usr/local/mysql/bin/mysqld(+0xccaaaa)[0x558d17688aaa]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect43disable_cond_guard_for_const_null_left_exprEi+0x69)[0x558d178c2149]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect31create_single_in_to_exists_condEP4JOINPP4ItemS4_+0x576)[0x558d178b2486]
+   > /usr/local/mysql/bin/mysqld(_ZN17Item_in_subselect24create_in_to_exists_condEP4JOIN+0x18e)[0x558d178b49c4]
+   > /usr/local/mysql/bin/mysqld(_ZN4JOIN20choose_subquery_planEy+0xd8)[0x558d17617292]
+   > /usr/local/mysql/bin/mysqld(+0xa6e44d)[0x558d1742c44d]
+   > sql/item.h:1779(Item::val_int_result())[0x558d1741f3f0]
+   > sql/item.cc:10125(Item_cache_int::cache_value())[0x558d1741cc09]
+   > sql/item.h:7099(Item_cache::has_value())[0x558d1737b2d9]
+   > sql/item.h:7108(Item_cache::is_null())[0x558d176150c4]
+   > sql/item_subselect.h:670(Item_in_subselect::disable_cond_guard_for_const_null_left_expr(int))[0x558d17421774]
+   > sql/item_subselect.cc:2402(Item_in_subselect::create_single_in_to_exists_cond(JOIN*, Item**, Item**))[0x558d1741f4f3]
+   > sql/item_subselect.cc:2807(Item_in_subselect::create_in_to_exists_cond(JOIN*))[0x558d1741cc09]
+   > sql/opt_subselect.cc:6522(JOIN::choose_subquery_plan(unsigned long long))[0x558d17428ab2]
+   > sql/sql_select.cc:6020(make_join_statistics(JOIN*, List<TABLE_LIST>&, st_dynamic_array*))[0x558d174176a3]
+   > sql/sql_select.cc:2524(JOIN::optimize_inner())[0x558d173bc137]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x558d173b31c1]
+   > sql/sql_lex.cc:4915(st_select_lex::optimize_unflattened_subqueries(bool))[0x558d173c1134]
+   > sql/opt_subselect.cc:5656(JOIN::optimize_unflattened_subqueries())[0x558d173acf6e]
+   > sql/sql_select.cc:3125(JOIN::optimize_stage2())[0x558d173ab8e0]
+   > sql/sql_select.cc:2550(JOIN::optimize_inner())[0x558d17593bbb]
+   > sql/sql_select.cc:1863(JOIN::optimize())[0x558d17593848]
+   > sql/sql_select.cc:5056(mysql_select(THD*, TABLE_LIST*, List<Item>&, Item*, unsigned int, st_order*, st_order*, Item*, st_order*, unsigned long long, select_result*, st_select_lex_unit*, st_select_lex*))[0x558d17acaad1]
+   > ??:0(pthread_condattr_setpshared)[0x7f65e4fc1ac3]
+   > ??:0(__xmknodat)[0x7f65e5053850]
    > Trying to get some variables.
    > Some pointers may be invalid and cause the dump to abort.
-   > Query (0x6290000872a8): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
+   > Query (0x7f6584014ec0): select subq_0.c0 as c0 from (select ref_0.c_s7edob as c0 from t_dmvax as ref_0 where ref_0.c_s7edob not in ( select ref_1.c_wwyiz as c0 from t_dmvax as ref_1) ) as subq_0 where subq_0.c0 = ( select ref_3.c_wwyiz as c0 from (t_dmvax as ref_2 cross join t_dmvax as ref_3) union select ref_4.c_wwyiz as c0 from t_dmvax as ref_4)
    > Connection ID (thread ID): 5
    > Status: NOT_KILLED
    > Optimizer switch: index_merge=on,index_merge_union=on,index_merge_sort_union=on,index_merge_intersection=on,index_merge_sort_intersection=off,engine_condition_pushdown=off,index_condition_pushdown=on,derived_merge=on,derived_with_keys=on,firstmatch=on,loosescan=on,materialization=on,in_to_exists=on,semijoin=on,partial_match_rowid_merge=on,partial_match_table_scan=on,subquery_cache=on,mrr=off,mrr_cost_based=off,mrr_sort_keys=off,outer_join_with_cache=on,semijoin_with_cache=on,join_cache_incremental=on,join_cache_hashed=on,join_cache_bka=on,optimize_join_buffer_size=on,table_elimination=on,extended_keys=on,exists_to_in=on,orderby_uses_equalities=on,condition_pushdown_for_derived=on,split_materialized=on,condition_pushdown_for_subquery=on,rowid_filter=on,condition_pushdown_from_having=on,not_null_range_scan=off
@@ -1198,7 +1188,7 @@ Description:              The server should crash.
    > Max file size             unlimited            unlimited            bytes     
    > Max data size             unlimited            unlimited            bytes     
    > Max stack size            8388608              unlimited            bytes     
-   > Max core file size        0                    unlimited            bytes     
+   > Max core file size        unlimited            unlimited            bytes     
    > Max resident set          unlimited            unlimited            bytes     
    > Max processes             61160                61160                processes 
    > Max open files            524288               524288               files     
