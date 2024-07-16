@@ -119,7 +119,7 @@ class Bug:
         result = [
             f"# Bug ID {self.bug_id}",
             "",
-            f"## Description",
+            "## Description",
             self.description,
             "",
             "## Details",

@@ -12,6 +12,20 @@ from testcase.helpers import MYSQL_CONNECTION_LOCK_WAIT_TIMEOUT_S, Instruction
 
 
 class TransactionProcess(multiprocessing.Process):
+    """
+    This class represents a transaction process, which will run the instructions.
+
+    The instructions are taken from the `instructions_to_run_queue` and the results are put in the
+    `instruction_output_queue`.
+
+    For stopping the process, two `None` instructions should be put in the `instructions_to_run_queue`:
+        * The first `None` instruction will stop the process from waiting for new instructions.
+        * The second `None` instruction will stop the process (which in particular closes the SQL connection).
+
+    Two `None` instructions are needed because we don't want to close the connection before all the
+    concurent processes are done executing their instructions.
+    """
+
     def __init__(
         self,
         conn: db_config.DatabaseConnection,
@@ -48,7 +62,7 @@ class TransactionProcess(multiprocessing.Process):
         while True:
             instruction = self.instructions_to_run_queue.get()
             if instruction is None:
-                # Quit the process
+                # Stop waiting for instructions
                 break
             if self.encountered_error:
                 instruction.previous_instruction_failed = True
@@ -78,4 +92,6 @@ class TransactionProcess(multiprocessing.Process):
             self.instruction_output_queue.put(instruction)
 
         self.instruction_output_queue.put(None)
+        instruction = self.instructions_to_run_queue.get()
+        assert instruction is None, "The second instruction should be None"
         connection.close()
