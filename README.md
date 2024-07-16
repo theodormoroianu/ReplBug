@@ -54,6 +54,6 @@ Additionally, a custom image of TiDB + TiKV + PD is used for running TiDB in a c
 The logs of the testcases can be seen in the [data/results](./data/results) directory.
 The logs are stored in the following format: `{BUG_ID}-{TESTCASE}.md`.
 
-A ferquent checkpoint of the Google Docs table with the results is available [here](./data/analysis/Exploring%20the%20Correlation%20between%20Transactional%20Bugs%20and%20Isolation%20Levels_5_jun.xlsx).
+A frequent checkpoint of the Google Docs table with the results is available in [this folder](./data/analysis/).
 
 The up-to-date sheet is available [here](https://docs.google.com/spreadsheets/d/1As6S9c8yzeAzXjCYplpv2aqIEXkB6BhpMhJR2qYJ4sk/edit?usp=sharing) (online).
