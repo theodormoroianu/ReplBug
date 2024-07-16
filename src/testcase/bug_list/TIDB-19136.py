@@ -10,7 +10,7 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.TIDB, "v4.0.4.tikv"
 )
 
-DESCRIPTION = """Duplicate key is ignored in insert The insert statement should fail."""
+DESCRIPTION = """The second select should output the same table as the first one, but it doesn't."""
 
 SETUP_SQL_SCRIPT = """
 create table t ( c_int int, c_str varchar(40), primary key(c_int, c_str) );
