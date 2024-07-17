@@ -11,7 +11,7 @@ RUN apt update \
 WORKDIR /server
 RUN git clone --depth 1 --branch mariadb-10.10.1 --single-branch https://github.com/MariaDB/server \
     && cd server \
-    && cmake . -DCMAKE_BUILD_TYPE=Debug \
+    && cmake . -DCMAKE_BUILD_TYPE=Debug -DWITH_ASAN=ON \
     && make -j8 \
     && make install \
     && make clean \
