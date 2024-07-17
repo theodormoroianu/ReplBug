@@ -80,6 +80,55 @@ class PodmanConnection:
         # by the database server starting up)
         self.log_characters_to_ignore: Dict[str, int] = defaultdict(int)
 
+    def _get_image_and_tag(
+        self, db_and_version: DatabaseTypeAndVersion
+    ) -> Tuple[str, str]:
+        """
+        Get the image name and tag for a specific database type and version.
+        If neccecary, the image is pulled from a registry.
+        """
+
+        local_image, local_tag = None, None
+
+        # Try to run the image locally (if present).
+        logging.info(f"Trying to find the image for {db_and_version} locally...")
+        for image, tag in db_and_version.to_docker_hub_images_and_tags():
+            try:
+                self.podman_client.images.get(f"{image}:{tag}")
+                local_image, local_tag = image, tag
+                logging.info(f"Found image {image}:{tag} locally.")
+                break
+            except Exception:
+                pass
+
+        # Not present locally, we need to pull it.
+        if local_image is None:
+            logging.info(
+                f"Image {db_and_version} not found locally. Trying to pull it..."
+            )
+            for image, tag in db_and_version.to_docker_hub_images_and_tags():
+                try:
+                    self.podman_client.images.pull(
+                        repository=f"docker.io/{image}", tag=tag
+                    )
+                    self.podman_client.images.get(f"{image}:{tag}")
+                    logging.info(f"Image {image}:{tag} pulled successfully.")
+                    local_image, local_tag = image, tag
+                    break
+                except Exception:
+                    pass
+
+        # Still not present, we can't do anything.
+        if local_image is None:
+            logging.error(
+                f"Image {db_and_version} not found. Maybe it needs to be built?"
+            )
+            print(f"Image {db_and_version} not found. Maybe it needs to be built?")
+            raise ValueError(
+                f"Image {db_and_version} not found. Maybe it needs to be built?"
+            )
+        return local_image, local_tag
+
     def create_container(
         self, db_and_version: DatabaseTypeAndVersion
     ) -> Tuple[str, DatabaseConnection]:
@@ -88,6 +137,7 @@ class PodmanConnection:
         returns the container id and the database connection.
         """
         logging.debug(f"new container for {db_and_version} requested.")
+
         # Maybe we have a container that is not currently used.
         if self.unused_containers[db_and_version]:
             logging.info(f"Re-using a container for {db_and_version}.")
@@ -95,14 +145,8 @@ class PodmanConnection:
             self.containers[container.id] = (container, db_and_version, db_connection)
             return container.id, db_connection
 
-        # The container image we need.
-        image_name, tag = db_and_version.to_docker_image_and_tag()
-
-        # Pull the image if necessary.
-        if db_and_version.needs_to_be_pulled:
-            logging.info(f"Pulling the database server for {db_and_version}.")
-            self.podman_client.images.pull(repository=image_name, tag=tag)
-            logging.info(f"Image {image_name}:{tag} pulled.")
+        # Get the image and tag
+        local_image, local_tag = self._get_image_and_tag(db_and_version)
 
         # Create the container
         host_port = helpers.get_free_port()
@@ -116,7 +160,7 @@ class PodmanConnection:
 
         try:
             container = self.podman_client.containers.create(
-                image=f"{image_name}:{tag}",
+                image=f"{local_image}:{local_tag}",
                 ports={f"{container_port}/tcp": host_port},
                 environment=environment,
                 auto_remove=False,
@@ -129,7 +173,7 @@ class PodmanConnection:
             # Log the error and raise a new one
             logging.error(e)
             print(
-                f"Unable to create the container. Image {image_name}:{tag} is not present."
+                f"Unable to create the container. Image {local_image}:{local_tag} cannot be started."
             )
             raise e
 
@@ -156,7 +200,7 @@ class PodmanConnection:
             print("Error connecting to the database server.")
             print("Please make sure that the database server is running:")
             print(
-                f"Command: docker run -p {host_port}:{container_port} {image_name}:{tag}"
+                f"Image used: {local_image}:{local_tag} (container id: {container.id})"
             )
             input("Press Enter to continue...")
             raise ConnectionError("Error connecting to the database server.")

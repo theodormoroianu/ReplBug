@@ -1,6 +1,13 @@
+"""
+This module contains the functions that are used to build the docker images.
+
+Optionally, the images can be pushed or pulled from a registry.
+"""
+
 import os, logging, pathlib
 
 import context
+import database.helpers as helpers
 
 
 def build_image(dockerfile: pathlib.Path):
@@ -8,6 +15,8 @@ def build_image(dockerfile: pathlib.Path):
     Builds a specific docker image.
 
     :param dockerfile: The path to the dockerfile. It should follow the naming conventions.
+
+    E.g. The file `mariadb-10.10.1.Dockerfile` will build an image with the name `[[registry name]]/mariadb-10.10.1`.
     """
 
     print(f"Trying to build the image from the dockerfile: {dockerfile}")
@@ -23,14 +32,19 @@ def build_image(dockerfile: pathlib.Path):
     folder = dockerfile.parent
     name = dockerfile.name[: -len(".Dockerfile")]
 
-    # Get the image name and version.
-    image_name = name.split("-")[0]
-    version = name[len(image_name) + 1 :]
+    # The name of the image, including the registry.
+    image_name = f"{context.Context.get_context().docker_hub_registry}/dbms:{name}"
 
     # Build the docker image.
-    os.system(
-        f"podman build --tag {image_name}:{version} --file {dockerfile.name} {folder}"
-    )
+    command = f"podman build --tag {image_name} --file {dockerfile} {folder}"
+    helpers.run_command(command)
+
+    if context.Context.get_context().docker_push_on_build:
+        command = f"podman push {image_name}"
+        retcode = helpers.run_command(command)
+        if retcode != 0:
+            print(f"Failed to push the image: {image_name}")
+            logging.error(f"Failed to push the image: {image_name}")
 
 
 def build_all_images():

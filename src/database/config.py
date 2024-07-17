@@ -1,6 +1,8 @@
 from enum import Enum
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 import mysql.connector
+
+import context
 
 
 class DatabaseType(Enum):
@@ -47,7 +49,6 @@ class DatabaseTypeAndVersion:
         """
         self.database_type = database_type
         self.version = version
-        self.needs_to_be_pulled = self.database_type == DatabaseType.MYSQL
 
     def __str__(self):
         return f"{self.database_type.value}-{self.version}"
@@ -62,27 +63,32 @@ class DatabaseTypeAndVersion:
     def __hash__(self) -> int:
         return hash((self.database_type, self.version))
 
-    def to_docker_image_and_tag(self) -> Tuple[str, str]:
+    def to_docker_hub_images_and_tags(self) -> List[Tuple[str, str]]:
         """
-        returns the docker image and tag for the database.
-        e.g. (docker.io/library/mariadb, 10.5.8)
-        """
-        if not self.needs_to_be_pulled:
-            return (self.database_type.value, self.version)
+        Returns a list of possible docker hub images and tags for the database.
+        The order is given by preference (i.e. the first element is the most preferred).
 
-        if self.database_type == DatabaseType.MYSQL:
-            return ("docker.io/library/mysql", self.version)
+        This is used because we sometimes want to use custom self-built images.
 
-        raise ValueError(f"Unsupported database type: {self.database_type}")
+        e.g. [([[registry name]]/dbms, mariadb-10.5.8), (library/mariadb, 10.5.8)]
+        """
+        custom_registry = context.Context.get_context().docker_hub_registry
+        custom_image = (
+            f"{custom_registry}/dbms",
+            f"{self.database_type.value}-{self.version}",
+        )
+        official_image = None
 
-    def to_remote_docker_image_name(self) -> Tuple[str, str]:
-        """
-        Returns the remote docker image name.
-        """
-        if self.database_type == DatabaseType.TIDB:
-            return ("docker.io/pingcap/tidb", self.version)
+        if self.database_type == DatabaseType.MARIADB:
+            official_image = ("library/mariadb", self.version)
+        elif self.database_type == DatabaseType.MYSQL:
+            official_image = ("library/mysql", self.version)
+        elif self.database_type == DatabaseType.TIDB:
+            official_image = ("pingcap/tidb", self.version)
         else:
-            return (f"docker.io/library/{self.database_type.value}", self.version)
+            raise ValueError(f"Unsupported database type: {self.database_type}")
+
+        return [custom_image, official_image]
 
 
 class DatabaseConnection:

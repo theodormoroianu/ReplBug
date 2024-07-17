@@ -51,6 +51,12 @@ class Context:
         # The location of the "dockerfiles" directory.
         self.dockerfiles_dir = self.project_root / "dockerfiles"
 
+        # Check if we should push images to a remote registry when built.
+        self.docker_push_on_build = os.getenv("DOCKER_PUSH_ON_BUILD") == "true"
+
+        # Remote registry to push / pull images from.
+        self.docker_hub_registry = os.getenv("DOCKER_HUB_REGISTRY")
+
     @staticmethod
     def get_context():
         """
