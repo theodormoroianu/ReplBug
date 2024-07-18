@@ -1,0 +1,20 @@
+diff --git a/storage/innobase/lock/lock0lock.cc b/storage/innobase/lock/lock0lock.cc
+index 4987d60d..d75e14a5 100644
+--- a/storage/innobase/lock/lock0lock.cc
++++ b/storage/innobase/lock/lock0lock.cc
+@@ -46,6 +46,7 @@ Created 5/7/1996 Heikki Tuuri
+ #include "row0mysql.h"
+ #include "row0vers.h"
+ #include "pars0pars.h"
++#include "log.h"
+ 
+ #include <set>
+ 
+@@ -5454,6 +5455,7 @@ lock_rec_convert_impl_to_expl_for_trx(
+ 	trx_t*			trx,	/*!< in/out: active transaction */
+ 	ulint			heap_no)/*!< in: rec heap number to lock */
+ {
++    sql_print_warning("lock_rec_convert_impl_to_expl_for_trx was called for index %lld, trx %lld", index->id, trx->id);
+ 	ut_ad(trx->is_referenced());
+ 	ut_ad(page_rec_is_leaf(rec));
+ 	ut_ad(!rec_is_default_row(rec, index));
