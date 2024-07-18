@@ -263,8 +263,15 @@ class PodmanConnection:
             try:
                 container.stop(timeout=0)
                 container.remove(v=True)
-            except Exception as e:
-                container.remove(v=True)
+            except Exception:
+                try:
+                    container.remove(v=True)
+                except Exception:
+                    # The container cannot be deleted, most probably because
+                    # it has already been deleted. Silently ignore the error.
+                    logging.info(
+                        f"Skipping deletion of container {container_id} because of failure..."
+                    )
             del self.containers[container_id]
             del self.log_characters_to_ignore[container_id]
 
