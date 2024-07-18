@@ -10,7 +10,7 @@ import context
 import database.helpers as helpers
 
 
-def build_image(dockerfile: pathlib.Path):
+def build_image(dockerfile: pathlib.Path, push_to_registry: bool):
     """
     Builds a specific docker image.
 
@@ -39,7 +39,7 @@ def build_image(dockerfile: pathlib.Path):
     command = f"podman build --tag {image_name} --file {dockerfile} {folder}"
     helpers.run_command(command)
 
-    if context.Context.get_context().docker_push_on_build:
+    if push_to_registry:
         command = f"podman push {image_name}"
         retcode = helpers.run_command(command)
         if retcode != 0:
@@ -47,7 +47,7 @@ def build_image(dockerfile: pathlib.Path):
             logging.error(f"Failed to push the image: {image_name}")
 
 
-def build_all_images():
+def build_all_images(push_to_registry: bool):
     """
     Builds all of the images found in the dockerfiles directory.
     """
@@ -61,4 +61,4 @@ def build_all_images():
 
     # Build all the images.
     for docker_file in docker_files:
-        build_image(dockerfiles_folder / docker_file)
+        build_image(dockerfiles_folder / docker_file, push_to_registry)

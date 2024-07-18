@@ -50,8 +50,14 @@ class MainInteractor(cmd.Cmd):
             self.help_build()
             return
         if arg:
+            words = arg.split()
+            if len(words) not in [1, 2] or len(words) == 2 and words[1] != "push":
+                self.help_build()
+                return
+            push = len(words) == 2
+            dockerfile = words[0]
             try:
-                db_build.build_image(pathlib.Path(arg))
+                db_build.build_image(pathlib.Path(dockerfile), push)
             except Exception as e:
                 print("Error: ", e)
                 logging.error(e)
@@ -65,8 +71,9 @@ class MainInteractor(cmd.Cmd):
     def help_build(self):
         print("Builds the custom docker images required for testing some of the bugs.")
         print("If a dockerfile is provided, it should follow naming conventions.")
-        print("Usage:   build [dockerfile]")
-        print("Example: build dockerfiles/tidb-v4.0.0.tikb.Dockerfile")
+        print("If 'push' is provided, the image will be pushed to the registry.\n")
+        print("Usage:   build [dockerfile] [push]")
+        print("Example: build dockerfiles/tidb-v4.0.0.tikb.Dockerfile push")
 
 
     def do_shell(self, arg: str):
