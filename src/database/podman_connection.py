@@ -130,16 +130,20 @@ class PodmanConnection:
         return local_image, local_tag
 
     def create_container(
-        self, db_and_version: DatabaseTypeAndVersion
+        self, db_and_version: DatabaseTypeAndVersion, create_fresh_container: bool
     ) -> Tuple[str, DatabaseConnection]:
         """
         Creates a container for the given database type and version.
         returns the container id and the database connection.
+
+        :param db_and_version: The database type and version to create the container for.
+        :param create_fresh_container: If a fresh container should be created (if false, an old container\
+            can be re-used).
         """
         logging.debug(f"new container for {db_and_version} requested.")
 
         # Maybe we have a container that is not currently used.
-        if self.unused_containers[db_and_version]:
+        if self.unused_containers[db_and_version] and not create_fresh_container:
             logging.info(f"Re-using a container for {db_and_version}.")
             container, db_connection = self.unused_containers[db_and_version].pop()
             self.containers[container.id] = (container, db_and_version, db_connection)

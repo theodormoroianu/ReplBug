@@ -14,6 +14,7 @@ class DatabaseProvider:
     def __init__(
         self,
         database_type_and_version: DatabaseTypeAndVersion,
+        create_new_server_for_testcase: bool = False,
         kill_server_after_testcase: bool = False,
     ):
         """
@@ -25,6 +26,7 @@ class DatabaseProvider:
         self.container_id = None
         self.db_connection = None
         self.db_type_and_version = database_type_and_version
+        self.create_new_server_for_testcase = create_new_server_for_testcase
         self.kill_server_after_testcase = kill_server_after_testcase
 
     def __enter__(self):
@@ -33,7 +35,8 @@ class DatabaseProvider:
         """
         podman_connection = PodmanConnection.get_instance()
         self.container_id, self.db_connection = podman_connection.create_container(
-            self.db_type_and_version
+            self.db_type_and_version,
+            self.create_new_server_for_testcase,
         )
 
         return self

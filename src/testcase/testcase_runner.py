@@ -39,6 +39,7 @@ class TestcaseRunner:
         instructions: List[Instruction],
         db_and_type: db_config.DatabaseTypeAndVersion,
         pre_run_instructions: List[Instruction] = None,
+        create_new_server_for_testcase: bool = False,
         kill_server_after_testcase: bool = False,
     ):
         """
@@ -60,6 +61,7 @@ class TestcaseRunner:
         self.db_and_type = db_and_type
         self.pre_run_instructions = pre_run_instructions
         self.db_server_logs = None
+        self.create_new_server_for_testcase = create_new_server_for_testcase
         self.kill_server_after_testcase = kill_server_after_testcase
 
         # Mapping from transaction id to the transaction process
@@ -220,7 +222,9 @@ class TestcaseRunner:
             f"Running testcase {self.name} on {self.db_and_type}, kill server after: {self.kill_server_after_testcase}"
         )
         with db_provider.DatabaseProvider(
-            self.db_and_type, self.kill_server_after_testcase
+            self.db_and_type,
+            create_new_server_for_testcase=self.create_new_server_for_testcase,
+            kill_server_after_testcase=self.kill_server_after_testcase,
         ) as provider:
             # Reset the environment before running the testcase, in case
             # it is not the first run.
