@@ -7,6 +7,8 @@ from podman.domain.containers import Container
 from .config import DatabaseTypeAndVersion, DatabaseConnection
 from . import helpers
 
+WAIT_FOR_CONNECTION_TIMEOUT_S = 60
+
 
 class PodmanConnection:
     """
@@ -193,7 +195,7 @@ class PodmanConnection:
         # make sure that the DB is reachable
         time_before = time.time()
         logging.info("Waiting for the database server to start...")
-        while time.time() - time_before < 30:
+        while time.time() - time_before < WAIT_FOR_CONNECTION_TIMEOUT_S:
             try:
                 db_connection.to_connection().ping()
                 break
