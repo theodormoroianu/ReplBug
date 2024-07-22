@@ -159,7 +159,7 @@ class Bug:
 
         with open(file, "w") as f:
             f.write("\n".join(result))
-        print(f"\n          Result saved in {file}.")
+        print(f"\n    Result saved in {file}.")
         logging.info(f"Result for {self.bug_id} saved in {file}.")
 
     def run(self):
@@ -167,7 +167,7 @@ class Bug:
         Runs the buggy scenarios
         """
         logging.info(f"Running bug {self.bug_id} on {self.db_and_type}")
-        print(f"\nRunning bug {self.bug_id} on {self.db_and_type}: ", end="", flush=True)
+        print(f"\n    Running bug {self.bug_id} on {self.db_and_type}: ", end="", flush=True)
 
         pre_run_instruction = []
         if self.setup_sql_script:
