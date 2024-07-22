@@ -49,21 +49,21 @@ class MainInteractor(cmd.Cmd):
         if arg == "help" or arg == "--help":
             self.help_build()
             return
+        push = False
+        arg = arg.split()
+        if arg[-1] == "push":
+            arg = arg[:-1]
+            push = True
         if arg:
-            words = arg.split()
-            if len(words) not in [1, 2] or len(words) == 2 and words[1] != "push":
-                self.help_build()
-                return
-            push = len(words) == 2
-            dockerfile = words[0]
             try:
-                db_build.build_image(pathlib.Path(dockerfile), push)
+                for dockerfile in arg:
+                    db_build.build_image(pathlib.Path(dockerfile), push)
             except Exception as e:
                 print("Error: ", e)
                 logging.error(e)
         else:
             try:
-                db_build.build_all_images()
+                db_build.build_all_images(push_to_registry=push)
             except Exception as e:
                 print("Error: ", e)
                 logging.error(e)
