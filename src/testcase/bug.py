@@ -144,7 +144,9 @@ class Bug:
                 result.append(f"     - Transaction: conn_{instr.transaction_id}")
                 result.append(f"     - Output: {instr.output}")
                 result.append(f"     - Executed order: {execution_order[nr_instr] if execution_order[nr_instr] is not None else 'Not executed'}")
-                result.append(f"     - Affected rows / Warnings: {instr.nr_affected_rows} / {instr.nr_warnings}")
+                result.append(f"     - Affected rows: {instr.nr_affected_rows}")
+                if instr.warnings:
+                    result.append(f"     - Warnings: {instr.warnings}")
             result.append("")
             result.append(" * Container logs:")
             container_logs = [

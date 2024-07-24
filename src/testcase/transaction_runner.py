@@ -8,7 +8,11 @@ import mysql.connector
 from queue import Queue
 
 import database.config as db_config
-from testcase.helpers import MYSQL_CONNECTION_LOCK_WAIT_TIMEOUT_S, Instruction
+from testcase.helpers import (
+    MYSQL_CONNECTION_LOCK_WAIT_TIMEOUT_S,
+    Instruction,
+    SuppressStderr,
+)
 
 
 class TransactionProcess(multiprocessing.Process):
@@ -47,6 +51,11 @@ class TransactionProcess(multiprocessing.Process):
     def run(self):
         connection = self.conn.to_connection(autocommit=True)
 
+        # Ask the connector to fetch warnings.
+        # This should not be required, but it seems that the connector does not fetch
+        # warnings by default.
+        connection.get_warnings = True
+
         # Pick database and set timeout
         connection.cursor().execute("use testdb;")
 
@@ -69,11 +78,14 @@ class TransactionProcess(multiprocessing.Process):
 
             try:
                 cursor = connection.cursor()
-                cursor.execute(instruction.sql_instruction_content)
-                instruction.executed_time = time.time()
-                output = None
-                if cursor.with_rows:
-                    output = cursor.fetchall()
+                # Need to supress stderr because the mysql connector prints warnings to stderr,
+                # and there is no documented way to disable this.
+                with SuppressStderr():
+                    cursor.execute(instruction.sql_instruction_content)
+                    instruction.executed_time = time.time()
+                    output = None
+                    if cursor.with_rows:
+                        output = cursor.fetchall()
             except mysql.connector.errors.OperationalError as e:
                 self.encountered_error = True
                 output = f"ERROR: {e}"
@@ -85,7 +97,13 @@ class TransactionProcess(multiprocessing.Process):
                 output = f"ERROR: {e}"
 
             instruction.output = output
-            instruction.nr_warnings = cursor.warning_count
+            if cursor.warning_count:
+                cursor.fetchwarnings()
+                instruction.warnings = cursor.warnings
+                if not instruction.warnings:
+                    # If for some reason the warnings are not fetched,
+                    # we still want to know that there were warnings
+                    instruction.warnings = [f"Warning count: {cursor.warning_count}"]
             instruction.nr_affected_rows = cursor.rowcount
 
             # Send the result

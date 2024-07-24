@@ -1,5 +1,6 @@
-import enum
-from typing import Callable, Union
+import enum, os, sys
+from typing import Union
+
 import database.config as db_config
 
 
@@ -80,8 +81,22 @@ class Instruction:
         self.instruction_nr = instruction_nr
         # The number of affected rows
         self.nr_affected_rows = None
-        # The number of warnings
-        self.nr_warnings = None
+        # List of warnings, None if no warning was reported.
+        self.warnings = None
 
     def __repr__(self):
         return f"Instruction(transaction_id={self.transaction_id}, instruction={self.sql_instruction_content})"
+
+
+class SuppressStderr:
+    """
+    This class suppresses the output to stderr while it is active (using the with statement).
+    """
+
+    def __enter__(self):
+        self._original_stderr = sys.stderr
+        sys.stderr = open(os.devnull, "w")
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        sys.stderr.close()
+        sys.stderr = self._original_stderr

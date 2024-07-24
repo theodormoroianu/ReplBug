@@ -105,7 +105,7 @@ class MainInteractor(cmd.Cmd):
             self.help_server()
             return
 
-        print("Starting the database server... ", end="", flush=True)
+        print("Starting the database server...  ", end="", flush=True)
         with db_provider.DatabaseProvider(db_and_version) as provider:
             print("DONE")
             connection = provider.db_connection
@@ -119,7 +119,7 @@ class MainInteractor(cmd.Cmd):
             print(f"Port:          {connection.port}")
             print(f"User:          {connection.user}")
             print(f"Connect with:  {db_open_sessions.mysql_cli_command(connection, "testdb")}")
-            print("\nPress Enter to stop the database server...")
+            print("\nPress Enter or Ctrl+C to stop the server... ", end="", flush=True)
             try:
                 input()
             except KeyboardInterrupt:
