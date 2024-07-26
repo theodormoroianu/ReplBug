@@ -122,5 +122,8 @@ class DatabaseConnection:
         if autocommit is not None:
             args["autocommit"] = autocommit
 
+        # Disable SSL.
+        args["ssl_disabled"] = True
+
         conn = mysql.connector.connect(**args)
         return conn
