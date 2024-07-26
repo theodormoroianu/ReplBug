@@ -123,7 +123,7 @@ class MainInteractor(cmd.Cmd):
             try:
                 input()
             except KeyboardInterrupt:
-                pass
+                print("")
             print("Stopping the database server...  ", end="", flush=True)
         print("DONE")
 
