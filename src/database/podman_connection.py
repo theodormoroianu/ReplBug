@@ -170,7 +170,9 @@ class PodmanConnection:
                 ports={f"{container_port}/tcp": host_port},
                 environment=environment,
                 auto_remove=False,
-                network_mode="bridge",
+                # This seems to not be required. Adding a network_mode="bridge" will make the container
+                # think it's running in a different network, and it will make mysql servers unreachable.
+                # network_mode="bridge",
             )
         except Exception as e:
             logging.info(
