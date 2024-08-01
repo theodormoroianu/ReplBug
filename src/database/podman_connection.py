@@ -6,6 +6,7 @@ from podman.domain.containers import Container
 
 from .config import DatabaseTypeAndVersion, DatabaseConnection
 from . import helpers
+from custom_exceptions import DatabaseVersionNotFoundError
 
 WAIT_FOR_CONNECTION_TIMEOUT_S = 60
 
@@ -125,10 +126,11 @@ class PodmanConnection:
             logging.error(
                 f"Image {db_and_version} not found. Maybe it needs to be built?"
             )
-            print(f"Image {db_and_version} not found. Maybe it needs to be built?")
-            raise ValueError(
-                f"Image {db_and_version} not found. Maybe it needs to be built?"
+            raise DatabaseVersionNotFoundError(
+                database_type=db_and_version.database_type.value,
+                version=db_and_version.version,
             )
+
         return local_image, local_tag
 
     def create_container(

@@ -7,6 +7,7 @@ import testcase.run_bugs as run_bugs
 import testcase.bug_list as bug_list
 import context
 import database.build as db_build
+import custom_exceptions as ce
 
 HISTORY_FILE = context.Context.get_context().cache_folder / "cmd_history"
 
@@ -87,7 +88,12 @@ class MainInteractor(cmd.Cmd):
         except Exception:
             self.help_shell()
             return
-        db_open_sessions.open_multiple_sessions(db_and_version, nr_instances=nr_shells)
+        try:
+            db_open_sessions.open_multiple_sessions(db_and_version, nr_instances=nr_shells)
+        except ce.DatabaseVersionNotFoundError as e:
+            print(f"   ERROR\nThe database version {e.version} was not found for {e.database_type}.")
+            print(f"Exiting.")
+
 
     def help_shell(self):
         print("Spawns multiple shells connected to a database server.")
@@ -106,26 +112,30 @@ class MainInteractor(cmd.Cmd):
             return
 
         print("Starting the database server...  ", end="", flush=True)
-        with db_provider.DatabaseProvider(db_and_version) as provider:
-            print("DONE")
-            connection = provider.db_connection
-            
-            # Create a test database.
-            conn = connection.to_connection()
-            conn.cursor().execute("drop database if exists testdb;")
-            conn.cursor().execute("create database testdb;")
+        try:
+            with db_provider.DatabaseProvider(db_and_version) as provider:
+                print("DONE")
+                connection = provider.db_connection
+                
+                # Create a test database.
+                conn = connection.to_connection()
+                conn.cursor().execute("drop database if exists testdb;")
+                conn.cursor().execute("create database testdb;")
 
-            print(f"Host:          {connection.host}")
-            print(f"Port:          {connection.port}")
-            print(f"User:          {connection.user}")
-            print(f"Connect with:  {db_open_sessions.mysql_cli_command(connection, "testdb")}")
-            print("\nPress Enter or Ctrl+C to stop the server... ", end="", flush=True)
-            try:
-                input()
-            except KeyboardInterrupt:
-                print("")
-            print("Stopping the database server...  ", end="", flush=True)
-        print("DONE")
+                print(f"Host:          {connection.host}")
+                print(f"Port:          {connection.port}")
+                print(f"User:          {connection.user}")
+                print(f"Connect with:  {db_open_sessions.mysql_cli_command(connection, "testdb")}")
+                print("\nPress Enter or Ctrl+C to stop the server... ", end="", flush=True)
+                try:
+                    input()
+                except KeyboardInterrupt:
+                    print("")
+                print("Stopping the database server...  ", end="", flush=True)
+            print("DONE")
+        except ce.DatabaseVersionNotFoundError as e:
+            print(f"    ERROR\nThe database version {e.version} was not found for {e.database_type}.")
+            print(f"Exiting.")
 
     def help_server(self):
         print("Starts a database server and waits for the user to connect to it.")
