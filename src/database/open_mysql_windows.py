@@ -14,7 +14,7 @@ def mysql_cli_command(conn: DatabaseConnection, db_name: str):
     assert conn.port != None
     assert conn.user != None
 
-    return f"mysql -h {conn.host} -P {conn.port} -u {conn.user} -D {db_name}"
+    return f"mysql -h {conn.host} -P {conn.port} -u {conn.user} -D {db_name} --ssl-mode=DISABLED"
 
 
 def open_multiple_sessions(db: DatabaseTypeAndVersion, nr_instances: int):
