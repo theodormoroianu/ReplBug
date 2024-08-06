@@ -8,7 +8,9 @@ from testcase.helpers import *
 ORIGINAL_ISOLATION_LEVEL = DEFAULT_ISOLATION_LEVEL
 BUG_ID = "TIDB-28095"
 LINK = "https://github.com/pingcap/tidb/issues/28095"
-DB_AND_VERSION = db_config.DatabaseTypeAndVersion(db_config.DatabaseType.TIDB, "v5.2.1")
+DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
+    db_config.DatabaseType.TIDB, "v6.4.0.tikv"
+)
 
 SETUP_SQL_SCRIPT = """
 drop table if exists t;
