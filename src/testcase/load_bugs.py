@@ -61,6 +61,11 @@ def load_bugs_from_module(
                 module, "CREATE_NEW_SERVER_FOR_TESTCASE"
             )
 
+        # The arguments passed to the database server.
+        custom_server_args = None
+        if "CUSTOM_SERVER_ARGS" in dir(module):
+            custom_server_args = getattr(module, "CUSTOM_SERVER_ARGS")
+
         # Get the SQL setup script. It can be in the file of in a file.
         sql_setup_script = None
         if "SETUP_SQL_SCRIPT" in dir(module):
@@ -102,6 +107,7 @@ def load_bugs_from_module(
                 is_valid=is_valid,
                 create_new_server_for_testcase=create_new_server_for_testcase,
                 kill_server_after_testcase=kill_server_after_testcase,
+                custom_server_args=custom_server_args,
             )
             bugs[f"{bug_id}-{isolation_level.name}"] = bug_runner
     return bugs

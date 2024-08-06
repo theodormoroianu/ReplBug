@@ -8,7 +8,7 @@ It relies on the "TestcaseRunner" class to run the scenarios.
 
 import database.config as db_config
 import pathlib
-from typing import Optional
+from typing import List, Optional
 import logging
 from context import Context
 from testcase.helpers import Instruction
@@ -85,6 +85,7 @@ class Bug:
         is_valid: bool = True,
         create_new_server_for_testcase: bool = False,
         kill_server_after_testcase: bool = False,
+        custom_server_args: Optional[List[str]] = None
     ):
         """
         Creates a new bug.
@@ -107,6 +108,7 @@ class Bug:
         self.is_valid = is_valid
         self.create_new_server_for_testcase = create_new_server_for_testcase
         self.kill_server_after_testcase = kill_server_after_testcase
+        self.custom_server_args = custom_server_args
 
     def _save_result_from_user(self):
         """
@@ -186,6 +188,7 @@ class Bug:
                 pre_run_instructions=pre_run_instruction,
                 create_new_server_for_testcase=self.create_new_server_for_testcase,
                 kill_server_after_testcase=self.kill_server_after_testcase,
+                custom_server_args=self.custom_server_args,
             )
             runner.run()
             self.testcase_runners.append(runner)

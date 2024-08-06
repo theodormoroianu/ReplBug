@@ -41,6 +41,7 @@ class TestcaseRunner:
         pre_run_instructions: List[Instruction] = None,
         create_new_server_for_testcase: bool = False,
         kill_server_after_testcase: bool = False,
+        custom_server_args: Optional[List[str]] = None,
     ):
         """
         Creates a new testcase runner.
@@ -63,6 +64,7 @@ class TestcaseRunner:
         self.db_server_logs = None
         self.create_new_server_for_testcase = create_new_server_for_testcase
         self.kill_server_after_testcase = kill_server_after_testcase
+        self.cuustom_server_args = custom_server_args
 
         # Mapping from transaction id to the transaction process
         self.transaction_id_to_process: Dict[int, TransactionProcess] = {}
@@ -225,6 +227,7 @@ class TestcaseRunner:
             self.db_and_type,
             create_new_server_for_testcase=self.create_new_server_for_testcase,
             kill_server_after_testcase=self.kill_server_after_testcase,
+            custom_args=self.cuustom_server_args,
         ) as provider:
             # Reset the environment before running the testcase, in case
             # it is not the first run.

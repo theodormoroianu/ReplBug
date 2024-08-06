@@ -2,6 +2,7 @@
 This module is responsible for providing the necessary binaries for the database.
 """
 
+from typing import List, Optional
 from .config import DatabaseTypeAndVersion
 from .podman_connection import PodmanConnection
 
@@ -16,6 +17,7 @@ class DatabaseProvider:
         database_type_and_version: DatabaseTypeAndVersion,
         create_new_server_for_testcase: bool = False,
         kill_server_after_testcase: bool = False,
+        custom_args: Optional[List[str]] = None,
     ):
         """
         Creates a new database provider.
@@ -28,6 +30,7 @@ class DatabaseProvider:
         self.db_type_and_version = database_type_and_version
         self.create_new_server_for_testcase = create_new_server_for_testcase
         self.kill_server_after_testcase = kill_server_after_testcase
+        self.custom_args = custom_args
 
     def __enter__(self):
         """
@@ -37,6 +40,7 @@ class DatabaseProvider:
         self.container_id, self.db_connection = podman_connection.create_container(
             self.db_type_and_version,
             self.create_new_server_for_testcase,
+            custom_args=self.custom_args,
         )
 
         return self

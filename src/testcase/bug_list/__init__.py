@@ -10,6 +10,7 @@ The recognised variables declared in files are:
     - SETUP_SQL_SCRIPT: The SQL script used for setting up the environment.
     - CREATE_NEW_SERVER_FOR_TESTCASE: If a new server should be created for each testcase.
     - KILL_SERVER_AFTER_TESTCASE: If the server should be stopped after running each testcase (e.g. invalid ends up in an state).
+    - CUSTOM_SERVER_ARGS: The custom arguments to be passed to the server.
 
 Additionally, the following functions are recognised:
     - get_scenarios(isolation_level: IsolationLevel): Returns a list of scenarios for the given isolation level.

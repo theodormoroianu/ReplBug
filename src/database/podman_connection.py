@@ -1,6 +1,6 @@
 import subprocess, logging, time, atexit, os
 import podman.client as client
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 from collections import defaultdict
 from podman.domain.containers import Container
 
@@ -9,6 +9,24 @@ from . import helpers
 from custom_exceptions import DatabaseVersionNotFoundError
 
 WAIT_FOR_CONNECTION_TIMEOUT_S = 60
+
+
+class RunningContainer:
+    """
+    A class that represents a running container.
+    """
+
+    def __init__(
+        self,
+        container: Container,
+        db_and_version: DatabaseTypeAndVersion,
+        db_connection: DatabaseConnection,
+        custom_args: Optional[List[str]] = None,
+    ):
+        self.container = container
+        self.db_and_version = db_and_version
+        self.db_connection = db_connection
+        self.custom_args = custom_args
 
 
 class PodmanConnection:
@@ -68,9 +86,7 @@ class PodmanConnection:
             raise ConnectionError("Error connecting to the podman daemon.")
 
         # Mapping from containerID to container object
-        self.containers: Dict[
-            str, Tuple[Container, DatabaseTypeAndVersion, DatabaseConnection]
-        ] = {}
+        self.containers: Dict[str, RunningContainer] = {}
 
         # Containers that are running but not currently used.
         # We check that the db is reachable before using it, to avoid
@@ -134,7 +150,10 @@ class PodmanConnection:
         return local_image, local_tag
 
     def create_container(
-        self, db_and_version: DatabaseTypeAndVersion, create_fresh_container: bool
+        self,
+        db_and_version: DatabaseTypeAndVersion,
+        create_fresh_container: bool,
+        custom_args: Optional[List[str]] = None,
     ) -> Tuple[str, DatabaseConnection]:
         """
         Creates a container for the given database type and version.
@@ -147,10 +166,16 @@ class PodmanConnection:
         logging.debug(f"new container for {db_and_version} requested.")
 
         # Maybe we have a container that is not currently used.
-        if self.unused_containers[db_and_version] and not create_fresh_container:
+        if (
+            self.unused_containers[db_and_version]
+            and not create_fresh_container
+            and not custom_args
+        ):
             logging.info(f"Re-using a container for {db_and_version}.")
             container, db_connection = self.unused_containers[db_and_version].pop()
-            self.containers[container.id] = (container, db_and_version, db_connection)
+            self.containers[container.id] = RunningContainer(
+                container, db_and_version, db_connection, custom_args
+            )
             return container.id, db_connection
 
         # Get the image and tag
@@ -172,6 +197,7 @@ class PodmanConnection:
                 ports={f"{container_port}/tcp": host_port},
                 environment=environment,
                 auto_remove=False,
+                command=custom_args,
                 # This seems to not be required. Adding a network_mode="bridge" will make the container
                 # think it's running in a different network, and it will make mysql servers unreachable.
                 # network_mode="bridge",
@@ -194,7 +220,10 @@ class PodmanConnection:
             db_and_version, host="127.0.0.1", port=host_port, user="root"
         )
 
-        self.containers[container.id] = (container, db_and_version, db_connection)
+        # Save the container in our list of running containers
+        self.containers[container.id] = RunningContainer(
+            container, db_and_version, db_connection, custom_args
+        )
 
         # make sure that the DB is reachable
         time_before = time.time()
@@ -226,8 +255,8 @@ class PodmanConnection:
         Get the logs of the container. If some lines are marked to
         be skipped (see `log_lines_to_ignore`), they are skipped.
         """
-        container, _, _ = self.containers[container_id]
-        logs = container.logs(stdout=True, stderr=True)
+        running_container = self.containers[container_id]
+        logs = running_container.container.logs(stdout=True, stderr=True)
         logs_dump = (
             logs.decode() if isinstance(type(logs), bytes) else b"".join(logs).decode()
         )
@@ -241,18 +270,18 @@ class PodmanConnection:
         :param container_id: The id of the container to stop.
         :param try_reuse: If the container should be tested for re-use.
         """
-        container, db_and_version, db_connection = self.containers[container_id]
+        running_container = self.containers[container_id]
         logging.debug(
-            f"Stopping container {container_id} of type {db_and_version} (try-reuse = {try_reuse})..."
+            f"Stopping container {container_id} of type {running_container.db_and_version} (try-reuse = {try_reuse})..."
         )
         try:
             # If we can't reuse it, throw an exception.
-            if not try_reuse:
+            if not try_reuse or running_container.custom_args is not None:
                 raise ValueError("Container can't be re-used (imposed by testcase).")
 
             # Try to re-use container
             # Make a few SQL queries to check if the DB is still alive
-            conn = db_connection.to_connection()
+            conn = running_container.db_connection.to_connection()
             conn.ping()
             cursor = conn.cursor()
             cursor.execute("drop database if exists testdb;")
@@ -261,7 +290,9 @@ class PodmanConnection:
             cursor.execute("insert into testdb.testtable values (1);")
             cursor.execute("drop table testdb.testtable;")
 
-            self.unused_containers[db_and_version].append((container, db_connection))
+            self.unused_containers[running_container.db_and_version].append(
+                (running_container.container, running_container.db_connection)
+            )
             self.log_characters_to_ignore[container_id] += len(
                 self.get_logs(container_id)
             )
@@ -271,11 +302,11 @@ class PodmanConnection:
             logging.debug(f"Error re-using container {container_id}: {e}")
             # Can't re-use container. Try to stop it.
             try:
-                container.stop(timeout=0)
-                container.remove(v=True)
+                running_container.container.stop(timeout=0)
+                running_container.container.remove(v=True)
             except Exception:
                 try:
-                    container.remove(v=True)
+                    running_container.container.remove(v=True)
                 except Exception:
                     # The container cannot be deleted, most probably because
                     # it has already been deleted. Silently ignore the error.
@@ -292,8 +323,8 @@ class PodmanConnection:
         """
         logging.info("Cleaning containers...")
         containers_ids = []
-        for _, (container, _, _) in self.containers.items():
-            containers_ids.append(container.id)
+        for _, running_container in self.containers.items():
+            containers_ids.append(running_container.container.id)
         for _, l in self.unused_containers.items():
             for container, _ in l:
                 containers_ids.append(container.id)
