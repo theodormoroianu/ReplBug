@@ -57,3 +57,8 @@ The logs are stored in the following format: `{BUG_ID}-{TESTCASE}.md`.
 A frequent checkpoint of the Google Docs table with the results is available in [this folder](./data/analysis/).
 
 The up-to-date sheet is available [here](https://docs.google.com/spreadsheets/d/1As6S9c8yzeAzXjCYplpv2aqIEXkB6BhpMhJR2qYJ4sk/edit?usp=sharing) (online).
+
+
+## Analysis
+
+An in-depth analysis of the interesting bugs can be found [here](./data/docs/README.md).
