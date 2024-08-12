@@ -28,3 +28,5 @@ Each of the interesting bugs is analyzed individually, analysing the following:
 
  - [MDEV-19535](./interesting_bugs/MDEV-19535.md).
  - [MDEV-26642](./interesting_bugs/MDEV-26642.md).
+ - [MDEV-26643](./interesting_bugs/MDEV-26643.md).
+ - [MDEV-29243](./interesting_bugs/MDEV-29243.md).
