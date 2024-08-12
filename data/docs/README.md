@@ -30,3 +30,5 @@ Each of the interesting bugs is analyzed individually, analysing the following:
  - [MDEV-26642](./interesting_bugs/MDEV-26642.md).
  - [MDEV-26643](./interesting_bugs/MDEV-26643.md).
  - [MDEV-29243](./interesting_bugs/MDEV-29243.md).
+ - [MDEV-29565](./interesting_bugs/MDEV-29565.md).
+ - [MYSQL-100293](./interesting_bugs/MYSQL-100293.md)
