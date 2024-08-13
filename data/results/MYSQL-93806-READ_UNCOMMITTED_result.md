@@ -5,7 +5,7 @@
 Link:                     https://bugs.mysql.com/bug.php?id=93806
 Original isolation level: REPEATABLE READ
 Tested isolation level:   READ UNCOMMITTED
-Description:              transaction start date is not expressed in session time zone
+Description:              Exclusive range locks are created when using ON DUPLICATE KEY UPDATE (and the update takes place)
 
 
 ## Details
