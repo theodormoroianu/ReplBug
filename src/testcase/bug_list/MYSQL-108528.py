@@ -10,6 +10,8 @@ DB_AND_VERSION = db_config.DatabaseTypeAndVersion(
     db_config.DatabaseType.MYSQL, "8.0.23"
 )
 
+DESCRIPTION = "The SELECT and the UPDATE do not affect the same number of rows despite having the same predicate."
+
 
 def get_scenarios(isolation_level: IsolationLevel):
     return [

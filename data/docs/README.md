@@ -33,3 +33,4 @@ Each of the interesting bugs is analyzed individually, analysing the following:
  - [MDEV-29565](./interesting_bugs/MDEV-29565.md).
  - [MYSQL-100293](./interesting_bugs/MYSQL-100293.md).
  - [MYSQL-104245](./interesting_bugs/MYSQL-104245.md).
+ - [MYSQL-108528](./interesting_bugs/MYSQL-108528.md).
